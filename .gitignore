@@ -1,0 +1,11 @@
+# Environment files
+.env
+Backend/.env
+FrondendReact/jobportal-app/.env
+
+# Node modules
+node_modules/
+
+# Build folders
+build/
+dist/
