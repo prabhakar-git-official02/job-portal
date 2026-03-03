@@ -48,8 +48,6 @@ function JobseekerProfileForm() {
   const [location, setLocation] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
-  const [skills, setSkills] = useState("");
-  const [storeSkills, setStoreSkills] = useState([]);
   const [resume, setResume] = useState(null);
   const [resumePreview, setResumePreview] = useState(null);
   const [expectedSalary, setExpectedSalary] = useState("");
@@ -57,7 +55,6 @@ function JobseekerProfileForm() {
   const [preferredLocation, setPreferredLocation] = useState("");
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
-  const [addSkillbtnError, setAddSkillbtnError] = useState(null);
   const [submitbtnError, setSubmitbtnError] = useState(null);
 
   useEffect(() => {
@@ -92,26 +89,6 @@ function JobseekerProfileForm() {
     }
   }, [ErrorMsg]);
 
-  // handle Add Skill
-  const handleAddSkills = (e) => {
-    e.preventDefault();
-    if (skills.trim() === "") {
-      setLoad(false);
-      setAddSkillbtnError({
-        msg: "Invalid Skill Add!",
-        id: Date.now(),
-      });
-      return;
-    }
-    setStoreSkills([...storeSkills, skills]);
-    setSkills("");
-  };
-
-  // handle Delete Skill
-  const handleDeleteSkill = (index) => {
-    const newStoreSkills = storeSkills.filter((_, i) => i !== index);
-    setStoreSkills(newStoreSkills);
-  };
 
   const ProfileImageObj = {
     url: ImageUrl,
@@ -196,7 +173,6 @@ function JobseekerProfileForm() {
           location: location,
           state: state,
           country: country,
-          skills: storeSkills,
           resume: ResumeObj,
           expectedSalary:expectedSalary,
           jobType: jobType,

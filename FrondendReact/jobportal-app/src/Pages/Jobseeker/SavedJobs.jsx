@@ -40,10 +40,6 @@ function SavedJobs() {
     dispatch(SavedJobsRemoveThunk(JobId));
   };
 
-  const handleNav = (JobId) => {
-    navigate(`/jobDescription/${JobId}`);
-  };
-
     const FilteredJobTypes = [
     "Full Time",
     "Part Time",

@@ -8,12 +8,16 @@ import ErrorAlert from "../Components/ErrorAlert";
 import ProgressLoad from "../Components/ProgressLoad";
 import MainNav from "../Navbar/MainNav";
 import { authThunk } from "../Thunks/authThunk";
+
+
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(authThunk());
   }, [dispatch]);
+
   const user = useSelector((state) => state.auth.user);
   console.log(user);
   const [email, setEmail] = useState("");

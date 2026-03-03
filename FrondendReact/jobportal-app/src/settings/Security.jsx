@@ -5,12 +5,11 @@ import ErrorAlert from "../Components/ErrorAlert";
 import { IsTokenSuccess, IsTokenFailure } from "../Redux/ResetTokenSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressLoad from "../Components/ProgressLoad";
-import { useNavigate } from "react-router-dom";
 import SecurityIcon from '@mui/icons-material/Security';
 
 function Security() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
 
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");

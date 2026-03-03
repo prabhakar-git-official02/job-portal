@@ -207,7 +207,6 @@ function AllJobs() {
   </p>
 </div>: 
 <div>
-
         {/* Job Cards */}
         <div className="row g-3 g-md-4">
           {filteredPosts

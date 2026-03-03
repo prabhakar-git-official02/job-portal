@@ -56,16 +56,6 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
 
   const AdminProfile = useSelector((state) => state.adminProfile.profile);
 
-  const Profile =
-    user?.roleData === "admin"
-      ? AdminProfile
-      : user?.roleData === "recruiter"
-        ? RecruiterProfile
-        : user?.roleData === "user"
-          ? JobseekerProfile
-          : null;
-
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [sidebarOpen,setSidebarOpen] = useState(false)
 
@@ -130,7 +120,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Find Dreams
           </Typography>
-          {auth && (
+
             <div>
               {!user ? <button onClick={() => handleLogin()} className='premium-btn'>Login</button> : null}
               <IconButton
@@ -165,7 +155,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
                 <MenuItem onClick={handleSettings}>Settings</MenuItem>
               </Menu>
             </div>
-          )}
+          
         </Toolbar>
       </AppBar>
     </Box>

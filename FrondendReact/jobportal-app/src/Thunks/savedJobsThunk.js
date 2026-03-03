@@ -1,7 +1,7 @@
 import api from "../api/axios";
 import { IsSavedJobsSuccess,IsSavedJobsFailure } from "../Redux/savedJobsSlice";
 import { showAlert } from "../Scripts/Alert";
-import { allPostsThunk } from "./allPostsThunk";
+
 
 export const savedJobsThunk = () => {
     return async(dispatch) => {

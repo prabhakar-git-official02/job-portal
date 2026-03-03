@@ -1,6 +1,6 @@
 import { Dialog } from "primereact/dialog";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { applicantGetAllThunk } from "../../Thunks/applicantThunk";
@@ -27,19 +27,15 @@ function DialogboxSheduleInterview({ApplicantId,ApplicantEmail,JobDetails,JobId}
   }, [dispatch]);
 
 
-  const user = useSelector((state) => state.auth.user);
+
 
   useEffect(() => {
     dispatch(applicantGetAllThunk());
   }, [dispatch]);
 
-  const Applicants = useSelector((state) => state.allApplicants.All_Applicants);
 
-   const FindJobs = Applicants?.map((applicant) =>
-    applicant?.appliedJobs?.filter(
-      (applied) => applied?.jobId?.recruiterId?._id === user?._id,
-    ),
-  );
+
+
 
 //   console.log(FindJobs);
 

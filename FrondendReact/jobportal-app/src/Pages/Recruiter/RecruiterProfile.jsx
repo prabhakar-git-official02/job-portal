@@ -27,9 +27,6 @@ function RecruiterProfile() {
 
   console.log(profile)
 
-  const profileError = useSelector(
-    (state) => state.recruiterProfile.error,
-  );
   return (
     <>
       <MainNav />

@@ -1,17 +1,16 @@
 import { adminProfileThunk } from "../../Thunks/adminProfileThunk";
 import { authThunk } from "../../Thunks/authThunk";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import MainNav from "../../Navbar/MainNav";
 import DialogboxAbout from "../../DialogBoxes/AdminProfile/DialogboxAbout";
 
 
 function AdminProfile(){
-    const [btnbgVisible,setBtnBgVisible] = useState(false)
+
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+
 
   useEffect(() => {
     dispatch(authThunk());
@@ -26,9 +25,6 @@ function AdminProfile(){
     }, [user, dispatch]);
 
 const profile = useSelector((state) => state.adminProfile.profile);
-
-const profileError = useSelector((state) => state.adminProfile.error)
-
 
   return (
     <>

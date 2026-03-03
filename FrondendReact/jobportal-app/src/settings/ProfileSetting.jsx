@@ -30,6 +30,7 @@ import ErrorAlert from "../Components/ErrorAlert";
 import { MuiTelInput } from "mui-tel-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import LocationInput from "../Components/LocationInput";
+import Cloudinary from "../Components/Cloudinary";
 
 function ProfileSetting() {
   const navigate = useNavigate();
@@ -100,7 +101,7 @@ function ProfileSetting() {
   const [resumePreview, setResumePreview] = useState(Profile?.resume?.url);
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
-  const [submitbtnError, setSubmitbtnError] = useState(null);
+
 
   const UpdateDatas =
     user?.roleData === "user"
@@ -427,6 +428,18 @@ function ProfileSetting() {
 
   return (
     <>
+    {load ?                       <Cloudinary
+                        file={profileImage}
+                        fileType="image"
+                        model={
+                          user?.roleData === "user" ? "jobseekerProfile" :
+                          user?.roleData === "recruiter" ? "recruiterProfile" :
+                          user?.roleData === "admin" ? "adminProfile" : null
+                        }
+                        id={Profile?._id}
+                        field="image"
+                        existingFile={Profile?.profileImage}
+                      /> : null}
       <div className="">
         <div className="profile-header">
           <h2>Profile Settings</h2>
@@ -555,13 +568,13 @@ function ProfileSetting() {
 
           {/* Buttons */}
           <div className="action-section">
-            {load ? (
+            {load && profileImage && !ImageUrl  ? (
               <div className="d-flex justify-content-center">
                 {" "}
                 <ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`} />
               </div>
             ) : null}
-            {!load ? (
+            {!load  ? (
               <ErrorAlert
                 buttonName={`Save`}
                 buttonVariant={`outlined`}

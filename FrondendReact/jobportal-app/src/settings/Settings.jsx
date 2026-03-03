@@ -1,5 +1,5 @@
 import MainNav from "../Navbar/MainNav";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { useEffect, useState } from "react";
 import Account from "../settings/Account";
 import ProfileSetting from "./ProfileSetting";

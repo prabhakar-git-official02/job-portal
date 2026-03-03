@@ -4,14 +4,13 @@ import { applicantGetAllThunk } from "../../Thunks/applicantThunk";
 import { authThunk } from "../../Thunks/authThunk";
 import { InterviewsGet_Thunk } from "../../Thunks/InterviewThunk";
 import MainNav from "../../Navbar/MainNav";
-import { useNavigate } from "react-router-dom";
 import DialogboxSheduleInterview from "../../DialogBoxes/RecruiterPost/DialogboxSheduleInterview";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import SearchInput from "../../Components/SearchInput";
 
 function SheduleInterview() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
 
   const [search, setSearch] = useState("");
 

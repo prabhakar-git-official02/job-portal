@@ -1,6 +1,6 @@
 import api from "../api/axios";
 import { IsRecruiterPostsSuccess,IsRecruiterPostsFailure } from "../Redux/recruiterPostsSlice";
-import { showAlert } from "../Scripts/Alert";
+
 
 export const recruiterPostsThunk = () => {
     return async(dispatch) => {
