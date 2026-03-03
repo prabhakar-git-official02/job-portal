@@ -83,18 +83,16 @@ export const Login = async (req, res) => {
     );
 
     res.cookie("accessToken", Accesstoken, {
-      signed: true,
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
+   sameSite: "none",
+  secure: true,
       maxAge: 5 * 60 * 1000, // 15 mins
     });
 
     res.cookie("refreshToken", RefreshToken, {
-      signed: true,
       httpOnly: true,
-      sameSite: "None",
-      secure: true,
+  sameSite: "none",
+  secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -212,17 +210,15 @@ export const googleAuthLogin = async (req, res) => {
 
     res.cookie("accessToken", AccessToken, {
       httpOnly: true,
-      signed: true,
-            sameSite: "None",
-      secure: true,
+    sameSite: "none",
+  secure: true,
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", RefreshToken, {
       httpOnly: true,
-      signed: true,
-            sameSite: "None",
-      secure: true,
+  sameSite: "none",
+  secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -249,12 +245,16 @@ export const googleAuthLogin = async (req, res) => {
 // Refresh Token
 export const RefreshToken = async (req, res) => {
   try {
-    const refreshToken = req.signedCookies.refreshToken;
+    const refreshToken = req.cookies.refreshToken;
+
     if (!refreshToken) {
       return res.sendStatus(401);
     }
 
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_JWT_SECRET);
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_JWT_SECRET
+    );
 
     const newAccessToken = jwt.sign(
       {
@@ -264,13 +264,12 @@ export const RefreshToken = async (req, res) => {
         authProvider: decoded.authProvider,
       },
       process.env.ACCESS_JWT_SECRET,
-      { expiresIn: "7D" },
+      { expiresIn: "15m" }
     );
 
     res.cookie("accessToken", newAccessToken, {
-      signed: true,
       httpOnly: true,
-      sameSite: "None",
+      sameSite: "none",
       secure: true,
       maxAge: 15 * 60 * 1000,
     });
@@ -419,17 +418,15 @@ export const Logout = async (req, res) => {
   try {
     res.clearCookie("accessToken", {
       httpOnly: true,
-      signed: true,
-      sameSite: "None",
-      secure: true,
+  sameSite: "none",
+  secure: true,
       maxAge: 15 * 60 * 1000,
     });
 
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      signed: true,
-     sameSite: "None",
-      secure: true,
+   sameSite: "none",
+  secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 

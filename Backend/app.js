@@ -15,7 +15,7 @@ console.log(Object.keys(process.env));
 const port = process.env.PORT || 3000
 
 const app = express()
-app.use(cookieParser("secret-key"));
+app.use(cookieParser());
 
 const allowedOrigins = [
   "http://localhost:3000",

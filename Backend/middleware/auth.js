@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken"
 export const authmiddleware = (req,res,next) => {
   
 
-    const token = req.signedCookies.accessToken
+    const token = req.cookies.accessToken
     if(!token){
        return res.status(401).json({msg : 'Login Expired'})
     }
