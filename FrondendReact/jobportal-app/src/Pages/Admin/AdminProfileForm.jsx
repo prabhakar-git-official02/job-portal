@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import api from "../../api/axios";
 import { showAlert } from "../../Scripts/Alert";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { isValidEmail } from "../../Scripts/emailValidation";
 import CloudinaryInital from "../../Components/CloudinaryInitial";
 import {
@@ -13,18 +11,15 @@ import {
   IsImagePublicIdSuccess,
   IsCloudinaryFailure
 } from "../../Redux/cloudinarySlice";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import ErrorAlert from "../../Components/ErrorAlert";
-import ButtonUI from "../../Components/ButttonUI";
 import ProgressLoad from "../../Components/ProgressLoad";
 import MainNav from "../../Navbar/MainNav";
 import { IsAdminProfileFailure } from "../../Redux/adminProfileSlice";
-import Button from "@mui/material/Button";
 import LocationInput from "../../Components/LocationInput";
 import { MuiTelInput } from "mui-tel-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
@@ -50,7 +45,7 @@ function AdminProfileForm() {
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
   const [submitbtnError, setSubmitbtnError] = useState(null);
-  const [phoneErr,setPhoneErr] = useState(false)
+
 
   // cloudinary
   const ImageUrl = useSelector((state) => state.cloudinary.ImageUrl);

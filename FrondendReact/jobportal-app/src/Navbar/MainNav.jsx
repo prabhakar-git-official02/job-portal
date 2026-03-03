@@ -20,9 +20,7 @@ import DrawerJobseeker from './DrawerJobseeker';
 import { adminProfileThunk } from '../Thunks/adminProfileThunk';
 import { recruiterProfileThunk } from '../Thunks/recruiterProfileThunk';
 import { jobseekerProfileThunk } from '../Thunks/jobseekerProfileThunk';
-import Button from '@mui/material/Button';
-import ButtonUI from '../Components/ButttonUI';
-import HomeIcon from "@mui/icons-material/Home";
+
 
 export default function MainNav({Navbg,Iconbg,textColor}) {
 
@@ -71,9 +69,6 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [sidebarOpen,setSidebarOpen] = useState(false)
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);

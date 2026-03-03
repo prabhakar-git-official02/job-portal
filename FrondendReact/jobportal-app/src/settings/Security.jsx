@@ -5,11 +5,7 @@ import ErrorAlert from "../Components/ErrorAlert";
 import { IsTokenSuccess, IsTokenFailure } from "../Redux/ResetTokenSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressLoad from "../Components/ProgressLoad";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import MainNav from "../Navbar/MainNav";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import SecurityIcon from '@mui/icons-material/Security';
 
 function Security() {

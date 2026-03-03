@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { authThunk } from "../../Thunks/authThunk";
 import { useSelector } from "react-redux";
 import { InterviewsGet_Thunk } from "../../Thunks/InterviewThunk";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import MainNav from "../../Navbar/MainNav";
 import { applicantGetAllThunk } from "../../Thunks/applicantThunk";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -16,7 +16,7 @@ function InterviewCallDescription() {
   const [seeApplicantDeatils, setSeeApplicantDetails] = useState(false);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     dispatch(authThunk());

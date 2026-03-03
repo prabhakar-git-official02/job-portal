@@ -4,28 +4,16 @@ import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { allPostsThunk } from "../../Thunks/allPostsThunk"
 import { timeAgo } from "../../Components/timeago"
-import ButtonUI from "../../Components/ButttonUI"
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import BookmarkSharpIcon from '@mui/icons-material/BookmarkSharp';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import { useNavigate } from "react-router-dom"
 import { authThunk } from "../../Thunks/authThunk"
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Button from "@mui/material/Button"
 import { allRecruiters_Get, Post_Status_Update } from "../../Thunks/adminGetReqThunk"
-import SearchIcon from '@mui/icons-material/Search';
-import InputAdornment from "@mui/material/InputAdornment"
 import SearchInput from "../../Components/SearchInput"
 import DropDown from "../../Components/DropDown"
 
 function RecruiterPosts(){
 
         const dispatch = useDispatch()
-        const navigate = useNavigate()
         const [activeId, setActiveId] = useState(null);
-          const [statusKey, setStatusKey] = useState("");
   const [jobTypeKey, setJobTypekey] = useState("");
   const [jobPlatformKey, setJobPlatformKey] = useState("");
   const [locationKey,setLocationKey] = useState("")
@@ -73,23 +61,7 @@ function RecruiterPosts(){
     
   ];
 
-  const Cities = [
-"All Posts","Chennai","Coimbatore","Madurai","Trichy","Salem","Tirunelveli","Vellore","Erode","Thoothukudi","Thanjavur",
-"Bangalore","Mysore","Mangalore","Hubli","Belgaum","Hyderabad","Warangal","Karimnagar",
-"Visakhapatnam","Vijayawada","Guntur","Tirupati","Kochi","Trivandrum","Kozhikode","Thrissur",
-"Mumbai","Pune","Nagpur","Nashik","Aurangabad","Delhi","Noida","Gurgaon","Faridabad","Ghaziabad",
-"Ahmedabad","Surat","Vadodara","Rajkot","Jaipur","Udaipur","Jodhpur","Kota",
-"Lucknow","Kanpur","Varanasi","Agra","Prayagraj","Bhopal","Indore","Gwalior",
-"Kolkata","Howrah","Durgapur","Chandigarh","Ludhiana","Amritsar","Jalandhar",
-"Bhubaneswar","Cuttack","Patna","Gaya","Ranchi","Jamshedpur",
-"Raipur","Bilaspur","Guwahati","Silchar","Panaji","Margao",
-"Shimla","Dehradun","Haridwar","Srinagar","Jammu",
-"Puducherry","Port Blair","Imphal","Aizawl","Shillong",
-"Gangtok","Itanagar","Agartala","Kohima",
-"Aligarh","Bareilly","Moradabad","Meerut",
-"Jabalpur","Ujjain","Solapur","Kolhapur",
-"Vadodara","Tiruppur","Dhanbad","Asansol"
-];
+
 
   const filteredPosts = Posts?.filter((p) => {
     const jobTypeMatch =

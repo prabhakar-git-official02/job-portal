@@ -2,7 +2,6 @@ import { authThunk } from "../Thunks/authThunk"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import MainNav from "../Navbar/MainNav"
 import { LoginActivityThunk } from "../Thunks/LoginActivityThunk"
 
 function LoginActivity(){

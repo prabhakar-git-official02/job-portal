@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { authThunk } from "../../Thunks/authThunk";
 import { InterviewsGet_Thunk, Interview_ApplicantResult_Update_Thunk } from "../../Thunks/InterviewThunk";
 import MainNav from "../../Navbar/MainNav";
-import ButtonUI from "../../Components/ButttonUI";
 import { timeAgo } from "../../Components/timeago";
 import { useState } from "react";
 import SearchInput from "../../Components/SearchInput";

@@ -67,24 +67,20 @@ function App() {
           <Route
             path="/allJobs"
             element={
-              <PrivateLogin>
                 <AllJobs />
-              </PrivateLogin>
             }
           />
           <Route path="/cloudinary" element={<Cloudinary />} />
           <Route path="/Loading" element={<LoadingPage />} />
-          <Route path="/notification" element={<Notifications />} />
+          <Route path="/notification" element={<PrivateLogin><Notifications /></PrivateLogin>} />
           <Route path="/platformJobs" element={<PlatformJobs />} />
 
 
           {/* Settings */}
-          <Route path="/setting" element={<Settings />} />
-          <Route path="/profileSetting" element={<ProfileSetting />} />
-          <Route path="/account" element={<Account />} />
+          <Route path="/setting" element={<PrivateLogin><Settings /></PrivateLogin>} />
+          <Route path="/profileSetting" element={<PrivateLogin><ProfileSetting /></PrivateLogin>} />
+          <Route path="/account" element={<PrivateLogin><Account /></PrivateLogin>} />
           <Route path="/security" element={<Security/>}/>
-        <Route path="/forgot-password" element={<Security />} />
-        <Route path="/reset-password/:token" element={<Security />} />
 
           {/* Jobseeker */}
           <Route
@@ -95,56 +91,56 @@ function App() {
               </PrivateLogin>
             }
           />
-          <Route path="/appliedJobs" element={<AppliedJobs />} />
+          <Route path="/appliedJobs" element={<PrivateLogin><AppliedJobs /></PrivateLogin>} />
           <Route
             path="/jobseekerProfileForm"
-            element={<JobseekerProfileForm />}
+            element={<PrivateLogin><JobseekerProfileForm /></PrivateLogin>}
           />
-          <Route path="/savedJobs" element={<SavedJobs />} />
-          <Route path="/jobDescription/:id" element={<JobDescription />} />
-          <Route path="/interviewCalls" element={<InterviewCalls />} />
-          <Route path="/interviewCall/:id" element={<InterviewCall />} />
-          <Route path="/jobseekerDashboard" element={<JobseekerDashbboard />} />
-          <Route path="/viewStatusJobs" element={<ViewStatusJobs />} />
+          <Route path="/savedJobs" element={<PrivateLogin><SavedJobs /></PrivateLogin>} />
+          <Route path="/jobDescription/:id" element={<PrivateLogin><JobDescription /></PrivateLogin>} />
+          <Route path="/interviewCalls" element={<PrivateLogin><InterviewCalls /></PrivateLogin>} />
+          <Route path="/interviewCall/:id" element={<PrivateLogin><InterviewCall /></PrivateLogin>} />
+          <Route path="/jobseekerDashboard" element={<PrivateLogin><JobseekerDashbboard /></PrivateLogin>} />
+          <Route path="/viewStatusJobs" element={<PrivateLogin><ViewStatusJobs /></PrivateLogin>} />
           <Route
             path="/viewStatusInterviews"
-            element={<ViewStatusInterview />}
+            element={<PrivateLogin><ViewStatusInterview /></PrivateLogin>}
           />
 
           {/* Recruiter */}
-          <Route path="/candidate/:id" element={<Candidate />} />
-          <Route path="/candidates" element={<Candidates />} />
+          <Route path="/candidate/:id" element={<PrivateLogin><Candidate /></PrivateLogin>} />
+          <Route path="/candidates" element={<PrivateLogin><Candidates /></PrivateLogin>} />
           <Route
             path="/interviewCallDescription/:applicantId/:jobId"
-            element={<InterviewCallDescription />}
+            element={<PrivateLogin><InterviewCallDescription /></PrivateLogin>}
           />
-          <Route path="/myApplicants" element={<MyApplicants />} />
-          <Route path="/postDetails/:id" element={<PostDetails />} />
-          <Route path="/postForm" element={<PostForm />} />
-          <Route path="/recruiterProfile" element={<RecruiterProfile />} />
+          <Route path="/myApplicants" element={<PrivateLogin><MyApplicants /></PrivateLogin>} />
+          <Route path="/postDetails/:id" element={<PrivateLogin><PostDetails /></PrivateLogin>} />
+          <Route path="/postForm" element={<PrivateLogin><PostForm /></PrivateLogin>} />
+          <Route path="/recruiterProfile" element={<PrivateLogin><RecruiterProfile /></PrivateLogin>} />
           <Route
             path="/recruiterProfileForm"
-            element={<RecruiterProfileForm />}
+            element={<PrivateLogin><RecruiterProfileForm /></PrivateLogin>}
           />
-          <Route path="/sheduleInterview" element={<SheduleInterview />} />
-          <Route path="/sheduledInterviews" element={<SheduledInterviews />} />
-          <Route path="/viewPosts" element={<ViewPosts />} />
-          <Route path="/recruiterDashboard" element={<RecruiterDashboard />} />
-          <Route path="/viewStatusPosts" element={<ViewStatusPosts />} />
+          <Route path="/sheduleInterview" element={<PrivateLogin><SheduleInterview /></PrivateLogin>} />
+          <Route path="/sheduledInterviews" element={<PrivateLogin><SheduledInterviews /></PrivateLogin>} />
+          <Route path="/viewPosts" element={<PrivateLogin><ViewPosts /></PrivateLogin>} />
+          <Route path="/recruiterDashboard" element={<PrivateLogin><RecruiterDashboard /></PrivateLogin>} />
+          <Route path="/viewStatusPosts" element={<PrivateLogin><ViewStatusPosts /></PrivateLogin>} />
           <Route
             path="/viewStatusApplicants"
-            element={<ViewStatusApplicants />}
+            element={<PrivateLogin><ViewStatusApplicants /></PrivateLogin>}
           />
 
           {/* Admin */}
-          <Route path="/adminProfile" element={<AdminProfile />} />
-          <Route path="/adminProfileForm" element={<AdminProfileForm />} />
-          <Route path="/adminDashboard" element={<AdminDashboard />} />
-          <Route path="/jobseekerLists" element={<JobseekerLists />} />
-          <Route path="/manageJobPosts" element={<ManageJobPosts />} />
-          <Route path="/recruiterLists" element={<RecruiterLists />} />
-          <Route path="/recruiterPosts" element={<RecruiterPosts />} />
-          <Route path="/jobListPreview" element={<JobListPreview />} />
+          <Route path="/adminProfile" element={<PrivateLogin><AdminProfile /></PrivateLogin>} />
+          <Route path="/adminProfileForm" element={<PrivateLogin><AdminProfileForm /></PrivateLogin>} />
+          <Route path="/adminDashboard" element={<PrivateLogin><AdminDashboard /></PrivateLogin>} />
+          <Route path="/jobseekerLists" element={<PrivateLogin><JobseekerLists /></PrivateLogin>} />
+          <Route path="/manageJobPosts" element={<PrivateLogin><ManageJobPosts /></PrivateLogin>} />
+          <Route path="/recruiterLists" element={<PrivateLogin><RecruiterLists /></PrivateLogin>} />
+          <Route path="/recruiterPosts" element={<PrivateLogin><RecruiterPosts /></PrivateLogin>} />
+          <Route path="/jobListPreview" element={<PrivateLogin><JobListPreview /></PrivateLogin>} />
         </Routes>
       </BrowserRouter>
     </div>

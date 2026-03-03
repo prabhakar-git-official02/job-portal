@@ -1,11 +1,8 @@
 import { Dialog } from "primereact/dialog";
 import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { showAlert } from "../../Scripts/Alert";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { authThunk } from "../../Thunks/authThunk";

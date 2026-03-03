@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { showAlert } from "../Scripts/Alert";
-import Cloudinary from "../Components/Cloudinary";
 import { useNavigate } from "react-router-dom";
 import { jobseekerProfileUpdateThunk } from "../Thunks/jobseekerProfileThunk";
 import {
@@ -23,7 +22,6 @@ import {
   adminProfileThunk,
   adminProfileUpdateThunk,
 } from "../Thunks/adminProfileThunk";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import InputFileUpload from "../Components/InputFileUpload";
 import ProgressLoad from "../Components/ProgressLoad";

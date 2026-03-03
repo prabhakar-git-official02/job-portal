@@ -8,10 +8,6 @@ import Box from "@mui/material/Box";
 import { authThunk } from "../../Thunks/authThunk";
 import ErrorAlert from "../../Components/ErrorAlert";
 import ImageAvatar from "../../Components/ImageAvatar";
-import {
-  recruiterProfileThunk,
-  recruiterProfileUpdateThunk,
-} from "../../Thunks/recruiterProfileThunk";
 import { adminProfileThunk, adminProfileUpdateThunk } from "../../Thunks/adminProfileThunk";
 
 function DialogboxAbout() {

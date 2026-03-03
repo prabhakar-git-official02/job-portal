@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 import CloudinaryInital from "../../Components/CloudinaryInitial";
 import {
@@ -13,17 +12,15 @@ import {
   IsImagePublicIdSuccess,
   IsCloudinaryFailure,
 } from "../../Redux/cloudinarySlice";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import ErrorAlert from "../../Components/ErrorAlert";
-import ButtonUI from "../../Components/ButttonUI";
 import ProgressLoad from "../../Components/ProgressLoad";
 import MainNav from "../../Navbar/MainNav";
-import Button from "@mui/material/Button";
+
 
 function PostForm() {
   const dispatch = useDispatch();

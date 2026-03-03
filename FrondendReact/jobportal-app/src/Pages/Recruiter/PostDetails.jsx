@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import MainNav from "../../Navbar/MainNav";
 import { timeAgo } from "../../Components/timeago";
 import DialogboxRecruiterPost from "../../DialogBoxes/RecruiterPost/DialogboxRecruiterPost";
-import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 function PostDetails() {
   const { id } = useParams();
 

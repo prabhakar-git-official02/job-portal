@@ -8,22 +8,21 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import SecurityIcon from "@mui/icons-material/Security";
 import { authThunk } from "../Thunks/authThunk";
-import { useNavigate } from "react-router-dom";
+
 
 function Settings() {
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
 
   const [route, setRoute] = useState("account");
-  const [dark, setDark] = useState(false);
-  const [compact, setCompact] = useState(false);
+
 
   useEffect(() => {
     dispatch(authThunk());
   }, [dispatch]);
 
-  const user = useSelector((state) => state.auth.user);
+
 
   const menuItems = [
     {

@@ -1,7 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
@@ -13,10 +12,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddAlertIcon from '@mui/icons-material/AddAlert';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import DraftsIcon from '@mui/icons-material/Drafts';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";

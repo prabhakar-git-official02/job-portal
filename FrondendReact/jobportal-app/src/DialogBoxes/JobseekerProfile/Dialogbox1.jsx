@@ -1,19 +1,16 @@
 import { Dialog } from 'primereact/dialog';
 import { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../../Scripts/Alert';
 import Cloudinary from '../../Components/Cloudinary';
-import { useNavigate } from 'react-router-dom';
 import { jobseekerProfileUpdateThunk } from '../../Thunks/jobseekerProfileThunk';
 import { IsImageUrlSuccess,IsImagePublicIdSuccess, IsCloudinaryFailure } from '../../Redux/cloudinarySlice';
 
 function Dialogbox1({imgUrl,imgPublicId,nameMsg,bioMsg,aboutMsg,existingFile}){
-    const navigate = useNavigate()
+   
     const dispatch = useDispatch()
 
     const ImageUrl = useSelector(state => state.cloudinary.ImageUrl)

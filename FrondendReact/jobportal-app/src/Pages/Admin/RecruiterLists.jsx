@@ -1,13 +1,12 @@
 import MainNav from "../../Navbar/MainNav";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { allRecruiters_Get } from "../../Thunks/adminGetReqThunk";
 import AddCallIcon from "@mui/icons-material/AddCall";
 import MailIcon from "@mui/icons-material/Mail";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchInput from "../../Components/SearchInput";
-import { Country, State, City } from "country-state-city";
 import DropDown from "../../Components/DropDown";
 
 function RecruiterLists() {

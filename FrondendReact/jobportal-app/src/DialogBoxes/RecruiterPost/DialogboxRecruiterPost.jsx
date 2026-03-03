@@ -6,19 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import ErrorAlert from "../../Components/ErrorAlert";
-import ImageAvatar from "../../Components/ImageAvatar";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-import { allPostsThunk } from "../../Thunks/allPostsThunk";
 import { IsImageUrlSuccess,IsImagePublicIdSuccess,IsCloudinaryFailure } from "../../Redux/cloudinarySlice";
 import Cloudinary from "../../Components/Cloudinary";
 import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 import { recruiterPostsThunk,recruiterPostSkillAddThunk,recruiterPostSkillDeleteThunk, recruiterPostUpdateThunk } from "../../Thunks/recruiterPostsThunk";
 import ProgressLoad from "../../Components/ProgressLoad";
 import { showAlert } from "../../Scripts/Alert";
-import ButtonUI from "../../Components/ButttonUI";
+
 
 function DialogboxRecruiterPost({postId}){
     

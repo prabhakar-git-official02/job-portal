@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { allPostsThunk } from "../Thunks/allPostsThunk";
 import MainNav from "../Navbar/MainNav";
 import { timeAgo } from "../Components/timeago";
-import ButtonUI from "../Components/ButttonUI";
 import BookmarkSharpIcon from "@mui/icons-material/BookmarkSharp";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import { SavedJobsPostThunk, savedJobsThunk } from "../Thunks/savedJobsThunk";
@@ -12,7 +11,6 @@ import { applicantThunk } from "../Thunks/applicantThunk";
 import { authThunk } from "../Thunks/authThunk";
 import SearchInput from "../Components/SearchInput";
 import DropDown from "../Components/DropDown";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 function AllJobs() {
   const dispatch = useDispatch();
@@ -196,6 +194,19 @@ function AllJobs() {
             onChange={(e) => setLocationKey(e.target.value)}
           /> 
         </div>
+{!Posts ? 
+<div className="no-data-wrapper">
+  <img
+    src="nodata-image.avif"
+    alt="No applied jobs"
+    className="no-data-img"
+  />
+  <h5 className="no-data-title">No records found</h5>
+  <p className="no-data-text">
+   Currently, there are no records available.
+  </p>
+</div>: 
+<div>
 
         {/* Job Cards */}
         <div className="row g-3 g-md-4">
@@ -298,16 +309,49 @@ function AllJobs() {
                       {timeAgo(post?.updatedAt)}
                     </small>
                   </div>
+          
                 </div>
+          
               </div>
+
             ))}
+        
         </div>
+</div>
+}
       </div>
+          
 
       {/* Styles */}
       <style>
         {`
+.no-data-wrapper {
+  text-align: center;
+  padding: 60px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
 
+.no-data-img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  border-radius : 20px;
+  object-fit: contain;
+  opacity: 0.9;
+  margin-bottom: 25px;
+}
+
+.no-data-title {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.no-data-text {
+  font-size: 14px;
+  color: #888;
+}
 .page-bg{
   background: linear-gradient(135deg,#f8fafc,#eef2f7);
 }

@@ -8,13 +8,10 @@ import ProgressLoad from "../Components/ProgressLoad";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MainNav from "../Navbar/MainNav";
-import { useNavigate } from "react-router-dom";
 
 function ForgotPass(){
 
     const dispatch = useDispatch()
-    const navigate = useNavigate()
-
     const [email,setEmail] = useState("")
     const [Alertmsg,setAlertmsg] = useState(null)
     const [loading,setLoading] = useState(false)

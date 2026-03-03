@@ -2,14 +2,12 @@ import { recruiterProfileThunk } from "../../Thunks/recruiterProfileThunk";
 import { authThunk } from "../../Thunks/authThunk";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { showAlert } from "../../Scripts/Alert";
-import { useNavigate } from "react-router-dom";
 import MainNav from "../../Navbar/MainNav";
 import DialogboxCompany from '../../DialogBoxes/RecruiterProfile/DailogboxCompany'
 import DialogboxAbout from "../../DialogBoxes/RecruiterProfile/DialogboxAbout";
 function RecruiterProfile() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     dispatch(authThunk());

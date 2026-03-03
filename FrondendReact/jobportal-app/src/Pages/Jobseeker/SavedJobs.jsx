@@ -30,7 +30,7 @@ function SavedJobs() {
     dispatch(applicantThunk());
   }, [dispatch]);
 
-  const user = useSelector((state) => state.auth.user);
+
   const SavedJobs = useSelector((state) => state.savedJobs.SavedJobs);
   const Applied = useSelector((state) => state.applicantMemory.applicant);
 

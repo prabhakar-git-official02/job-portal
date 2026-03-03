@@ -10,7 +10,7 @@ import MainNav from "../Navbar/MainNav";
 import ProgressLoad from "../Components/ProgressLoad";
 import { authThunk } from "../Thunks/authThunk";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+
 
 function ResetPass() {
     const [newPassword, setNewPassword] = useState("")
@@ -25,7 +25,7 @@ function ResetPass() {
         dispatch(authThunk())
     },[dispatch])
 
-    const user = useSelector(state => state.auth.user)
+
 
     const { token } = useParams()
     console.log(token)

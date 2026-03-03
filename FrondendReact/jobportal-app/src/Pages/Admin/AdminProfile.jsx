@@ -3,8 +3,6 @@ import { authThunk } from "../../Thunks/authThunk";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import CustomizedSwitches from "../../Components/CustomizedSwitches";
-import { showAlert } from "../../Scripts/Alert";
 import { useNavigate } from "react-router-dom";
 import MainNav from "../../Navbar/MainNav";
 import DialogboxAbout from "../../DialogBoxes/AdminProfile/DialogboxAbout";

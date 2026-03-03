@@ -1,13 +1,10 @@
 import { Dialog } from "primereact/dialog";
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { applicantGetAllThunk } from "../../Thunks/applicantThunk";
 import { authThunk } from "../../Thunks/authThunk";
-import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CustomDateTimePicker from "../../Components/CustomDateTimePicker";
 import ErrorAlert from "../../Components/ErrorAlert";
@@ -17,7 +14,7 @@ import ProgressLoad from "../../Components/ProgressLoad";
 function DialogboxSheduleInterview({ApplicantId,ApplicantEmail,JobDetails,JobId}){
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+
     const [interviewDateAndTime,setInterviewDateAndTime] = useState(null)
     const [interviewLocation,setInterviewLocation] = useState("")
     const [interviewMessage,setInterviewMessage] = useState("")

@@ -1,36 +1,9 @@
 import axios from "axios";
-import { showAlert } from "../Scripts/Alert";
-
 
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
 });
-
-
-// api.interceptors.response.use(res => res,async err => {
-// try{
-//     const originalRequest = err.config;
-//     if (originalRequest?.url?.includes("/auth/refresh")) {
-//       return Promise.reject(err);
-//     }
-//     if (err.response?.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-//       try {
-//         await api.post("/auth/refresh");
-//         return api(originalRequest);
-//       } catch (refreshErr) {
-//         console.log("Refresh token expired. Logout user.");
-//         return Promise.reject(refreshErr);
-//       }
-//     }
-//     return Promise.reject(err);
-//   } catch(err){
-//     showAlert("Error",err.message || "Something went wrong","error")
-//   }
-//   }
-// );
-
 
 api.interceptors.response.use(
   (res) => res,
