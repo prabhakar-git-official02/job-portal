@@ -1,0 +1,306 @@
+import { recruiterProfileThunk } from "../../Thunks/recruiterProfileThunk";
+import { authThunk } from "../../Thunks/authThunk";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { showAlert } from "../../Scripts/Alert";
+import { useNavigate } from "react-router-dom";
+import MainNav from "../../Navbar/MainNav";
+import DialogboxCompany from '../../DialogBoxes/RecruiterProfile/DailogboxCompany'
+import DialogboxAbout from "../../DialogBoxes/RecruiterProfile/DialogboxAbout";
+function RecruiterProfile() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(authThunk());
+  }, [dispatch]);
+
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (user?.roleData === "recruiter") {
+      dispatch(recruiterProfileThunk());
+    }
+  }, [user, dispatch]);
+
+  const profile = useSelector(
+    (state) => state.recruiterProfile.profile,
+  );
+
+  console.log(profile)
+
+  const profileError = useSelector(
+    (state) => state.recruiterProfile.error,
+  );
+  return (
+    <>
+      <MainNav />
+      <br /><br /><br />
+      <div className="profile-wrapper">
+
+        {/* HEADER */}
+        <div className="profile-header">
+          <div className="profile-image-container">
+            <img
+              src={
+                profile?.profileImage?.url
+                  ? profile?.profileImage?.url
+                  : "default-profile.jpg"
+              }
+              alt="profile"
+              className="profile-image"
+            />
+          </div>
+
+          <div className="profile-top-info">
+            <h3>{profile?.firstName} {profile?.lastName}</h3>
+            <p>{profile?.bio || "Professional Recruiter"}</p>
+            <h5>{user?.roleData.toUpperCase()}</h5>
+          </div>
+        </div>
+
+        <div className="profile-content">
+
+          {/* BASIC INFO */}
+          <div className="section-card">
+            <div className="section-title">Basic Information</div>
+            <div className="basic-grid">
+              <div className="basic-item"><span>Email</span>{profile?.email}</div>
+              <div className="basic-item"><span>Phone</span>{profile?.phone}</div>
+              <div className="basic-item"><span>Age</span>{profile?.age}</div>
+              <div className="basic-item"><span>Gender</span>{profile?.gender}</div>
+              <div className="basic-item"><span>Country</span>{profile?.country}</div>
+              <div className="basic-item"><span>State</span>{profile?.state}</div>
+              <div className="basic-item"><span>City</span>{profile?.location}</div>
+            </div>
+          </div>
+
+          {/* ABOUT */}
+          <div className="section-card">
+            <div className="section-title">About</div>
+            <p>{profile?.about || "No About Added"}</p>
+            <div>
+             <DialogboxAbout/>
+            </div>
+          </div>
+
+          <div className="section-card">
+            <div className="section-title">Company Details</div>
+            <div className="basic-grid">
+              <div className="basic-item"><span>Company Name</span>{profile?.companyName}</div>
+              <div className="basic-item"><span>Industry</span>{profile?.industry}</div>
+              <div className="basic-item"><span>Designation</span>{profile?.designation}</div>
+              <div className="basic-item"><span>Company Size</span>{profile?.companySize}</div>
+              <div className="basic-item"><span>Company Webisite</span>{profile?.companyWebsite}</div>
+              <div className="basic-item"><span>Company Address</span>{profile?.companyAddress}</div>
+            </div>
+            <div>
+              <DialogboxCompany/>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+     <style>{`
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  padding:0;
+  background:#f4f6f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.profile-wrapper{
+  width:100%;
+  padding:20px;
+}
+
+/* ================= HEADER ================= */
+
+.profile-header{
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  border-radius:20px;
+  padding:30px 20px 80px 20px;
+  position:relative;
+  text-align:center;
+  color:white;
+}
+
+/* Profile Image */
+.profile-image-container{
+  position:absolute;
+  left:50%;
+  bottom:-60px;
+  transform:translateX(-50%);
+}
+
+.profile-image{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:5px solid white;
+  object-fit:cover;
+  box-shadow:0 8px 25px rgba(0,0,0,0.2);
+}
+
+.profile-top-info{
+  margin-top:10px;
+}
+
+.profile-top-info h3{
+  margin:0;
+  font-weight:600;
+}
+
+.profile-top-info p{
+  margin:5px 0 0 0;
+  font-size:14px;
+  opacity:0.9;
+}
+
+/* ================= CONTENT ================= */
+
+.profile-content{
+  margin-top:80px;
+}
+
+/* Card */
+.section-card{
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  margin-bottom:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.05);
+}
+
+.section-title{
+  font-size:17px;
+  font-weight:600;
+  margin-bottom:15px;
+  color:#1e3c72;
+}
+
+/* ================= BASIC GRID ================= */
+
+.basic-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+
+.basic-item{
+  background:#f9fafc;
+  padding:12px;
+  border-radius:10px;
+  font-size:14px;
+}
+
+.basic-item span{
+  display:block;
+  font-weight:600;
+  color:#2a5298;
+}
+
+/* ================= SKILLS ================= */
+
+.skill-container{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.skill{
+  background:linear-gradient(90deg,#00c6ff,#0072ff);
+  color:white;
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+/* ================= INNER CARD ================= */
+
+.inner-card{
+  background:#f9fafc;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:12px;
+  border:1px solid #eee;
+}
+
+.inner-card h6{
+  margin-bottom:6px;
+  font-weight:600;
+}
+
+.inner-card p{
+  font-size:13px;
+  margin:3px 0;
+  color:#555;
+}
+
+/* Buttons */
+.delete-btn{
+  margin-top:8px;
+  background:linear-gradient(90deg,#f43f5e,#dc2626);
+  color:white;
+  border:none;
+  padding:5px 10px;
+  border-radius:6px;
+  font-size:12px;
+}
+
+/* ================= DESKTOP BREAKPOINT ================= */
+
+@media(min-width:768px){
+
+  .profile-wrapper{
+    padding:40px 60px;
+  }
+
+  .profile-header{
+    text-align:left;
+    padding:40px 60px 100px 60px;
+  }
+
+  .profile-image-container{
+    left:60px;
+    transform:none;
+  }
+
+  .profile-image{
+    width:150px;
+    height:150px;
+  }
+
+  .profile-top-info{
+    margin-left:220px;
+    margin-top:0;
+  }
+
+  .profile-content{
+    margin-top:100px;
+  }
+
+  .basic-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(min-width:1024px){
+  .basic-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+`}</style>
+     
+    </>
+  );
+}
+
+export default RecruiterProfile;

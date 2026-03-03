@@ -1,0 +1,88 @@
+import Recruiter from "../models/RecruiterProfileShema.js"
+import Jobseeker from "../models/JobSeekerProfileSchema.js"
+
+// recruiter profile photo
+export const recruiter_Photo = async(req,res) => {
+    try{
+        const recruiterExist = await Recruiter.findOne({recruiterId : req.userId})
+        if(!recruiterExist){
+            return res.status(404).json({msg : 'Recruiter not Found'})
+        }
+        
+        if(!req.file){
+            return res.status(404).json({msg : 'Image not Found'})
+        }
+
+        const imagePath = req.file.path.replace(/\\/g, "/")
+        console.log(imagePath)
+        const uploadImage = await Recruiter.findOneAndUpdate(
+            {recruiterId : req.userId},
+            {$set : {ProfileUrl : imagePath}},
+            {new : true}
+        )
+
+        res.json({
+            msg : 'Profile photo uploaded',
+            data : uploadImage
+        })
+    } catch(err){
+        res.json({msg : err.message})
+    }
+}
+
+
+// jobseeker profile photo
+export const jobseeker_Photo = async(req,res) => {
+    try{
+        const jobseekerExist = await Jobseeker.findOne({jobseekerId : req.userId})
+        if(!jobseekerExist){
+            return res.status(404).json({msg : 'Jobseeker not Found'})
+        }
+
+        if(!req.file){
+            return res.status(404).json({msg : 'Image not found'})
+        }
+        console.log(req.file)
+        const imagePath = req.file.path.replace(/\\/g, "/")
+
+        const uploadImage = await Jobseeker.findOneAndUpdate(
+            {jobseekerId : req.userId},
+            {$set : {profileUrl : imagePath}},
+            {new : true}
+        )
+        res.json({
+            msg : 'Profile Photo Updated successfully',
+            data  : uploadImage
+        })
+    } catch(err){
+        res.status(500).json({msg : err.message})
+    }
+}
+
+// jobseeker resume
+export const jobseeker_Resume = async(req,res)=>{
+    try{
+        const jobseekerExist = await Jobseeker.findOne({jobseekerId : req.userId})
+        if(!jobseekerExist){
+            return res.status(404).json({msg : 'Jobseeker not Found'})
+        }
+
+        if(!req.file){
+            return res.status(404).json({msg : 'resume not found'})
+        }
+        console.log(req.file)
+        const resumePath = req.file.path.replace(/\\/g, "/")
+
+        const uploadResume = await Jobseeker.findOneAndUpdate(
+            {jobseekerId : req.userId},
+            {$set : {resumeUrl : resumePath}},
+            {new : true}
+        )
+        res.json({
+            msg : 'Resume Uploaded successfully',
+            data : uploadResume
+        })
+    } catch(err){
+        res.status(500).json({msg : err.message})
+    }
+}

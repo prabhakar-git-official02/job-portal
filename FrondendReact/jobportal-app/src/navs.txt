@@ -1,0 +1,12 @@
+        <h5 onClick={() => navigate('/')}>Home</h5>
+          <h5 onClick={() => navigate('/login')}>Login</h5>
+            <h5 onClick={() => navigate('/register')}>Register</h5>
+          <h5 onClick={() => navigate('/jobseekerProfile')}>JobseekerProfile</h5>
+            <h5 onClick={() => navigate('/recruiterProfile')}>RecruiterProfile</h5>
+              <h5 onClick={() => navigate('/adminProfile')}>Admin Profile</h5>
+        <h5 onClick={() => navigate('/allJobs')}>All Jobs</h5>
+        <h5 onClick={() => navigate('/appliedJobs')}>Applied Jobs</h5>
+        <h5 onClick={() => navigate('/savedJobs')}>Saved Jobs</h5>
+        <h5 onClick={() => navigate('/postForm')}>Post Job</h5>
+        <h5 onClick={() => navigate('/viewPosts')}>View Posted Jobs</h5>
+        <h5 onClick={() => navigate('/dashboard')}>Dashboard</h5>

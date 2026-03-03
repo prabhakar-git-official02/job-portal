@@ -1,0 +1,74 @@
+import api from "../api/axios";
+ import { useEffect, useState} from "react";
+  import { useNavigate } from "react-router-dom";
+   import { showAlert } from "../Scripts/Alert";
+    import { useDispatch, useSelector } from "react-redux";
+     import { loginSuccess } from "../Redux/authSlice";
+      import Box from "@mui/material/Box"; 
+      import TextField from "@mui/material/TextField"; 
+      import ErrorAlert from "../Components/ErrorAlert";
+       import ProgressLoad from "../Components/ProgressLoad";
+        import MainNav from "../Navbar/MainNav";
+         import { authThunk } from "../Thunks/authThunk"; 
+         function Login() { 
+            const navigate = useNavigate();
+             const dispatch = useDispatch(); 
+             useEffect(() => {
+                 dispatch(authThunk())
+                  },[dispatch])
+                   const user = useSelector(state => state.auth.user) 
+                   console.log(user)
+                    const [email, setEmail] = useState(""); 
+                    const [password, setPassword] = useState("");
+                     const [Alertmsg, setAlertmsg] = useState(null);
+                      const [loading, setLoading] = useState(false); 
+                      const login = async (e) => {
+                         e.preventDefault();
+                          if (email.trim() === "") { 
+                            setAlertmsg({
+                                 msg: "Email Required!",
+                                  id: Date.now(), });
+                                   setLoading(false);
+                                    return; 
+                                    } 
+                            if (password.trim() === "") { 
+                                setAlertmsg({ 
+                                    msg: "Password Required!",
+                                     id: Date.now(), 
+                                     });
+                                      setLoading(false);
+                                       return; 
+                                       }
+                                        try { 
+                                            const response = await api.post( "/auth/login",
+                                             {
+                                                 email: email,
+                                                  password: password,
+                                                   },
+                                         { withCredentials: true, },
+                                          ); 
+                                          if (response) { 
+                                            try{
+                                                 const response = await api.post('/auth/loginActivity',
+                                                  {},
+                                                   {withCredentials : true} 
+                                                  ) 
+                                                  if(response){
+                                                     showAlert("Success","Login Success","success") 
+                                                     } 
+                                                     } catch(err){
+                                                         showAlert("Error",err?.response?.data?.msg) 
+                                                         } 
+                                            dispatch(loginSuccess(response.data.user)); 
+                                            sessionStorage.setItem("AuthProvider", response?.data?.user?.authProvider);
+                                             setEmail(""); 
+                                             setPassword("");
+                                              setAlertmsg(null); 
+                                              setLoading(false); 
+                                              showAlert("Success", "Login Success", "success"); 
+                                              return navigate("/");
+                                               }
+                                                } catch (err) {
+                                                     showAlert("Error", err.response?.data?.msg || "Login Failed", "error");
+                                                      } 
+                                                      };

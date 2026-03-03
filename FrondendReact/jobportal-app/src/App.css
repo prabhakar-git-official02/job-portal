@@ -1,0 +1,30 @@
+.swal2-container {
+  z-index: 9999 !important;
+}
+
+:root{
+--bg:white;
+--text:black;
+}
+
+body{
+background: linear-gradient(135deg,#f8fafc,#eef2f7);
+font-family: "Inter", sans-serif;
+}
+
+.dark{
+background:rgb(42, 40, 40);
+color:white;
+}
+
+.fontSizeLarge{
+  font-size: large;
+}
+
+.fontSizeMedium{
+  font-size: medium;
+}
+
+.fontSizeSmall{
+  font-style: italic;
+}

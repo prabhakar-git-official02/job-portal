@@ -1,0 +1,70 @@
+import axios from "axios";
+import { showAlert } from "../Scripts/Alert";
+
+
+const api = axios.create({
+  baseURL: "http://localhost:5000",
+  withCredentials: true,
+});
+
+
+// api.interceptors.response.use(res => res,async err => {
+// try{
+//     const originalRequest = err.config;
+//     if (originalRequest?.url?.includes("/auth/refresh")) {
+//       return Promise.reject(err);
+//     }
+//     if (err.response?.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+//       try {
+//         await api.post("/auth/refresh");
+//         return api(originalRequest);
+//       } catch (refreshErr) {
+//         console.log("Refresh token expired. Logout user.");
+//         return Promise.reject(refreshErr);
+//       }
+//     }
+//     return Promise.reject(err);
+//   } catch(err){
+//     showAlert("Error",err.message || "Something went wrong","error")
+//   }
+//   }
+// );
+
+
+api.interceptors.response.use(
+  (res) => res,
+  async (err) => {
+    const originalRequest = err.config;
+
+    // Avoid infinite loop
+    if (originalRequest?.url?.includes("/auth/refresh")) {
+      console.log("Session Expired", "Please login again", "error");
+      return Promise.reject(err);
+    }
+
+    if (err.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        await api.post("/auth/refresh");
+        return api(originalRequest);
+      } catch (refreshErr) {
+        console.log("Session Expired", "Please login again", "error");
+        return Promise.reject(refreshErr);
+      }
+    }
+
+    // Other errors
+    console.log(
+      "Error",
+      err.response?.data?.msg || err.message || "Something went wrong",
+      "error"
+    );
+
+    return Promise.reject(err);
+  }
+);
+
+
+
+export default api;

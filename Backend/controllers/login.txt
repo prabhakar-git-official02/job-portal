@@ -1,0 +1,61 @@
+// Login
+export const Login = async(req,res) => {
+    const {email,password} = req.body
+    const user = await User.findOne({email})
+    if(!user){
+      return  res.status(404).json({msg : 'User not registered'})
+    }
+    const isMatch = await bcrypt.compare(password,user.password)
+    if(!isMatch){
+       return res.status(404).json({msg : 'Login Failed'})
+    }
+    try{
+    const Accesstoken =jwt.sign(
+        {
+            userId:user._id,
+            role:user.role,    
+        },
+        process.env.ACCESS_JWT_SECRET,
+        {expiresIn : '15m'}
+        
+    )
+
+    const RefreshToken = jwt.sign(
+        {
+            userId:user._id,
+            role:user.role,    
+        },
+        process.env.REFRESH_JWT_SECRET,
+        {expiresIn : '7D'}
+    )
+
+    res.cookie("accessToken",Accesstoken,
+        {
+            signed:true,
+            httpOnly:true,
+            secure:false,
+            sameSite:'strict',
+            maxAge : 5*60*1000 // 15 mins
+        }
+    )
+
+    res.cookie("refreshToken",RefreshToken,
+        {
+            signed:true,
+            httpOnly:true,
+            secure:false,
+            sameSite:'strict',
+            maxAge : 7*24*60*60*1000 // 7 days
+        }
+    )
+
+
+    res.json({
+        msg : 'Login success',
+        data : true,
+        roleData : user.role,
+    })
+} catch(err){
+    res.status(500).json(err.message)
+}
+}
