@@ -60,13 +60,6 @@ function DialogboxAbout() {
         style={{ background: `linear-gradient(90deg, #8b5cf6, #7c3aed)` }}
         label="Show"
         icon={faPenToSquare}
-        breakpoints={{
-          "1400px": "50vw",
-          "1024px": "60vw",
-          "768px": "80vw",
-          "560px": "95vw",
-          "480px": "98vw",
-        }}
         onClick={() => {
           setVisible(true);
           setAbout(AdminProfile?.about);

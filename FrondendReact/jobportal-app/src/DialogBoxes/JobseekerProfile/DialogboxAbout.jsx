@@ -62,13 +62,6 @@ function DialogboxAbout() {
       <span
         className="mx-2"
         label="Show"
-          breakpoints={{
-    "1400px": "50vw",
-    "1024px": "60vw",
-    "768px": "80vw",
-    "560px": "95vw",
-    "480px": "98vw"
-  }}
         icon={`pi pi-external-link`}
         onClick={
           () => {
@@ -89,6 +82,13 @@ function DialogboxAbout() {
       
         header={`Find Dreams`}
         visible={visible}
+                breakpoints={{
+          "1400px": "50vw",
+          "1024px": "60vw",
+          "768px": "80vw",
+          "560px": "95vw",
+          "480px": "98vw",
+        }}
         style={{ width: "50vw" }}
         onHide={() => {
           if (!visible) return;
