@@ -1,5 +1,5 @@
 import MainNav from "../Navbar/MainNav";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import Account from "../settings/Account";
 import ProfileSetting from "./ProfileSetting";
@@ -9,53 +9,29 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import SecurityIcon from "@mui/icons-material/Security";
 import { authThunk } from "../Thunks/authThunk";
 
-
 function Settings() {
-
   const dispatch = useDispatch();
-
-
   const [route, setRoute] = useState("account");
-
 
   useEffect(() => {
     dispatch(authThunk());
   }, [dispatch]);
 
-
-
   const menuItems = [
-    {
-      id: "account",
-      label: "Account",
-      icon: <PersonOutlineIcon />
-    },
-    {
-      id: "profile",
-      label: "Profile",
-      icon: <SettingsIcon />
-    },
-    {
-      id: "security",
-      label: "Security",
-      icon: <SecurityIcon />
-    }
+    { id: "account", label: "Account", icon: <PersonOutlineIcon /> },
+    { id: "profile", label: "Profile", icon: <SettingsIcon /> },
+    { id: "security", label: "Security", icon: <SecurityIcon /> }
   ];
 
   return (
     <>
       <MainNav />
-      <div className="container-fluid m-0 p-0 page-bg">
 
-<div
-  className={`settings-wrapper page-bg`}
->
-
-        <div className="settings-container m-0 p-0">
+      <div className="settings-wrapper">
+        <div className="settings-container">
 
           {/* SIDEBAR */}
           <div className="settings-sidebar">
-
             <h4 className="sidebar-title">
               <SettingsIcon />
               Settings
@@ -73,72 +49,56 @@ function Settings() {
                 </div>
               ))}
             </div>
-
-            
-
           </div>
 
-
           {/* CONTENT */}
-          <div className="settings-content m-2 d-flex align-items-center">
-        
-            {route === "account" && <Account /> }
-
-            {route === "profile" &&<ProfileSetting />}
-
-            {route === "security" && <Security/>}
-          
+          <div className="settings-content">
+            {route === "account" && <Account />}
+            {route === "profile" && <ProfileSetting />}
+            {route === "security" && <Security />}
           </div>
 
         </div>
-
       </div>
 
-
-      {/* STYLE */}
       <style>{`
+
 *{
   box-sizing:border-box;
 }
-.settings-wrapper{
-  padding:100px 20px 40px;
-  background:#f1f5f9;
-  min-height:100vh;
-  transition:0.3s ease;
 
+/* ===== Wrapper ===== */
+.settings-wrapper{
+  padding:110px 20px 40px;
+  min-height:100vh;
+  background:linear-gradient(135deg,#f8fafc,#eef2f7);
   display:flex;
   justify-content:center;
 }
 
-/* LAYOUT */
+/* ===== Layout ===== */
 .settings-container{
   display:grid;
   grid-template-columns:260px 1fr;
   gap:30px;
   width:100%;
-  max-width:1200px;   /* 👈 THIS makes whole layout center */
+  max-width:1200px;
 }
 
-.page-bg{
-  background: linear-gradient(135deg,#f8fafc,#eef2f7);
-}
-
-
-/* SIDEBAR */
+/* ===== Sidebar ===== */
 .settings-sidebar{
-  background:#fff;
-  padding:25px;
+  background:#ffffff;
   border-radius:18px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.06);
+  padding:25px 20px;
+  box-shadow:0 10px 35px rgba(0,0,0,0.05);
   height:fit-content;
   position:sticky;
-  top:110px;
-  transition:0.3s;
+  top:100px;
 }
 
 .sidebar-title{
   font-weight:700;
-  margin-bottom:20px;
+  margin-bottom:25px;
   display:flex;
   align-items:center;
   gap:8px;
@@ -157,115 +117,49 @@ function Settings() {
   padding:12px 15px;
   border-radius:12px;
   cursor:pointer;
-  margin-bottom:8px;
-  transition:all 0.25s ease;
+  margin-bottom:10px;
+  transition:0.25s ease;
   font-weight:500;
   color:#444;
 }
 
 .sidebar-item:hover{
-  background:#f1f3f9;
-  transform:translateX(3px);
+  background:#f2f4f8;
 }
 
 .sidebar-item.active{
-  background:linear-gradient(135deg,#111,#333);
+  background:#385e82;
   color:#fff;
 }
 
-.sidebar-divider{
-  height:1px;
-  background:#eee;
-  margin:20px 0;
-}
-
-.toggle-group label{
-  display:flex;
-  justify-content:space-between;
-  font-size:14px;
-  margin-bottom:12px;
-  cursor:pointer;
-}
-
-.security-card,
-.security-card *{
-  box-sizing:border-box;
-}
-
-/* CONTENT */
+/* ===== Content ===== */
 .settings-content{
-  background:#fff;
+  background:#ffffff;
   padding:40px;
   border-radius:18px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.06);
+  box-shadow:0 10px 35px rgba(0,0,0,0.05);
   min-height:600px;
-  transition:0.3s;
+  transition:0.3s ease;
 }
 
-/* DARK MODE */
-.dark-mode{
-  background:#111;
-}
-
-.dark-mode .settings-sidebar,
-.dark-mode .settings-content{
-  background:#1c1c1c;
- 
-}
-
-.dark-mode .sidebar-item{
-  color:#ccc;
-}
-
-.dark-mode .sidebar-item:hover{
-  background:#2a2a2a;
-}
-
-.dark-mode .sidebar-item.active{
-  background:#333;
-}
-
-/* COMPACT MODE */
-.compact{
-  font-size:14px;
-}
-
-.compact .settings-content{
-  padding:25px;
-}
-
-
-/* Tablet */
-
-
+/* ===== Tablet ===== */
 @media(max-width:1024px){
 
   .settings-container{
     grid-template-columns:1fr;
-    gap:25px;
   }
 
   .settings-sidebar{
     position:relative;
     top:0;
   }
-
-}
-.settings-content > *{
-  width:100%;
 }
 
-  .security-card{
-  margin:0 auto;
-}
-
-/* Mobile res */
-
-
+/* ===== Mobile ===== */
 @media(max-width:768px){
 
   .settings-wrapper{
-    padding:90px 15px 30px;
+    padding:100px 15px 30px;
   }
 
   .settings-container{
@@ -275,38 +169,22 @@ function Settings() {
 
   .settings-sidebar{
     display:flex;
-    flex-direction:row;
+    flex-direction:column;
     align-items:center;
-    width:100%;
-    overflow-x:auto;
-    gap:10px;
     padding:15px;
     border-radius:14px;
-    position:static;
-    height:auto;
+    position:relative;
   }
 
-  /* Hide scrollbar */
-  .settings-sidebar::-webkit-scrollbar{
-    display:none;
-  }
-
-  .settings-sidebar{
-    scrollbar-width:none;
-  }
-
-
-
-  .sidebar-title,
-  .sidebar-divider,
-  .toggle-group{
+  .sidebar-title{
     display:none;
   }
 
   .menu-list{
     flex-direction:row;
-    gap:10px;
+    justify-content:space-between;
     width:100%;
+    gap:10px;
   }
 
   .sidebar-item{
@@ -314,53 +192,24 @@ function Settings() {
     flex-direction:column;
     justify-content:center;
     text-align:center;
-    min-width:100px;
     font-size:12px;
-    margin-bottom:0;
-    padding:12px;
-  }
-
-  .sidebar-item:hover{
-    transform:none;
+    margin:0;
+    padding:10px;
   }
 
   .settings-content{
-    padding:20px 12px;
-    display:flex;
-    justify-content:center;   
+    padding:20px 15px;
   }
-
-  .settings-content > *{
-    width:100%;
-    max-width:420px;          
-    margin:0 auto;           
-  }
-
 }
 
-@media (max-width:360px){
-
-  .settings-content{
-    padding:15px 10px;
-    display:flex !important;
-    justify-content:center !important;
+/* ===== Small Mobile ===== */
+@media(max-width:400px){
+  .sidebar-item span{
+    font-size:11px;
   }
-
-  .security-card{
-    width:100% !important;
-    max-width:100% !important;
-    margin:0 auto !important;
-    box-sizing:border-box;
-  }
-
-}
-
-
-
 }
 
       `}</style>
-</div>
     </>
   );
 }

@@ -346,7 +346,6 @@ const SignOut = async () => {
     </div>
 <style>{ `
 .lux-security-root {
-  padding: 40px 20px;
   color: black;
 }
 
@@ -356,7 +355,7 @@ color : white;
     radial-gradient(circle at top, #1a1a2e, #0f0f1a);
 
   border-radius: 20px;
-  padding: 35px;
+  padding: 25px;
   border: 1px solid rgba(255,215,0,0.15);
 
   box-shadow:
