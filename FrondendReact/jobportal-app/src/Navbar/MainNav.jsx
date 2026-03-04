@@ -122,7 +122,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
           </Typography>
 
             <div>
-              {!user ? <button onClick={() => handleLogin()} className='premium-btn'>Login</button> : null}
+            
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -151,6 +151,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
               >
                 
                 <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
+                 {!user ? <MenuItem  onClick={handleLogin}>Login</MenuItem> : null}
                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={handleSettings}>Settings</MenuItem>
               </Menu>
