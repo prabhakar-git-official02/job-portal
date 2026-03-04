@@ -1,8 +1,6 @@
 import {  useState } from "react";
 import api from "../api/axios";
 import ErrorAlert from "../Components/ErrorAlert";
-import { IsTokenSuccess,IsTokenFailure } from "../Redux/ResetTokenSlice";
-import { useDispatch } from "react-redux";
 import ProgressLoad from "../Components/ProgressLoad";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -10,7 +8,6 @@ import MainNav from "../Navbar/MainNav";
 import { useNavigate } from "react-router-dom";
 function ForgotPass(){
 
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [email,setEmail] = useState("")
     const [Alertmsg,setAlertmsg] = useState(null)
@@ -40,7 +37,6 @@ function ForgotPass(){
             }
         );
 if (response) {
-    dispatch(IsTokenSuccess(response.data.data));
     setLoading(false);
     setEmail("");
     setAlertmsg(null);
@@ -49,7 +45,6 @@ if (response) {
     navigate(`/reset-password/${token}`); 
 }
     } catch(err){
-        dispatch(IsTokenFailure(err.response?.data?.msg))
         setLoading(false)
         setAlertmsg({
             msg : err?.response?.data?.msg,
