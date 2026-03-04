@@ -25,7 +25,7 @@ function Security() {
 
   const ResetLink = useSelector((state) => state.resetToken.token);
 
-  console.log(ResetLink);
+  console.log("Reset-Link",ResetLink);
 
 
   // forget password
@@ -70,7 +70,8 @@ function Security() {
   
   const CleanLink = ResetLink?.replace("https://job-portal-zeta-bice.vercel.app/", "");
 
-  const resetPassword = async (e) => {
+  const resetPassword = async (e) => 
+    {
     e.preventDefault();
     setResetLoading(true);
 
@@ -240,7 +241,8 @@ const SignOut = async () => {
               />
 
             </>
-          ) : (
+          ) :
+          ResetLink ? (
             <>
               <div className="lux-field">
 
@@ -282,7 +284,7 @@ const SignOut = async () => {
               />
 
             </>
-          )}
+          ) : null}
 
         </div>
 
