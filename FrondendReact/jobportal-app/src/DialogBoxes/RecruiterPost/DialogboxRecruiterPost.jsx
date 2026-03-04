@@ -16,6 +16,7 @@ import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 import { recruiterPostsThunk,recruiterPostSkillAddThunk,recruiterPostSkillDeleteThunk, recruiterPostUpdateThunk } from "../../Thunks/recruiterPostsThunk";
 import ProgressLoad from "../../Components/ProgressLoad";
 import { showAlert } from "../../Scripts/Alert";
+import { updateOptions } from "recharts/types/state/rootPropsSlice";
 
 
 function DialogboxRecruiterPost({postId}){
@@ -60,7 +61,7 @@ function DialogboxRecruiterPost({postId}){
          public_id:  ImagePublicId ? ImagePublicId :  Post?.profileImage?.public_id,
          },
          companyName: company ? company : Post?.companyName,
-         location : location ? location : Post?.jobLocation,
+         jobLocation : location ? location : Post?.jobLocation,
          jobType : jobType ? jobType : Post?.jobType,
          jobPlatform : jobPlatform ? jobPlatform : Post?.jobPlatform,
          experience : experience ? experience : Post?.experience,
@@ -195,7 +196,7 @@ function DialogboxRecruiterPost({postId}){
   "Construction",
   "Government Services"
 ];
-
+console.log(UpdateDatas)
 
     return(
         <>
