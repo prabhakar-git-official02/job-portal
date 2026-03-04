@@ -24,8 +24,13 @@ function Login() {
   const [password, setPassword] = useState("");
   const [Alertmsg, setAlertmsg] = useState(null);
   const [loading, setLoading] = useState(false);
+
+
   const login = async (e) => {
     e.preventDefault();
+
+    setLoading(true)
+    
     if (email.trim() === "") {
       setAlertmsg({
         msg: "Email Required!",
