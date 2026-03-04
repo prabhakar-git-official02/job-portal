@@ -44,7 +44,7 @@ function ForgotPass(){
            setLoading(false)
            setEmail("")
            setAlertmsg(null)
-           navigate(`/resetPassword/${response.data.data}`)
+           return navigate(`/reset-password/${response.data.data}`)
            
         }
     } catch(err){
