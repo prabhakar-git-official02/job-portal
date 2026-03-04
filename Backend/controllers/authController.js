@@ -3,7 +3,6 @@ import User from "../models/UsersShema.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
-import nodemailer from "nodemailer";
 import LoginActivity from "../models/UserLoginActivity.js";
 import sgMail from "@sendgrid/mail";
 
