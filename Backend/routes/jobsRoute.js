@@ -57,7 +57,7 @@ route.post('/recruiterCheck',authmiddleware,recruiter_Middleware,Recruiter_Check
 route.post('/jobseekerCheck',authmiddleware,Jobseeker_Check)
 
 // get All Posts
-route.get('/getAllPosts',authmiddleware,Posts_Get);
+route.get('/getAllPosts',Posts_Get);
 
 // get all applied jobs
 route.get('/getApplicants',authmiddleware,Applicants)
