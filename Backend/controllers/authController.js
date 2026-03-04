@@ -5,6 +5,7 @@ import crypto from "crypto";
 import { OAuth2Client } from "google-auth-library";
 import nodemailer from "nodemailer";
 import LoginActivity from "../models/UserLoginActivity.js";
+import sgMail from "@sendgrid/mail";
 
 // register
 export const setRegister = async (req, res) => {
@@ -288,65 +289,41 @@ export const RefreshToken = async (req, res) => {
 
 
 // Forget password
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 export const ForgetPassword = async (req, res) => {
   try {
     const { email } = req.body;
-
     console.log("ForgetPassword called for:", email);
 
     const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ msg: "User Not Found" });
+    if (user.authorizedType === "google") 
+      return res.status(400).json({ msg: "This account uses Google Sign-In" });
 
-    if (!user) {
-      return res.status(404).json({ msg: "User Not Found" });
-    }
-
-    if (user.authorizedType === "google") {
-      return res.status(400).json({
-        msg: "This account uses Google Sign-In",
-      });
-    }
-
-    // crypto token
+    // Generate reset token
     const resetToken = crypto.randomBytes(32).toString("hex");
-
-    user.resetPasswordToken = crypto
-      .createHash("sha256")
-      .update(resetToken)
-      .digest("hex");
-
-    user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hr
-
+    user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hour
     await user.save();
 
     const reseturl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     console.log("Generated Reset URL:", reseturl);
 
-    // send Mail
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465, // SSL
-      secure: true,
-      auth: {
-        user: process.env.MY_GMAIL,
-        pass: process.env.MY_APP_PASSWORD, 
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.MY_GMAIL,
+    // Send email via SendGrid
+    const msg = {
       to: email,
+      from: process.env.SENDGRID_VERIFIED_SENDER,
+      replyTo: process.env.SENDGRID_VERIFIED_SENDER, 
       subject: "Reset Your Password",
       text: `Hello ${email},\n\nClick this link to reset your password:\n${reseturl}\n\nLink expires in 1 hour`,
     };
 
     console.log("Sending email...");
-    await transporter.sendMail(mailOptions);
+    await sgMail.send(msg);
     console.log("Email sent successfully");
 
-    res.json({
-      msg: `Reset Password link sent to your email`,
-      data: reseturl,
-    });
+    res.json({ msg: "Reset Password link sent to your email", data: reseturl });
   } catch (err) {
     console.log("ForgetPassword Error:", err.message);
     res.status(500).json({ msg: err.message });
