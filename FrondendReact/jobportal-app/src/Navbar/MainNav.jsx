@@ -100,6 +100,9 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
   }
 
   const handleSidebar = () => {
+    if(!user){
+      return showAlert("Warning","The sidebar is enabled after authentication","warning")
+    }
     setSidebarOpen(true)
   }
 
@@ -114,7 +117,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={user ? handleSidebar() : showAlert("Warning","The sidebar is enabled after authentication","warning")}
+            onClick={handleSidebar}
           >
             <MenuIcon />
           </IconButton>
