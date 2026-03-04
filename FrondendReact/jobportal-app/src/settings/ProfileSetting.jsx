@@ -578,6 +578,7 @@ function ProfileSetting() {
               <ErrorAlert
                 buttonName={`Save`}
                 buttonVariant={`outlined`}
+                buttonClass={`mt-2`}
                 handlefn={handleSave}
                 alertMsg={savebtnError}
               />

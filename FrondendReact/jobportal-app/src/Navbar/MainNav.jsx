@@ -20,6 +20,7 @@ import DrawerJobseeker from './DrawerJobseeker';
 import { adminProfileThunk } from '../Thunks/adminProfileThunk';
 import { recruiterProfileThunk } from '../Thunks/recruiterProfileThunk';
 import { jobseekerProfileThunk } from '../Thunks/jobseekerProfileThunk';
+import { showAlert } from '../Scripts/Alert';
 
 
 export default function MainNav({Navbg,Iconbg,textColor}) {
@@ -164,7 +165,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
     user?.roleData === "user"?<DrawerJobseeker visible={sidebarOpen} hide={setSidebarOpen}/>:
     user?.roleData === "recruiter" ? <DrawerRecruiter  visible={sidebarOpen} hide={setSidebarOpen}/> :
     user?.roleData === "admin" ? <DrawerAdmin visible={sidebarOpen} hide={setSidebarOpen}/> :
-     null
+     showAlert("Warning","The sidebar is enabled after authentication","warning")
     }
     <style>{`
     .premium-btn {
