@@ -74,7 +74,7 @@ try{
             setLoading(false)
             setNewPassword("")
             setConfirmPassword("")
-             navigate("/")
+             navigate("/login")
             return;
 
         }

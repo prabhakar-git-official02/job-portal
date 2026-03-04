@@ -39,7 +39,6 @@ function ForgotPass(){
 if (response) {
     setLoading(false);
     setEmail("");
-    setAlertmsg(null);
     const resetLink = response?.data?.data; 
     const token = resetLink.split("/").pop();
     navigate(`/reset-password/${token}`); 
