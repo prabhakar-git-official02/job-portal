@@ -310,13 +310,17 @@ export const ForgetPassword = async (req, res) => {
     console.log("Generated Reset URL:", reseturl);
 
     // Send email via SendGrid
-    const msg = {
-      to: email,
-      from: process.env.SENDGRID_VERIFIED_SENDER,
-      replyTo: process.env.SENDGRID_VERIFIED_SENDER, 
-      subject: "Reset Your Password",
-      text: `Hello ${email},\n\nClick this link to reset your password:\n${reseturl}\n\nLink expires in 1 hour`,
-    };
+const msg = {
+  to: email,
+  from: process.env.SENDGRID_VERIFIED_SENDER,
+  replyTo: process.env.SENDGRID_VERIFIED_SENDER,
+  subject: "Reset Your Password",
+  text: `Hello ${email},\nClick here to reset: ${reseturl}`,
+  html: `<p>Hello ${email},</p>
+         <p>Click the link below to reset your password:</p>
+         <p><a href="${reseturl}">Reset Password</a></p>
+         <p>Link expires in 1 hour.</p>`
+};
 
     console.log("Sending email...");
     await sgMail.send(msg);
