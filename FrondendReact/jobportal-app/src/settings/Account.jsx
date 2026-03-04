@@ -92,15 +92,15 @@ return (
         <div className="info-grid">
           <div>
             <label>Role</label>
-            <p>{user?.roleData}</p>
+            <p>{user?.roleData ? user?.roleData  : "Role Not Found"}</p>
           </div>
           <div>
             <label>Email</label>
-            <p>{user?.email}</p>
+            <p>{user?.email ? user?.email : "Email Not Found"}</p>
           </div>
           <div>
             <label>Authentication</label>
-            <p>{user?.authProvider}</p>
+            <p>{user?.authProvider ? user?.authProvider : "Authprovider Not Found"}</p>
           </div>
         </div>
 
@@ -115,10 +115,10 @@ return (
               </span>
             </p>
             <p>
-              <strong>Last Login:</strong> {LastLogin || "No Data"}
+              <strong>Last Login:</strong> {LastLogin ? LastLogin : "Last login Not Found"}
             </p>
             <p>
-              <strong>Login Refresh:</strong> {date}
+              <strong>Login Refresh:</strong> {date ? date : "Last Referesh not Found"}
             </p>
           </div>
         </div>
