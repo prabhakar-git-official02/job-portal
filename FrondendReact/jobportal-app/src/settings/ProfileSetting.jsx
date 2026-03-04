@@ -101,6 +101,7 @@ function ProfileSetting() {
   const [resumePreview, setResumePreview] = useState(Profile?.resume?.url);
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
+  const [updateLoading,setUpdateLoading] = useState(false)
 
 
   const UpdateDatas =
@@ -200,6 +201,7 @@ function ProfileSetting() {
   };
 
   const handleSubmit = async () => {
+    setUpdateLoading(true)
     if (
       !firstName ||
       firstName.trim() === "" ||
@@ -227,6 +229,7 @@ function ProfileSetting() {
         msg: "Invalid Form Update!",
         id: Date.now(),
       });
+      setUpdateLoading(false)
       return;
     }
 
@@ -236,7 +239,7 @@ function ProfileSetting() {
         msg: "Invalid Email!",
         id: Date.now(),
       });
-
+      setUpdateLoading(false)
       return;
     }
 
@@ -246,6 +249,7 @@ function ProfileSetting() {
         msg: "Invalid Phone Number!",
         id: Date.now(),
       });
+      setUpdateLoading(false)
       return;
     }
 
@@ -254,6 +258,7 @@ function ProfileSetting() {
           .then(() => {
             showAlert("Success", "Profile Updated", "success");
           })
+          .then(() => setUpdateLoading(false))
           .then(() => {
             setLoad(false);
           })
@@ -319,6 +324,7 @@ function ProfileSetting() {
             .then(() => {
               setLoad(false);
             })
+            .then(() => setUpdateLoading(false))
             .then(() => {
               setProfileImage(null);
             })
@@ -372,6 +378,7 @@ function ProfileSetting() {
               .then(() => {
                 setLoad(false);
               })
+              .then(() => setUpdateLoading(false))
               .then(() => {
                 setProfileImage(null);
               })
@@ -583,9 +590,18 @@ function ProfileSetting() {
                 alertMsg={savebtnError}
               />
             ) : (
-              <Button variant="contained" onClick={handleSubmit}>
+              <div>
+                {updateLoading ?                 <div className="d-flex justify-content-center">
+                <ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`} />
+              </div> : null}
+              <Button
+               variant="contained"
+                onClick={handleSubmit}
+                className="mt-2"
+                >
                 Update
               </Button>
+              </div>
             )}
           </div>
         </div>
