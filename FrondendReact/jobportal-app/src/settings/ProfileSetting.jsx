@@ -484,7 +484,7 @@ function ProfileSetting() {
           </div>
 
           {/* Form Grid */}
-          <div className="form-grid">
+          <div className="form-grid p-3">
             <TextField
               sx={{ m: 1 }}
               fullWidth

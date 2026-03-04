@@ -45,10 +45,10 @@ function Settings() {
   return (
     <>
       <MainNav />
-      <div className="container-fluid m-0 p-0">
+      <div className="container-fluid m-0 p-0 page-bg">
 
 <div
-  className={`settings-wrapper`}
+  className={`settings-wrapper page-bg`}
 >
 
         <div className="settings-container m-0 p-0">
@@ -80,7 +80,7 @@ function Settings() {
 
 
           {/* CONTENT */}
-          <div className="settings-content d-flex align-items-center">
+          <div className="settings-content m-2 d-flex align-items-center">
         
             {route === "account" && <Account /> }
 
@@ -118,6 +118,11 @@ function Settings() {
   width:100%;
   max-width:1200px;   /* 👈 THIS makes whole layout center */
 }
+
+.page-bg{
+  background: linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
 
 /* SIDEBAR */
 .settings-sidebar{
