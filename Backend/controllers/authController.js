@@ -323,12 +323,10 @@ const msg = {
 };
 
     console.log("Sending email...");
-    console.log("SENDGRID_VERIFIED_SENDER:", process.env.SENDGRID_VERIFIED_SENDER);
-      console.log("SENDGRID_API_KEY:", process.env.SENDGRID_API_KEY?.slice(0,4) + "..."); // hide full key
     await sgMail.send(msg);
     console.log("Email sent successfully");
 
-    res.json({ msg: "Reset Password link sent to your email", data: reseturl });
+    res.json({ msg: "Reset Password generated successfully", data: reseturl });
   } catch (err) {
     console.log("ForgetPassword Error:", err.message);
     res.status(500).json({ msg: err.message });
