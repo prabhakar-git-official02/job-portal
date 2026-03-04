@@ -292,6 +292,8 @@ export const ForgetPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
+    console.log("ForgetPassword called for:", email);
+
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -312,18 +314,21 @@ export const ForgetPassword = async (req, res) => {
       .update(resetToken)
       .digest("hex");
 
-    user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1hr
+    user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hr
 
     await user.save();
 
     const reseturl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    console.log("Generated Reset URL:", reseturl);
 
     // send Mail
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465, // SSL
+      secure: true,
       auth: {
         user: process.env.MY_GMAIL,
-        pass: process.env.MY_APP_PASSWORD,
+        pass: process.env.MY_APP_PASSWORD, 
       },
     });
 
@@ -331,20 +336,19 @@ export const ForgetPassword = async (req, res) => {
       from: process.env.MY_GMAIL,
       to: email,
       subject: "Reset Your Password",
-      text: `Hello ${email},\n\nClick this link to reset your password:\n${`${reseturl}`}\n\nLink expires in 1 hour`,
+      text: `Hello ${email},\n\nClick this link to reset your password:\n${reseturl}\n\nLink expires in 1 hour`,
     };
 
+    console.log("Sending email...");
     await transporter.sendMail(mailOptions);
-
-console.log("Email received:", email);
-console.log("Reset URL:", reseturl);
-console.log("Error:", err);
+    console.log("Email sent successfully");
 
     res.json({
       msg: `Reset Password link sent to your email`,
       data: reseturl,
     });
   } catch (err) {
+    console.log("ForgetPassword Error:", err.message);
     res.status(500).json({ msg: err.message });
   }
 };
