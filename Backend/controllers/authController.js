@@ -83,16 +83,18 @@ export const Login = async (req, res) => {
     );
 
     res.cookie("accessToken", Accesstoken, {
-      httpOnly: true,
-   sameSite: "none",
+  httpOnly: true,
   secure: true,
+  sameSite: "None",
+  path: "/",
       maxAge: 5 * 60 * 1000, // 15 mins
     });
 
     res.cookie("refreshToken", RefreshToken, {
-      httpOnly: true,
-  sameSite: "none",
+  httpOnly: true,
   secure: true,
+  sameSite: "None",
+  path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -209,16 +211,18 @@ export const googleAuthLogin = async (req, res) => {
     );
 
     res.cookie("accessToken", AccessToken, {
-      httpOnly: true,
-    sameSite: "none",
+  httpOnly: true,
   secure: true,
+  sameSite: "None",
+  path: "/",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", RefreshToken, {
-      httpOnly: true,
-  sameSite: "none",
+  httpOnly: true,
   secure: true,
+  sameSite: "None",
+  path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -268,9 +272,10 @@ export const RefreshToken = async (req, res) => {
     );
 
     res.cookie("accessToken", newAccessToken, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
+  httpOnly: true,
+  secure: true,
+  sameSite: "None",
+  path: "/",
       maxAge: 15 * 60 * 1000,
     });
 
@@ -417,17 +422,17 @@ export const Me = async (req, res) => {
 export const Logout = async (req, res) => {
   try {
     res.clearCookie("accessToken", {
-      httpOnly: true,
-  sameSite: "none",
+  httpOnly: true,
   secure: true,
-      maxAge: 15 * 60 * 1000,
+  sameSite: "None",
+  path: "/"
     });
 
     res.clearCookie("refreshToken", {
-      httpOnly: true,
-   sameSite: "none",
+  httpOnly: true,
   secure: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+  sameSite: "None",
+  path: "/"
     });
 
     res.status(200).json({
