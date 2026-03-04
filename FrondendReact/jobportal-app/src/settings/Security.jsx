@@ -23,6 +23,7 @@ function Security() {
  const [captchaLoading,setCaptchaLoading] = useState(false)
  const [captchaError,setCaptchaError] = useState(null)
 
+
   const ResetLink = useSelector((state) => state.resetToken.token);
 
   console.log("Reset-Link",ResetLink);
@@ -52,7 +53,7 @@ function Security() {
         },
       );
       if (response) {
-        dispatch(IsTokenSuccess(response.data.data));
+        dispatch(IsTokenSuccess(response?.data?.data));
         setForgetLoading(false);
         setEmail("");
         setForgetAlertmsg(null);
@@ -152,6 +153,8 @@ function Security() {
 const SignOut = async () => {
   try {
 
+    setCaptchaLoading(true)
+
     if (captchaIp.trim() === "") {
       setCaptchaError({
         msg: 'Captcha Required',
@@ -230,7 +233,7 @@ const SignOut = async () => {
               </div>
 
               {forgetloading &&
-                <ProgressLoad trigger={1} setSize="20px" msg="Processing..." />
+                <ProgressLoad trigger={1} setSize="20px" msg="Processing..." /> 
               }
 
               <ErrorAlert
@@ -332,8 +335,8 @@ const SignOut = async () => {
           </div>
 
 
-          {captchaLoading &&
-            <ProgressLoad trigger={1} setSize="20px" msg="Verifying..." />
+          {captchaLoading ? 
+            <ProgressLoad trigger={1} setSize="20px" msg="Verifying..." /> : null
           }
 
 
