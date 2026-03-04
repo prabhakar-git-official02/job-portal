@@ -323,6 +323,8 @@ const msg = {
 };
 
     console.log("Sending email...");
+    console.log("SENDGRID_VERIFIED_SENDER:", process.env.SENDGRID_VERIFIED_SENDER);
+      console.log("SENDGRID_API_KEY:", process.env.SENDGRID_API_KEY?.slice(0,4) + "..."); // hide full key
     await sgMail.send(msg);
     console.log("Email sent successfully");
 
