@@ -95,13 +95,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
 
   const handleSettings = () => {
     setAnchorEl(null)
-    if(!user && !sessionStorage.getItem("AuthProvider")){
-     return navigate('/login')
-    }
-
-    if(user && sessionStorage.getItem("AuthProvider")){
-      return navigate('/setting')
-    }
+    navigate('/setting')
   }
 
   const handleSidebar = () => {

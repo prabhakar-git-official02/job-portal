@@ -77,9 +77,9 @@ function App() {
 
 
           {/* Settings */}
-          <Route path="/setting" element={<PrivateLogin><Settings /></PrivateLogin>} />
-          <Route path="/profileSetting" element={<PrivateLogin><ProfileSetting /></PrivateLogin>} />
-          <Route path="/account" element={<PrivateLogin><Account /></PrivateLogin>} />
+          <Route path="/setting" element={<Settings />} />
+          <Route path="/profileSetting" element={<ProfileSetting />} />
+          <Route path="/account" element={<Account />} />
           <Route path="/security" element={<Security/>}/>
 
           {/* Jobseeker */}
