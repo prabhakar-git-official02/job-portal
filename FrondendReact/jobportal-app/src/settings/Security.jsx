@@ -27,6 +27,8 @@ function Security() {
 
   console.log(ResetLink);
 
+
+  // forget password
   const forgetPassword = async (e) => {
     e.preventDefault();
     setForgetLoading(true);
@@ -65,7 +67,8 @@ function Security() {
     }
   };
 
-  const CleanLink = ResetLink?.replace("http://localhost:3000/", "");
+  
+  const CleanLink = ResetLink?.replace("https://job-portal-zeta-bice.vercel.app/", "");
 
   const resetPassword = async (e) => {
     e.preventDefault();
