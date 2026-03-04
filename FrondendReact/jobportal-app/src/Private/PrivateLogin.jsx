@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { authThunk } from "../Thunks/authThunk";
-
+import ProgressLoad from '../Components/ProgressLoad'
 function PrivateLogin({ children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ function PrivateLogin({ children }) {
   }, [user, loading, navigate]);
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div><ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`}/></div>; 
   }
 
   if (user && sessionStorage.getItem("AuthProvider")) {
