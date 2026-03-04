@@ -336,6 +336,10 @@ export const ForgetPassword = async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
+console.log("Email received:", email);
+console.log("Reset URL:", reseturl);
+console.log("Error:", err);
+
     res.json({
       msg: `Reset Password link sent to your email`,
       data: reseturl,
