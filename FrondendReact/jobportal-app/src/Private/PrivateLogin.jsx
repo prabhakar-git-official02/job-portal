@@ -27,7 +27,7 @@ function PrivateLogin({ children }) {
   }, [user, loading, navigate]);
 
   if (loading) {
-    return <div><ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`}/></div>; 
+    return <div className="d-flex justify-content-center align-items-center vh-100 m-0 p-0"><ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`}/></div>; 
   }
 
   if (user && sessionStorage.getItem("AuthProvider")) {
