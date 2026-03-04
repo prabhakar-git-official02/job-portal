@@ -16,7 +16,7 @@ import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 import { recruiterPostsThunk,recruiterPostSkillAddThunk,recruiterPostSkillDeleteThunk, recruiterPostUpdateThunk } from "../../Thunks/recruiterPostsThunk";
 import ProgressLoad from "../../Components/ProgressLoad";
 import { showAlert } from "../../Scripts/Alert";
-import { updateOptions } from "recharts/types/state/rootPropsSlice";
+
 
 
 function DialogboxRecruiterPost({postId}){
