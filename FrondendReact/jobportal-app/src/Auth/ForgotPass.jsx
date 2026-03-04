@@ -39,14 +39,15 @@ function ForgotPass(){
                 withCredentials: true,
             }
         );
-        if (response) {
-            dispatch(IsTokenSuccess(response.data.data))
-           setLoading(false)
-           setEmail("")
-           setAlertmsg(null)
-           return navigate(`/reset-password/${response.data.data}`)
-           
-        }
+if (response) {
+    dispatch(IsTokenSuccess(response.data.data));
+    setLoading(false);
+    setEmail("");
+    setAlertmsg(null);
+    const resetLink = response?.data?.data; 
+    const token = resetLink.split("/").pop();
+    navigate(`/reset-password/${token}`); 
+}
     } catch(err){
         dispatch(IsTokenFailure(err.response?.data?.msg))
         setLoading(false)
