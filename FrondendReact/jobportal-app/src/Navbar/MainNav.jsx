@@ -114,7 +114,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={handleSidebar}
+            onClick={user ? handleSidebar() : showAlert("Warning","The sidebar is enabled after authentication","warning")}
           >
             <MenuIcon />
           </IconButton>
@@ -165,7 +165,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
     user?.roleData === "user"?<DrawerJobseeker visible={sidebarOpen} hide={setSidebarOpen}/>:
     user?.roleData === "recruiter" ? <DrawerRecruiter  visible={sidebarOpen} hide={setSidebarOpen}/> :
     user?.roleData === "admin" ? <DrawerAdmin visible={sidebarOpen} hide={setSidebarOpen}/> :
-     showAlert("Warning","The sidebar is enabled after authentication","warning")
+     null
     }
     <style>{`
     .premium-btn {
