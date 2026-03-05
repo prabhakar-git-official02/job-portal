@@ -26,7 +26,9 @@ function RoleDialog({ visibleRes, tokenRes }) {
     }
   }, [visibleRes]);
 
+  
  const handleSubmit = (e) => {
+  try{
     e.preventDefault()
 
     setLoad(true)
@@ -59,6 +61,9 @@ dispatch(GoogleApiCallThunk(tokenRes, role))
  .then(() => { navigate("/");})
  .catch((err) => showAlert("Error",err.message,"err"))
     }
+  }catch(err){
+    console.log("Auth/RoleDialog/handleSubmit-Error",err?.message)
+  }
  }
 
   return (

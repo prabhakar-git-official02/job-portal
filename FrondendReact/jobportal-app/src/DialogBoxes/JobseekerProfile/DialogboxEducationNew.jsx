@@ -82,6 +82,7 @@ function DialogboxEducationNew() {
   ];
 
   const handleSubmit = async () => {
+    try{
     if (
       !institute ||
       institute.trim() === "" ||
@@ -102,6 +103,9 @@ function DialogboxEducationNew() {
     setYearStart(null);
     setYearEnd(null);
     setVisible(false);
+  }catch(err){
+    console.log("JobseekerProfile/DialogboxEducationNew/handlesubmit-Err",err?.message)
+  }
   };
 
   return (

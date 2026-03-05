@@ -154,6 +154,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
   ];
 
   const handleJobApply = () => {
+    try{
     if (
       qualification.trim() === "" ||
       experience === 0 || experience === "" ||
@@ -174,6 +175,9 @@ function DialogboxApplyJob({ btnName,JobId}) {
     .then(() => setExpectedSalary(""))
     .then(()=> setAlertMsg(null))
     .then(() => {navigate('/allJobs')})
+  }catch(err){
+    console.log("JobseekerProfile/DialogboxApplyJob/handleJobApply-Err",err?.message)
+  }
   };
 
   return (

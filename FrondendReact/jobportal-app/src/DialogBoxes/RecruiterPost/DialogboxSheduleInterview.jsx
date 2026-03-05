@@ -27,17 +27,9 @@ function DialogboxSheduleInterview({ApplicantId,ApplicantEmail,JobDetails,JobId}
   }, [dispatch]);
 
 
-
-
   useEffect(() => {
     dispatch(applicantGetAllThunk());
   }, [dispatch]);
-
-
-
-
-
-//   console.log(FindJobs);
 
 
         const InterviewDatas = {
@@ -52,6 +44,7 @@ function DialogboxSheduleInterview({ApplicantId,ApplicantEmail,JobDetails,JobId}
 
 
   const handleSheduleInterview = () => {
+    try{
          setLoad(true)
         if(
             !interviewDateAndTime || 
@@ -108,6 +101,9 @@ function DialogboxSheduleInterview({ApplicantId,ApplicantEmail,JobDetails,JobId}
         .then(() => setInterviewLocation(""))
         .then(() => setInterviewMessage(""))
         .then(() => setVisible(false))
+      }catch(err){
+        console.log("RecruiterPost/DialogboxSheduleInterview-handleSheduleInterview-Err",err?.message)
+      }
   }
 
     return(

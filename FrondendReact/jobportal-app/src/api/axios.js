@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = axios.create({
+const api =  axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
 });
@@ -11,7 +11,6 @@ api.interceptors.response.use(
   (res) => res,
   async (err) => {
     const originalRequest = err.config;
-
     // Avoid infinite loop
     if (originalRequest?.url?.includes("/auth/refresh")) {
       console.log("Session Expired", "Please login again", "error");

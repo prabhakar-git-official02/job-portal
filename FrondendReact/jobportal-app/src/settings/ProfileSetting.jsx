@@ -148,6 +148,7 @@ function ProfileSetting() {
   }, [UploadError]);
 
   const handleSave = () => {
+    try{
     if (
       !firstName ||
       firstName.trim() === "" ||
@@ -198,9 +199,13 @@ function ProfileSetting() {
     }
 
     setLoad(true);
+  }catch(err){
+    console.log("Settings/ProfileSetting-handleSave-Err",err?.message)
+  }
   };
 
   const handleSubmit = async () => {
+    try{
     setUpdateLoading(true)
     if (
       !firstName ||
@@ -425,6 +430,9 @@ function ProfileSetting() {
                 navigate("/adminProfile");
               })
           : navigate("/pageNotFound");
+            }catch(err){
+              console.log("Settings/ProfileSetting-handlesubmit-Err",err?.message)
+            }
   };
 
   useEffect(() => {

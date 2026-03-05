@@ -42,6 +42,7 @@ useEffect(() => {
 
     
    const handleSave = () => {
+    try{
     if(
         fullName === "" ||
         about === "" || 
@@ -51,9 +52,13 @@ useEffect(() => {
     }
 
     setLoad(true)
+  }catch(err){
+    console.log("JobseekerProfile/Dialogbox1/handleSave-Err",err?.message)
+  }
    }
 
    const handleSubmit = async() => {
+    try{
         if(
         fullName === "" ||
         about === "" || 
@@ -68,7 +73,12 @@ useEffect(() => {
     dispatch(IsImagePublicIdSuccess(null))
     dispatch(IsCloudinaryFailure(null))
     setVisible(false)
+  }catch(err){
+    console.log("JobseekerProfile/Dialogbox1/handlesubmit-Err",err?.message)
+  }
    }
+
+   
 return(
     <>
     <span label="Show" icon={`pi pi-external-link`} onClick={() => setVisible(true)}><span>{`Edit`}</span><FontAwesomeIcon className='mx-1' icon={faPenToSquare}></FontAwesomeIcon></span>

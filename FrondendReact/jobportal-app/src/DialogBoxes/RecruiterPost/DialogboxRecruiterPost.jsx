@@ -78,6 +78,7 @@ function DialogboxRecruiterPost({postId}){
 
     // handle skill add
      const handleSkillAdd = () => {
+      try{
       if(AddSkill.trim() ===""){
           return setAlertMsg({
               msg : 'Invalid Skill Add!',
@@ -87,11 +88,18 @@ function DialogboxRecruiterPost({postId}){
       dispatch(recruiterPostSkillAddThunk(Post?._id,AddSkill))
       setAlertMsg(null)
       setAddSkill("")
+    }catch(err){
+      console.log("RecruiterPost/DialogboxRecruiterPost-handleSkillAdd-Err",err?.message)
+    }
      }
   
      // handle skill delete
        const handleSkillDelete = (caughtJobId,caughtSkill) => {
+        try{
         dispatch(recruiterPostSkillDeleteThunk(caughtJobId,caughtSkill))
+        }catch(err){
+          console.log("RecruiterPost/DialogboxRecruiterPost-handleSkillDelete-Err",err?.message)
+        }
        }
 
 
@@ -104,6 +112,7 @@ function DialogboxRecruiterPost({postId}){
 
 
        const handleSave = () => {
+        try{
            if (
             company.trim() === "" || !company ||
             location.trim() === "" || !location ||
@@ -121,9 +130,13 @@ function DialogboxRecruiterPost({postId}){
              return;
            }     
            setLoad(true);
+          }catch(err){
+            console.log("RecruiterPost/DialogboxRecruiterPost-handleSave-Err",err?.message)
+          }
          };
 
           const handleSubmit = async () => {
+            try{
               dispatch(recruiterPostUpdateThunk(Post?._id,UpdateDatas))
              .then(() => {showAlert("Success", "Profile Updated", "success")})
              .then(() => {setLoad(false)})
@@ -142,6 +155,9 @@ function DialogboxRecruiterPost({postId}){
              .then(() => {setSalary(Post?.salary)})
              .then(() => {setJobDescription(Post?.jobDescription)})
               .then(() => {setVisible(false)})
+            }catch(err){
+               console.log("RecruiterPost/DialogboxRecruiterPost-handleSubmit-Err",err?.message)
+            }
           }
 
     const jobFields = [

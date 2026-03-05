@@ -63,6 +63,7 @@ function DialogboxExperienceNew({ btnName, btnType }) {
   ];
 
   const handleSubmit = async () => {
+    try{
     if (
       !company ||
       company.trim() === "" ||
@@ -89,7 +90,11 @@ function DialogboxExperienceNew({ btnName, btnType }) {
     setWorkExperience("");
     setCTC("");
     setVisible(false);
+  }catch(err){
+    console.log("JobseekerProfile/DialogboxExperienceNew/handlesubmit-Err",err?.message)
+  }
   };
+  
   const Nums = [];
 
   for (let i = 1; i < 50; i++) {

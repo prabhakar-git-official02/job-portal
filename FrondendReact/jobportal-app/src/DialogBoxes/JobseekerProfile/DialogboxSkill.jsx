@@ -33,6 +33,7 @@ function DialogboxSkillAdd(){
 
   // handle skill add
    const handleSkillAdd = () => {
+    try{
     if(AddSkill.trim() ===""){
         return setAlertMsg({
             msg : 'Invalid Skill Add!',
@@ -42,12 +43,20 @@ function DialogboxSkillAdd(){
     dispatch(jobseeker_Profile_skill_Add_Thunk(AddSkill))
     setAlertMsg(null)
     setAddSkill("")
+  }catch(err){
+    console.log("JobseekerProfile/DialogboxSkill/handleSkillAdd-Err",err?.message)
+  }
    }
 
    // handle skill delete
      const handleFieldDelete = (caughtSkill) => {
+      try{
        dispatch(jobseeker_Profile_skill_Delete_Thunk(caughtSkill))
+      }catch(err){
+        console.log("JobseekerProfile/DialogboxSkill/handleSkillDelete-Err",err?.message)
+      }
      }
+     
     return(
         <>
         <button

@@ -57,6 +57,7 @@ function DialogboxAbout() {
   };
 
   const handleSubmit = async () => {
+    try{
     if (
       company.trim() === "" ||
       !company ||
@@ -87,6 +88,9 @@ function DialogboxAbout() {
     setDesignation(UpdateDatas?.designation);
     setAlertMsg(null);
     setVisible(false);
+  }catch(err){
+    console.log("RecruiterProfile/DialogboxCompany-handlesubmit-Err",err?.message)
+  }
   };
 
   const industries = [

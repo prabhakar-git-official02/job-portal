@@ -10,6 +10,7 @@ import ErrorAlert from "../../Components/ErrorAlert";
 import ImageAvatar from "../../Components/ImageAvatar";
 import { adminProfileThunk, adminProfileUpdateThunk } from "../../Thunks/adminProfileThunk";
 
+
 function DialogboxAbout() {
   const dispatch = useDispatch();
 
@@ -39,12 +40,18 @@ function DialogboxAbout() {
   };
 
   const handleSubmit = async () => {
-    if (about.trim() === "" || bio.trim() === "" || !about || !bio) {
-      return setAlertMsg({
+    try{
+    if (about.trim() === "" || 
+        bio.trim() === "" ||
+         !about || !bio
+        ) {
+       setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
       });
+      return
     }
+
     dispatch(adminProfileUpdateThunk(UpdateDatas)).then(
       dispatch(adminProfileThunk()),
     );
@@ -52,7 +59,11 @@ function DialogboxAbout() {
     setBio(UpdateDatas?.bio);
     setAlertMsg(null);
     setVisible(false);
+  } catch(err){
+    console.log("AdminProfile-DialogboxAbout-handleSubmit-Error",err?.message)
+  }
   };
+
   return (
     <>
       <button

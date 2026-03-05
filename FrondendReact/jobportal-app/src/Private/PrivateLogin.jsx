@@ -10,20 +10,27 @@ function PrivateLogin({ children }) {
   const [loading, setLoading] = useState(true); // track auth check
 
   useEffect(() => {
-   
+    try{
     const fetchUser = async () => {
       await dispatch(authThunk());
       setLoading(false); 
     };
     fetchUser();
+  }catch(err){
+    console.log("Private/PrivateLogin-Err",err?.message)
+  }
   }, [dispatch]);
 
   useEffect(() => {
+    try{
     if (!loading) {
       if (!user || !sessionStorage.getItem("AuthProvider")) {
         navigate("/login");
       }
     }
+  }catch(err){
+    console.log("Private/PrivateLogin-Err",err?.message)
+  }
   }, [user, loading, navigate]);
 
   if (loading) {

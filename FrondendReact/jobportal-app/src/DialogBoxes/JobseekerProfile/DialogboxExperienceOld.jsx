@@ -71,6 +71,7 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
   ];
 
   const handleSubmit = async () => {
+    try{
     if (
       !company ||
       company.trim() === "" ||
@@ -100,6 +101,9 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
     .then(() => setWorkExperience(UpdateData?.workExperience))
     .then(() => setCTC(UpdateData?.CTC))
     .then(() => setVisible(false))
+  }catch(err){
+    console.log("JobseekerProfile/DialogboxExperienceOld/handlesubmit-Err",err?.message)
+  }
   };
 
   const Nums = [];

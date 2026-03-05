@@ -38,6 +38,7 @@ function DialogboxAbout() {
  }
   
      const handleSubmit = async() => {
+      try{
           if(
           about.trim() === "" ||
           bio.trim() === "" ||
@@ -55,7 +56,11 @@ function DialogboxAbout() {
       setBio(UpdateDatas?.bio)
       setAlertMsg(null)
       setVisible(false)
+    }catch(err){
+      console.log("RecruiterProfile/DialogboxAbout-handlesubmit-Err",err?.message)
+    }
      }
+     
   return (
     <>
       <span
