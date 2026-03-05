@@ -67,7 +67,7 @@ dispatch(GoogleApiCallThunk(tokenRes, role))
       <Dialog
         header={"FIND DREAMS"}
         visible={visible}
-                breakpoints={{
+        breakpoints={{
           "1400px": "50vw",
           "1024px": "60vw",
           "768px": "80vw",
@@ -82,7 +82,7 @@ dispatch(GoogleApiCallThunk(tokenRes, role))
         }}
       >
         <div className="container-fluid">
-          <div className="row m-3">
+          <div className="row">
             <div className="card p-5">
               <h3 className="text-center">
                 <span className="mx-2">Login with</span>

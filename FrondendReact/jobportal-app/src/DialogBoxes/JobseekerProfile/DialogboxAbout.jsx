@@ -32,6 +32,7 @@ function DialogboxAbout() {
   const [AlertMsg, setAlertMsg] = useState(null);
   const [about, setAbout] = useState(JobseekerProfile?.about);
   const [bio, setBio] = useState(JobseekerProfile?.bio);
+ 
 
  const UpdateDatas = {
     about : about ||  JobseekerProfile?.about,
