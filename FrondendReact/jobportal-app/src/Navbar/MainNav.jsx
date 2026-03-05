@@ -101,7 +101,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
 
   const handleSidebar = () => {
     if(!user){
-      return showAlert("Warning","The sidebar is enabled after authentication","warning")
+      return showAlert("Warning","The sidebar is enabled after login","warning")
     }
     setSidebarOpen(true)
   }
