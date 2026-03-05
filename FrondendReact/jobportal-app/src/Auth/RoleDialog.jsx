@@ -113,21 +113,22 @@ dispatch(GoogleApiCallThunk(tokenRes, role))
                 </Button>
               </div>
               <hr />
+              {load?
+              <div>
+                <ProgressLoad  trigger={1} setSize={`20px`} msg={`Loading`}/>
+              </div>:null
+               }
               <div>
               <ErrorAlert
               alertMsg={Alertmsg}
               buttonName={`Submit`}
+              buttonClass={`mt-3`}
               buttonVariant={`contained`}
               colorbg={`teal`}
               handlefn={handleSubmit}
               
               />
               </div>
-              {load?
-              <div>
-                <ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`}/>
-              </div>:null
-               }
             </div>
           </div>
         </div>
