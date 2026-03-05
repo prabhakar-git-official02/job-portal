@@ -19,12 +19,16 @@ function GoogleAuthLogin(){
     console.log(EmailExistRes)
 
     const handleGoogleLogin = () => {
+        try{
         if(EmailExistRes === true && EmailRole){
             dispatch(GoogleApiCallThunk(Token,EmailRole))
             .then(() => dispatch(EmailExistAction(null)))
             .then(() => dispatch(EmailExistRole(null)))
             .then(() => {navigate('/')})
         }
+    } catch(err){
+        console.log("handleGoogleLogin-Error",err?.message)
+    }
     }
 
     return(

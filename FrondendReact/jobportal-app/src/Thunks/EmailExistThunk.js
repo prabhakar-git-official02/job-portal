@@ -34,8 +34,6 @@ export const EmailExistThunk = (token) => {
   };
 };
 
-
-
 export const GoogleApiCallThunk = (token,Role) =>  {
     return async(dispatch) => {
                 try {
@@ -50,7 +48,7 @@ export const GoogleApiCallThunk = (token,Role) =>  {
           );
 
 
-          if (response) {
+          if (response) {;
              try{
                const response = await api.post('/auth/loginActivity',
               {},
@@ -62,7 +60,6 @@ export const GoogleApiCallThunk = (token,Role) =>  {
              } catch(err){
                console.log("Google-Login-API-Error",err?.response?.data?.msg)
                 }
-
 
     dispatch(loginSuccess(response?.data?.user));
             sessionStorage.setItem(

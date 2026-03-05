@@ -1,8 +1,8 @@
+
 import MainNav from "../Navbar/MainNav"
 import GoogleAuthLogin from "./GoogleAuthLogin"
 
 function GoogleLoginPage(){
-
   return(
 
     <>
@@ -47,14 +47,10 @@ function GoogleLoginPage(){
               <div className="google-sub">
                 Use your Google account to continue
               </div>
-
-
+              
               <div className="google-btn-wrapper">
-
-                <GoogleAuthLogin/>
-
+               <GoogleAuthLogin/>
               </div>
-
             </div>
 
           </div>
