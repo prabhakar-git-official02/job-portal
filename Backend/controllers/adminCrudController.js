@@ -149,25 +149,29 @@ export const AppliedJob_Delete = async (req, res) => {
   }
 };
 
+// Get all users
+export const all_users = async(req,res) => {
+  try{
+    const All_Users = await User.find()
+
+    if(All_Users.length === 0){
+      return res.status(404).json({msg : 'Users not found'})
+    }
+
+    res.json({msg : 'Users fetched successfully',Users : All_Users})
+  } catch(err){
+    res.status(500).json({msg : err.message})
+  }
+}
+
 // Get All Recruiters
 export const all_Recruiters_Get = async(req,res) => {
   try{
-    const All_Recruiters = await User.find({role : "recruiter"})
-
-    const All_Recruiters_Profiles = await Recruiter.find()
-
+    const All_Recruiters = await Recruiter.find()
     if(All_Recruiters.length === 0){
-      return res.status(404).json({msg : 'Recruiters Not Found'})
+      return res.status(404).json({msg : 'Recruiters not found'})
     }
-
-    if(All_Recruiters_Profiles.length === 0){
-      return res.status(404).json({msg : 'Recruiters Profile Not Found'})
-    }
-    res.json({
-      msg : 'Recruiters Fetched Successfully',
-      recruitersData : All_Recruiters,
-      recruitersProfileData : All_Recruiters_Profiles,
-    })
+    res.json({msg : 'Recruiters Fetched Successfully',data : All_Recruiters})
   } catch(err){
     res.status(500).json({msg : err.message})
   }

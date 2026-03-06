@@ -14,6 +14,7 @@ import {
   Post_Delete,
   Post_Get,
 
+  all_users,
   all_Recruiters_Get,
   all_Jobseekers_Get,
 
@@ -34,8 +35,10 @@ route.delete("/profileDelete",authmiddleware,adminMiddleware,Admin_Profile_Delet
 
 
 // admin Get Reqs
+route.get('/allUsers/Get',authmiddleware,adminMiddleware,all_users)
 route.get('/allRecruiters/Get',authmiddleware,adminMiddleware,all_Recruiters_Get)
 route.get('/allJobseekers/Get',authmiddleware,adminMiddleware,all_Jobseekers_Get)
+
 
 // recruiter posts (Test-ok) - for admin
 route.patch('/updatePost/:id',authmiddleware,adminMiddleware,Post_Update); // update recruiter status
