@@ -4,6 +4,8 @@ import mongoose from 'mongoose'
 import Jobseeker from '../models/JobSeekerProfileSchema.js'
 import Recruiter from '../models/RecruiterProfileShema.js'
 import Notification from '../models/NotificationSchema.js'
+import User from '../models/UsersShema.js'
+
 
 // Posted job Update
 export const Post_Update = async(req,res) => {
@@ -147,21 +149,32 @@ export const AppliedJob_Delete = async (req, res) => {
   }
 };
 
-
+// Get All Recruiters
 export const all_Recruiters_Get = async(req,res) => {
   try{
-    const All_Recruiters = await Recruiter.find()
+    const All_Recruiters = await User.find({role : "recruiter"})
+
+    const All_Recruiters_Profiles = await Recruiter.find()
 
     if(All_Recruiters.length === 0){
-      return res.status(404).json({msg : 'Recruiters not found'})
+      return res.status(404).json({msg : 'Recruiters Not Found'})
     }
-    res.json({msg : 'Recruiters Fetched Successfully',data : All_Recruiters})
+
+    if(All_Recruiters_Profiles.length === 0){
+      return res.status(404).json({msg : 'Recruiters Profile Not Found'})
+    }
+    res.json({
+      msg : 'Recruiters Fetched Successfully',
+      recruitersData : All_Recruiters,
+      recruitersProfileData : All_Recruiters_Profiles,
+    })
   } catch(err){
     res.status(500).json({msg : err.message})
   }
 }
 
 
+// Get All Jobseekers
 export const all_Jobseekers_Get = async(req,res) => {
     try{
     const All_Jobseekers = await Jobseeker.find()
