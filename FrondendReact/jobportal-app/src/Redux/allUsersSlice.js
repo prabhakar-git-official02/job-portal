@@ -16,6 +16,6 @@ const allUsersSlice = createSlice({
     }
 })
 
-export const {IsUsersSuccess,IsUsersFailure} = allUsersSlice.actions
+export const { IsUsersSuccess,IsUsersFailure } = allUsersSlice.actions
 
 export default allUsersSlice.reducer

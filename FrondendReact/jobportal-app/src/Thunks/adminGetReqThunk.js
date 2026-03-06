@@ -14,8 +14,8 @@ export const allUsers_Get = () => {
                 {withCredentials : true}
             )
             if(response){
-                dispatch(IsUsersSuccess(response?.data?.data))
-                console.log("all users",response?.data?.data)
+                dispatch(IsUsersSuccess(response.data.data))
+                console.log("all users",response.data.data)
                 return response
             }
         } catch(err){

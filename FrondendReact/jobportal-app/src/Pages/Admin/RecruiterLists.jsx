@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { allRecruiters_Get } from "../../Thunks/adminGetReqThunk";
 import AddCallIcon from "@mui/icons-material/AddCall";
 import MailIcon from "@mui/icons-material/Mail";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchInput from "../../Components/SearchInput";
 import DropDown from "../../Components/DropDown";
 
@@ -28,6 +26,8 @@ function RecruiterLists() {
   const AllRecruiters = useSelector(
     (state) => state.allRecruiters.AllRecruiters,
   );
+
+console.log(AllRecruiters)
 
   const industries = [
     "All Industrys",
@@ -112,18 +112,17 @@ function RecruiterLists() {
 
         {/* Title */}
 
-        <div className="modern-title-container text-center mb-3">
+        <div className="title-wrapper text-center mb-4">
 
-          <h3 className="modern-title">
-            Recruiters Directory
-          </h3>
+<h2 className="dashboard-title">
+Recruiters <span>Directory</span>
+</h2>
 
-          <p className="modern-subtitle">
-            Discover recruiters and connect with top companies
-          </p>
+<p className="dashboard-subtitle">
+Discover recruiters and connect with top companies
+</p>
 
-        </div>
-
+</div>
 
         {/* Search */}
 
@@ -176,106 +175,177 @@ function RecruiterLists() {
 
         {/* Cards */}
 
-        <div className="row g-3 g-md-4">
+       {/* Desktop Table */}
 
-          {filteredRecruiters
-            ?.filter((r)=>
-              `${r.firstName} ${r.lastName}`
-                .toLowerCase()
-                .includes(search.toLowerCase())
-            )
-            .map((r)=>(
-              
-              <div key={r._id} className="col-12 col-sm-6 col-lg-4 col-xl-3">
+<div className="table-wrapper">
+  <table className="premium-table">
+    <thead>
+      <tr>
+        <th>Recruiter</th>
+        <th>Designation</th>
+        <th>Company</th>
+        <th>Action</th>
+      </tr>
+    </thead>
 
-                <div className="card card-saas border-0 shadow-sm h-100 p-3">
+    <tbody>
+      {filteredRecruiters
+        ?.filter((r) =>
+          `${r.firstName} ${r.lastName}`
+            .toLowerCase()
+            .includes(search.toLowerCase())
+        )
+        .map((r) => (
+          <>
+          <tr key={r._id}>
 
-                  <div className="d-flex gap-3">
+            <td className="user-cell">
 
-                    <img
-                      src={r?.profileImage?.url}
-                      className="profile-img"
-                      alt="profile"
-                    />
+              <img
+                src={r?.profileImage?.url}
+                className="profile-img-table"
+                alt="profile"
+              />
 
-                    <div>
-
-                      <h6 className="fw-bold mb-1">
-                        {r.firstName} {r.lastName}
-                      </h6>
-
-                      <p className="text-muted small mb-1">
-                        {r.designation}
-                      </p>
-
-                      <div className="small text-muted">
-                        {r.companyName}
-                      </div>
-
-                    </div>
-
-                  </div>
-
-
-                  {/* Contact */}
-
-                  <div className="mt-3 small">
-
-                    <div>
-                      <MailIcon fontSize="small"/> {r.email}
-                    </div>
-
-                    <div>
-                      <AddCallIcon fontSize="small"/> {r.phone}
-                    </div>
-
-                  </div>
-
-
-                  {/* Button */}
-                  <div>
-                  <button
-                    className="btn apply-btn mt-3"
-                    onClick={()=>
-                      setActiveId(
-                        activeId===r._id?null:r._id
-                      )
-                    }
-                  >
-
-                    {activeId===r._id ?
-                      <>Hide Details <KeyboardArrowUpIcon fontSize="small"/></>
-                      :
-                      <>View Details <KeyboardArrowDownIcon fontSize="small"/></>
-                    }
-
-                  </button>
-                  </div>
-
-
-                  {/* Details */}
-
-                  {activeId===r._id &&
-
-                    <div className="details-box mt-3">
-
-                      <div><b>Industry:</b> {r.industry}</div>
-                      <div><b>Location:</b> {r.location}</div>
-                      <div><b>State:</b> {r.state}</div>
-                      <div><b>Country:</b> {r.country}</div>
-                      <div><b>Company Size:</b> {r.companySize}</div>
-
-                    </div>
-
-                  }
-
+              <div>
+                <div className="user-email">
+                  {r.firstName} {r.lastName}
                 </div>
 
+                <div className="small text-muted">
+                  <span><MailIcon fontSize=""/></span><span className="mx-1">{r.email}</span>
+                </div>
               </div>
 
-            ))}
+            </td>
+
+            <td>
+              <span className="role-badge">{r.designation}</span>
+            </td>
+
+            <td>
+              <span className="auth-badge">{r.companyName}</span>
+            </td>
+
+            <td>
+              <button
+                className="view-btn"
+                onClick={() =>
+                  setActiveId(activeId === r._id ? null : r._id)
+                }
+              >
+                {activeId === r._id ? `Hide` : "View"}
+              </button>
+            </td>
+          </tr>
+         {activeId === r._id && (
+<tr>
+<td colSpan="4">
+<div className="details-box mt-2 card p-4">
+         
+            <div><b>Bio: </b>{r?.bio || "Null"}</div>
+            <div><b>About: </b>{r?.about || "Null"}</div>
+            <div><b><AddCallIcon fontSize=""/></b> {r.phone || "Null"}</div>
+            <div><b>Age:</b> {r.age || "Null"}</div>
+            <div><b>Gender:</b> {r.gender || "Null"}</div>
+            <div><b>City/Town:</b> {r.location || "Null"}</div>
+            <div><b>State:</b> {r.state || "Null"}</div>
+            <div><b>Country:</b> {r.country || "Null"}</div>
+            <div><b>Industry:</b> {r.industry || "Null"}</div>
+            <div><b>Company Size:</b> {r.companySize || "Null"}</div>
+            <div><b>Company Website:</b> {r.companyWebsite || "Null"}</div>
+            <div><b>Company Address:</b> {r.companyAddress || "Null"}</div>
+         </div>
+</td>
+</tr>
+        )}
+          </>
+        ))}
+    </tbody>
+  </table>
+  
+</div>
+
+<div className="mobile-users">
+
+  {filteredRecruiters
+    ?.filter((r) =>
+      `${r.firstName} ${r.lastName}`
+        .toLowerCase()
+        .includes(search.toLowerCase())
+    )
+    .map((r) => (
+
+      <div key={r._id} className="mobile-user-card">
+
+        <div className="mobile-user-header">
+
+          <img
+            src={r?.profileImage?.url}
+            className="profile-img-mobile"
+            alt="profile"
+          />
+
+          <div>
+
+            <div className="mobile-user-email">
+              {r.firstName} {r.lastName}
+            </div>
+
+            <div className="small text-muted">
+              {r.companyName}
+            </div>
+
+          </div>
 
         </div>
+
+
+        <div className="mobile-user-body">
+
+          <div className="mobile-row">
+            <span>Designation</span>
+            <span className="role-badge">{r.designation}</span>
+          </div>
+
+          <div className="mobile-row">
+            <span>Email</span>
+            <span><span><MailIcon fontSize=""/></span><span className="mx-1">{r.email}</span></span>
+          </div>
+
+        </div>
+
+
+        <button
+          className="view-btn mt-2"
+          onClick={() =>
+            setActiveId(activeId === r._id ? null : r._id)
+          }
+        >
+          {activeId === r._id ? "Hide Details" : "View Details"}
+        </button>
+        {activeId === r._id && (
+          <div className="details-box mt-3 card">
+            <div><b>Bio: </b>{r?.bio || "Null"}</div>
+            <div><b>About: </b>{r?.about || "Null"}</div>
+            <div><b><AddCallIcon fontSize=""/></b> {r.phone || "Null"}</div>
+            <div><b>Age:</b> {r.age || "Null"}</div>
+            <div><b>Gender:</b> {r.gender || "Null"}</div>
+            <div><b>City/Town:</b> {r.location || "Null"}</div>
+            <div><b>State:</b> {r.state || "Null"}</div>
+            <div><b>Country:</b> {r.country || "Null"}</div>
+            <div><b>Industry:</b> {r.industry || "Null"}</div>
+            <div><b>Company Size:</b> {r.companySize || "Null"}</div>
+            <div><b>Company Website:</b> {r.companyWebsite || "Null"}</div>
+            <div><b>Company Address:</b> {r.companyAddress || "Null"}</div>
+          </div>
+        )}
+
+      </div>
+
+    ))}
+
+</div>
 
       </div>
 
@@ -285,71 +355,76 @@ function RecruiterLists() {
 
       <style>{`
 
-.page-bg{
-  background: linear-gradient(135deg,#f8fafc,#eef2f7);
+.profile-img-table{
+width:38px;
+height:38px;
+border-radius:10px;
+object-fit:cover;
 }
 
-.modern-title{
-  font-size:26px;
-  font-weight:700;
-  background: linear-gradient(135deg,#4f46e5,#6366f1);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.modern-subtitle{
-  color:#6b7280;
-  font-size:14px;
-}
-
-.card-saas{
-  border-radius:16px;
-  transition:0.3s;
-}
-
-.card-saas:hover{
-  transform:translateY(-6px);
-  box-shadow:0 20px 40px rgba(0,0,0,0.08);
-}
-
-.profile-img{
-  width:60px;
-  height:60px;
-  border-radius:12px;
-  object-fit:cover;
-}
-
-.apply-btn{
-  background: linear-gradient(135deg,#6366f1,#4f46e5);
-  color:white;
-  border:none;
-  border-radius:10px;
-  font-size:13px;
+.profile-img-mobile{
+width:38px;
+height:38px;
+border-radius:10px;
+object-fit:cover;
 }
 
 .details-box{
-  background:#f8fafc;
-  padding:10px;
-  border-radius:10px;
-  font-size:13px;
+background:#f9fafb;
+padding:10px;
+border-radius:10px;
+font-size:13px;
+line-height:1.7;
 }
 
+.table-wrapper{
+background:white;
+border-radius:16px;
+box-shadow:0 10px 40px rgba(0,0,0,0.08);
+overflow-x:auto;
+}
+/* Match dropdown height */
+
 .premium-dropdown{
+
   height:42px;
+
   display:flex;
   align-items:center;
+
 }
+
+/* Mobile responsive */
 
 @media(max-width:768px){
 
-  .profile-img{
-    width:50px;
-    height:50px;
+  .premium-input{
+
+    width:100%;
+    min-width:unset;
+
   }
 
 }
+.dashboard-title{
+font-size:32px;
+font-weight:700;
+letter-spacing:0.5px;
+}
 
-.premium-input{
+.dashboard-title span{
+background:linear-gradient(135deg,#4f46e5,#6366f1);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.dashboard-subtitle{
+color:#6b7280;
+font-size:14px;
+margin-top:4px;
+}
+
+ .premium-input{
 
   height:42px;
   min-width:220px;
@@ -388,30 +463,146 @@ function RecruiterLists() {
 
 }
 
-/* Match dropdown height */
-
-.premium-dropdown{
-
-  height:42px;
-
-  display:flex;
-  align-items:center;
-
+.premium-table{
+width:100%;
+border-collapse:collapse;
 }
 
-/* Mobile responsive */
+.premium-table thead{
+background:#f9fafb;
+}
+
+.premium-table th{
+text-align:left;
+padding:16px;
+font-size:13px;
+font-weight:600;
+color:#6b7280;
+border-bottom:1px solid #eee;
+}
+
+.premium-table td{
+padding:16px;
+border-bottom:1px solid #f1f1f1;
+vertical-align:middle;
+}
+
+.premium-table tbody tr{
+transition:0.25s;
+}
+
+.premium-table tbody tr:hover{
+background:#f8fafc;
+}
+
+.user-cell{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.avatar{
+width:38px;
+height:38px;
+border-radius:10px;
+background:linear-gradient(135deg,#6366f1,#4f46e5);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
+}
+
+.user-email{
+font-weight:500;
+font-size:14px;
+}
+
+.role-badge{
+background:#eef2ff;
+color:#4f46e5;
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:500;
+}
+
+.auth-badge{
+background:#ecfdf5;
+color:#059669;
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:500;
+}
+
+.view-btn{
+background:#4f46e5;
+color:white;
+border:none;
+padding:6px 14px;
+border-radius:8px;
+font-size:12px;
+transition:0.25s;
+}
+
+.view-btn:hover{
+background:#4338ca;
+}
+
+/* mobile cards hidden by default */
+.mobile-users{
+display:none;
+}
+
+/* mobile card */
+
+.mobile-user-card{
+background:white;
+border-radius:14px;
+padding:16px;
+margin-bottom:14px;
+box-shadow:0 8px 25px rgba(0,0,0,0.06);
+}
+
+.mobile-user-header{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:10px;
+}
+
+.mobile-user-email{
+font-weight:600;
+font-size:14px;
+word-break:break-all;
+}
+
+.mobile-user-body{
+margin-top:8px;
+}
+
+.mobile-row{
+display:flex;
+justify-content:space-between;
+padding:6px 0;
+font-size:13px;
+border-bottom:1px solid #f1f1f1;
+}
+
+/* Responsive behavior */
 
 @media(max-width:768px){
 
-  .premium-input{
-
-    width:100%;
-    min-width:unset;
-
-  }
-
+.table-wrapper{
+display:none;
 }
 
+.mobile-users{
+display:block;
+}
+
+}
 
 
 `}</style>

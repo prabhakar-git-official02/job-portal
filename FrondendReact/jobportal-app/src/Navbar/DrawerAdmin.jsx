@@ -16,8 +16,9 @@ import { useDispatch } from "react-redux";
 import { authThunk } from "../Thunks/authThunk";
 import { useSelector } from "react-redux";
 import { adminProfileThunk } from "../Thunks/adminProfileThunk";
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import WorkIcon from '@mui/icons-material/Work';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 function DrawerAdmin({ visible, hide }){
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ function DrawerAdmin({ visible, hide }){
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon className="text-dark">
-                <ListAltIcon/>
+                <PeopleAltIcon/>
               </ListItemIcon>
               <ListItemText primary={`All Users`} />
             </ListItemButton>
@@ -95,9 +96,9 @@ function DrawerAdmin({ visible, hide }){
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon className="text-dark">
-                <ListAltIcon/>
+                <AccountBoxIcon/>
               </ListItemIcon>
-              <ListItemText primary={`Recruiter Lists`} />
+              <ListItemText primary={`Recruiters Profile`} />
             </ListItemButton>
           </ListItem>
         </List>
@@ -106,9 +107,9 @@ function DrawerAdmin({ visible, hide }){
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon className="text-dark">
-                <ListAltIcon/>
+               <AccountBoxIcon/>
               </ListItemIcon>
-              <ListItemText primary={`Jobseeker Lists`} />
+              <ListItemText primary={`Jobseekers Profile`} />
             </ListItemButton>
           </ListItem>
         </List>

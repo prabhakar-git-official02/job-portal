@@ -5,8 +5,6 @@ import { allJobseekers_Get } from "../../Thunks/adminGetReqThunk";
 
 import AddCallIcon from "@mui/icons-material/AddCall";
 import MailIcon from "@mui/icons-material/Mail";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import SearchInput from "../../Components/SearchInput";
 import DropDown from "../../Components/DropDown";
@@ -17,8 +15,8 @@ function JobseekerLists() {
   const [activeId, setActiveId] = useState(null);
   const [search, setSearch] = useState("");
 
-  const [locationKey,setLocationKey] = useState("")
-  const [qualificationKey,setQualificationKey] = useState("")
+  const [locationKey, setLocationKey] = useState("");
+  const [qualificationKey, setQualificationKey] = useState("");
 
   useEffect(() => {
     dispatch(allJobseekers_Get());
@@ -28,9 +26,8 @@ function JobseekerLists() {
     (state) => state.allJobseekers.AllJobseekers,
   );
 
-
-      const qualifications = [
-      "All Qualifications",
+  const qualifications = [
+    "All Qualifications",
     "10th",
     "12th",
     "ITI",
@@ -62,28 +59,27 @@ function JobseekerLists() {
     "Other",
   ];
 
-const filteredJobseekers = AllJobseekers?.filter((r) => {
+  const filteredJobseekers = AllJobseekers?.filter((r) => {
+    const qualificationMatch =
+      qualificationKey && qualificationKey !== "All Qualifications"
+        ? r?.education?.some((e) =>
+            e?.qualification
+              ?.trim()
+              .toLowerCase()
+              .includes(qualificationKey.trim().toLowerCase()),
+          )
+        : true;
 
-  const qualificationMatch =
-    qualificationKey && qualificationKey !== "All Qualifications"
-      ? r?.education?.some((e) =>
-          e?.qualification
+    const locationMatch =
+      locationKey && locationKey !== ""
+        ? r?.location
             ?.trim()
             .toLowerCase()
-            .includes(qualificationKey.trim().toLowerCase())
-        )
-      : true;
+            .includes(locationKey.trim().toLowerCase())
+        : true;
 
-  const locationMatch =
-    locationKey && locationKey !== ""
-      ? r?.location
-          ?.trim()
-          .toLowerCase()
-          .includes(locationKey.trim().toLowerCase())
-      : true;
-
-  return locationMatch && qualificationMatch;
-});
+    return locationMatch && qualificationMatch;
+  });
 
   return (
     <div className="container-fluid page-bg min-vh-100 px-0">
@@ -102,13 +98,18 @@ const filteredJobseekers = AllJobseekers?.filter((r) => {
       <div className="container py-4 px-3 px-md-4 px-lg-5 mt-5">
         {/* Title */}
 
-        <div className="modern-title-container text-center mb-3">
-          <h3 className="modern-title pb-2">Jobseekers Directory</h3>
+        
+        <div className="title-wrapper text-center mb-4">
 
-          <p className="modern-subtitle">
-            Explore talented candidates and their professional profiles
-          </p>
-        </div>
+<h2 className="dashboard-title">
+Jobseekers <span>Directory</span>
+</h2>
+
+<p className="dashboard-subtitle">
+Explore talented candidates and their professional profiles
+</p>
+
+</div>
 
         {/* Search */}
 
@@ -120,9 +121,7 @@ const filteredJobseekers = AllJobseekers?.filter((r) => {
           />
         </div>
 
-        
         <div className="d-flex gap-2 flex-wrap mb-4">
-
           <DropDown
             datas={qualifications}
             dataName={qualificationKey}
@@ -131,299 +130,428 @@ const filteredJobseekers = AllJobseekers?.filter((r) => {
             initialName="Filter Qualification"
           />
 
-                    <input
+          <input
             type="text"
             placeholder="🔍 Filter Recruiter Location..."
             className="premium-input"
             value={locationKey}
             onChange={(e) => setLocationKey(e.target.value)}
-          /> 
-
+          />
         </div>
 
         {/* Cards */}
 
-        <div className="row g-3 g-md-4">
-          {filteredJobseekers?.filter((j) =>
-            `${j.firstName} ${j.lastName}`
-              .toLowerCase()
-              .includes(search.toLowerCase()),
-          )?.map((j) => (
-            <div key={j._id} className="col-12 col-sm-6 col-lg-4 col-xl-3">
-              <div className="card card-saas border-0 shadow-sm h-100 p-3">
-                {/* Top */}
+        {/* Desktop Table */}
 
-                <div className="d-flex gap-3">
+        <div className="table-wrapper">
+          <table className="premium-table">
+            <thead>
+              <tr>
+                <th>Jobseeker</th>
+                <th>Job Type</th>
+                <th>Location</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {filteredJobseekers
+                ?.filter((j) =>
+                  `${j.firstName} ${j.lastName}`
+                    .toLowerCase()
+                    .includes(search.toLowerCase()),
+                )
+                .map((j) => (
+                  <>
+                    <tr key={j._id}>
+                      <td className="user-cell">
+                        <img
+                          src={j?.profileImage?.url}
+                          className="profile-img-table"
+                          alt="profile"
+                        />
+
+                        <div>
+                          <div className="user-email">
+                            {j.firstName} {j.lastName}
+                          </div>
+
+                          <div className="small text-muted">
+                            <MailIcon fontSize="small" /> {j.email}
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <span className="role-badge">
+                          {j.jobType || "Jobseeker"}
+                        </span>
+                      </td>
+
+                      <td>
+                        <span className="auth-badge">{j.location || "-"}</span>
+                      </td>
+
+                      <td>
+                        <button
+                          className="view-btn"
+                          onClick={() =>
+                            setActiveId(activeId === j._id ? null : j._id)
+                          }
+                        >
+                          {activeId === j._id ? "Hide" : "View"}
+                        </button>
+                      </td>
+                    </tr>
+
+                    {activeId === j._id && (
+                      <tr>
+                        <td colSpan="4">
+                          <div className="details-box card p-5 m-3">
+                            <div>
+                              <b><AddCallIcon fontSize=""/></b> {j.phone || "Null"}
+                            </div>
+                            <div>
+                              <b>Age:</b> {j.age || "Null"}
+                            </div>
+                            <div>
+                              <b>Gender:</b> {j.gender || "Null"}
+                            </div>
+                            <div>
+                              <b>Expected Salary:</b> {j.expectedSalary || "Null"}
+                            </div>
+                            <div>
+                              <b>Experience Type:</b> {j.experienceType || "Null"}
+                            </div>
+
+                            <div className="mt-2">
+                              <b><VisibilityIcon fontSize=""/></b>
+
+                              <a
+                                href={j?.resume?.url  || "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mx-2"
+                              >
+                                View Resume
+                              </a>
+                            </div>
+
+                            {/* Skills */}
+
+                            <div className="mt-3">
+                              <b>Skills:</b>
+
+                              <ul className="skills-box">
+                                {j.skills?.length > 0
+                                  ? j.skills.map((s, i) => (
+                                      <li key={i} className="skill-pill">
+                                        {s  || "Null"}
+                                      </li>
+                                    ))
+                                  : "Null"}
+                              </ul>
+                            </div>
+
+                            {/* Education */}
+
+                            <div className="mt-3">
+                              <b>Education:</b>
+
+                              {j.education?.length > 0
+                                ? j.education.map((e) => (
+                                    <div key={e._id} className="sub-card p-3 m-3 card page-bg">
+                                      <div><strong>Qualification: </strong>{e.qualification  || "Null"}</div>
+
+                                      <div className="small text-muted">
+                                        <strong>Institute: </strong>{e.institute  || "Null"}
+                                      </div>
+
+                                      <div className="small text-muted">
+                                        <strong>Years: </strong>
+                                        {new Date(e?.yearStart  || "Null").getFullYear()} -
+                                        {new Date(e?.yearEnd  || "Null").getFullYear()}
+                                      </div>
+                                    </div>
+                                  ))
+                                : "Null"}
+                            </div>
+
+                            {/* Experience */}
+
+                            <div className="mt-3">
+                              <b>Experience:</b>
+
+                              {j.experience?.length > 0
+                                ? j.experience.map((e) => (
+                                    <div key={e._id} className="sub-card card p-3 m-3 page-bg">
+                                      <div><strong>Company Name: </strong>{e.company  || "Null"}</div>
+
+                                      <div className="small text-muted">
+                                        <strong>Field: </strong>{e.field  || "Null"}
+                                      </div>
+
+                                      <div className="small text-muted">
+                                        <strong>CTC: </strong> {e?.CTC  || "Null"}
+                                      </div>
+
+                                      <div className="small text-muted">
+                                        <strong>Work Experience: </strong> {e?.workExperience  || "Null"}
+                                      </div>
+
+                                      <div className="small text-muted">
+                                        <strong>Years: </strong>
+                                        {new Date(e?.yearStart  || "Null").getFullYear()} -
+                                        {new Date(e?.yearEnd || "Null").getFullYear()}
+                                      </div>
+                                    </div>
+                                  ))
+                                : "Null"}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Cards */}
+
+        <div className="mobile-users">
+          {filteredJobseekers
+            ?.filter((j) =>
+              `${j.firstName} ${j.lastName}`
+                .toLowerCase()
+                .includes(search.toLowerCase()),
+            )
+            .map((j) => (
+              <div key={j._id} className="mobile-user-card">
+                <div className="mobile-user-header">
                   <img
                     src={j?.profileImage?.url}
+                    className="profile-img-mobile"
                     alt="profile"
-                    className="profile-img"
                   />
 
                   <div>
-                    <h6 className="fw-bold mb-1">
+                    <div className="mobile-user-email">
                       {j.firstName} {j.lastName}
-                    </h6>
-
-                    <p className="text-muted small mb-1">
-                      {j.jobType || "Jobseeker"}
-                    </p>
+                    </div>
 
                     <div className="small text-muted">
-                      📍 {j.location || "-"}
+                      {j.jobType || "Jobseeker"}
                     </div>
                   </div>
                 </div>
 
-                {/* Contact */}
-
-                <div className="mt-3 small">
-                  <div>
-                    <MailIcon fontSize="small" /> {j.email}
+                <div className="mobile-user-body">
+                  <div className="mobile-row">
+                    <span>Email</span>
+                    <span>{j.email}</span>
                   </div>
 
-                  <div>
-                    <AddCallIcon fontSize="small" /> {j.phone}
-                  </div>
-                  <div>
-                    <VisibilityIcon fontSize="small" />
-                    <a
-                    className="mx-2"
-                      href={j?.resume?.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: "none", color: "blue" }}
-                    >
-                      View Resume
-                    </a>
+                  <div className="mobile-row">
+                    <span>Location</span>
+                    <span>{j.location || "-"}</span>
                   </div>
                 </div>
 
-                {/* Button */}
-
-                <div>
                 <button
-                  className="btn apply-btn mt-3"
+                  className="view-btn mt-2"
                   onClick={() => setActiveId(activeId === j._id ? null : j._id)}
                 >
-                  {activeId === j._id ? (
-                    <>
-                      Hide Details <KeyboardArrowUpIcon fontSize="small" />
-                    </>
-                  ) : (
-                    <>
-                      View Details <KeyboardArrowDownIcon fontSize="small" />
-                    </>
-                  )}
+                  {activeId === j._id ? "Hide Details" : "View Details"}
                 </button>
-                </div>
 
-                {/* Details */}
-
-                {activeId === j._id && (
-                  <div className="details-box mt-3">
-                    <div>
-                      <b>About:</b> {j.about || "-"}
-                    </div>
-
-                    <div>
-                      <b>Age:</b> {j.age || "-"}
-                    </div>
-
-                    <div>
-                      <b>Gender:</b> {j.gender || "-"}
-                    </div>
-
-                    <div>
-                      <b>Expected Salary:</b> {j.expectedSalary || "-"}
-                    </div>
-
-                    <div>
-                      <b>Experience Type:</b> {j.experienceType || "-"}
-                    </div>
-
-                    {/* Skills */}
-
-                    <div className="mt-2">
-                      <b>Skills:</b>
-
-                      <div className="skills-box">
-                        {j.skills?.length > 0
-                          ? j.skills.map((s, i) => (
-                              <span key={i} className="skill-pill">
-                                {s}
-                              </span>
-                            ))
-                          : "-"}
-                      </div>
-                    </div>
-
-                    {/* Education */}
-
-                    <div className="mt-2">
-                      <b>Education:</b>
-
-                      {j.education?.length > 0
-                        ? j.education.map((e) => (
-                            <div key={e._id} className="sub-card p-3">
-                              <div>{e.qualification}</div>
-
-                              <div className="small text-muted">
-                                {e.institute}
-                              </div>
-                              <div className="small text-muted">
-                                {new Date(e?.yearStart).getFullYear()} -{" "}
-                                {new Date(e?.yearEnd).getFullYear()}
-                              </div>
+                    {activeId === j._id && (
+                          <div className="details-box card p-3 mt-3">
+                            <div>
+                              <b>Phone:</b> {j.phone || "Null"}
                             </div>
-                          ))
-                        : "-"}
-                    </div>
-
-                    {/* Experience */}
-
-                    <div className="mt-2">
-                      <b>Experience:</b>
-
-                      {j.experience?.length > 0
-                        ? j.experience.map((e) => (
-                            <div key={e._id} className="sub-card p-3">
-                              <div>{e.company}</div>
-
-                              <div className="small text-muted">{e.field}</div>
-                              <div className="small text-muted">
-                                CTC: {e?.CTC}
-                              </div>
-                              <div className="small text-muted">
-                                Work Experience: {e?.workExperience}
-                              </div>
-                              <div className="small text-muted">
-                                {new Date(e?.yearStart).getFullYear()} -{" "}
-                                {new Date(e?.yearEnd).getFullYear()}
-                              </div>
+                            <div>
+                              <b>Age:</b> {j.age || "Null"}
                             </div>
-                          ))
-                        : "-"}
-                    </div>
-                  </div>
-                )}
+                            <div>
+                              <b>Gender:</b> {j.gender || "Null"}
+                            </div>
+                            <div>
+                              <b>Expected Salary:</b> {j.expectedSalary || "Null"}
+                            </div>
+                            <div>
+                              <b>Experience Type:</b> {j.experienceType || "Null"}
+                            </div>
+
+                            <div className="mt-2">
+                              <b>Resume:</b>
+
+                              <a
+                                href={j?.resume?.url  || "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mx-2"
+                              >
+                                View Resume
+                              </a>
+                            </div>
+
+                            {/* Skills */}
+
+                            <div className="mt-3">
+                              <b>Skills:</b>
+
+                              <ul className="skills-box">
+                                {j.skills?.length > 0
+                                  ? j.skills.map((s, i) => (
+                                      <li key={i} className="skill-pill">
+                                        {s  || "Null"}
+                                      </li>
+                                    ))
+                                  : "Null"}
+                              </ul>
+                            </div>
+
+                            {/* Education */}
+
+                            <div className="mt-3">
+                              <b>Education:</b>
+
+                              {j.education?.length > 0
+                                ? j.education.map((e) => (
+                                    <div key={e._id} className="sub-card p-3 mt-2 card page-bg">
+                                      <div><strong>Qualification: </strong>{e.qualification  || "Null"}</div>
+
+                                      <div className="small text-muted">
+                                        <strong>Institute: </strong>{e.institute  || "Null"}
+                                      </div>
+
+                                      <div className="small text-muted">
+                                        <strong>Years: </strong>
+                                        {new Date(e?.yearStart  || "Null").getFullYear()} -
+                                        {new Date(e?.yearEnd  || "Null").getFullYear()}
+                                      </div>
+                                    </div>
+                                  ))
+                                : "Null"}
+                            </div>
+
+                            {/* Experience */}
+
+                            <div className="mt-3">
+                              <b>Experience:</b>
+
+                              {j.experience?.length > 0
+                                ? j.experience.map((e) => (
+                                    <div key={e._id} className="sub-card card p-3 mt-2 page-bg">
+                                      <div><strong>Company Name: </strong>{e.company  || "Null"}</div>
+
+                                      <div className="small text-muted">
+                                        <strong>Field: </strong>{e.field  || "Null"}
+                                      </div>
+
+                                      <div className="small text-muted">
+                                        <strong>CTC: </strong> {e?.CTC  || "Null"}
+                                      </div>
+
+                                      <div className="small text-muted">
+                                        <strong>Work Experience: </strong> {e?.workExperience  || "Null"}
+                                      </div>
+
+                                      <div className="small text-muted">
+                                        <strong>Years: </strong>
+                                        {new Date(e?.yearStart  || "Null").getFullYear()} -
+                                        {new Date(e?.yearEnd || "Null").getFullYear()}
+                                      </div>
+                                    </div>
+                                  ))
+                                : "Null"}
+                            </div>
+                          </div>
+                    )}
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
 
       {/* Styles */}
 
       <style>{`
-
-.page-bg{
+      .page-bg{
   background: linear-gradient(135deg,#f8fafc,#eef2f7);
 }
 
-/* Title */
-
-.modern-title{
-  font-size:26px;
-  font-weight:700;
-  background: linear-gradient(135deg,#4f46e5,#6366f1);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+.profile-img-table{
+width:38px;
+height:38px;
+border-radius:10px;
+object-fit:cover;
 }
 
-.modern-subtitle{
-  font-size:14px;
-  color:#6b7280;
+.profile-img-mobile{
+width:38px;
+height:38px;
+border-radius:10px;
+object-fit:cover;
 }
-
-
-/* Card */
-
-.card-saas{
-  border-radius:16px;
-  transition:0.3s;
-}
-
-.card-saas:hover{
-  transform:translateY(-6px);
-  box-shadow:0 20px 40px rgba(0,0,0,0.08);
-}
-
-
-/* Image */
-
-.profile-img{
-  width:60px;
-  height:60px;
-  border-radius:12px;
-  object-fit:cover;
-}
-
-
-/* Button */
-
-.apply-btn{
-  background: linear-gradient(135deg,#6366f1,#4f46e5);
-  color:white;
-  border:none;
-  border-radius:10px;
-  font-size:13px;
-}
-
-
-/* Details */
 
 .details-box{
-  background:#f8fafc;
-  padding:10px;
-  border-radius:10px;
-  font-size:13px;
+background:#f9fafb;
+padding:10px;
+border-radius:10px;
+font-size:13px;
+line-height:1.7;
 }
 
+.table-wrapper{
+background:white;
+border-radius:16px;
+box-shadow:0 10px 40px rgba(0,0,0,0.08);
+overflow-x:auto;
+}
+/* Match dropdown height */
 
-/* Skills */
+.premium-dropdown{
 
-.skills-box{
+  height:42px;
+
   display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:5px;
+  align-items:center;
+
 }
 
-.skill-pill{
-  background:#eef2ff;
-  color:#4f46e5;
-  padding:3px 8px;
-  border-radius:6px;
-  font-size:12px;
-}
-
-
-/* Sub cards */
-
-.sub-card{
-  background:white;
-  padding:6px;
-  border-radius:6px;
-  margin-top:5px;
-  border:1px solid #eee;
-}
-
-
-/* Mobile */
+/* Mobile responsive */
 
 @media(max-width:768px){
 
-  .profile-img{
-    width:50px;
-    height:50px;
+  .premium-input{
+
+    width:100%;
+    min-width:unset;
+
   }
 
 }
+.dashboard-title{
+font-size:32px;
+font-weight:700;
+letter-spacing:0.5px;
+}
 
+.dashboard-title span{
+background:linear-gradient(135deg,#4f46e5,#6366f1);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
+.dashboard-subtitle{
+color:#6b7280;
+font-size:14px;
+margin-top:4px;
+}
 
-.premium-input{
+ .premium-input{
 
   height:42px;
   min-width:220px;
@@ -462,27 +590,148 @@ const filteredJobseekers = AllJobseekers?.filter((r) => {
 
 }
 
-/* Match dropdown height */
-
-.premium-dropdown{
-
-  height:42px;
-
-  display:flex;
-  align-items:center;
-
+.premium-table{
+width:100%;
+border-collapse:collapse;
 }
 
-/* Mobile responsive */
+.premium-table thead{
+background:#f9fafb;
+}
 
-@media(max-width:768px){
+.premium-table th{
+text-align:left;
+padding:16px;
+font-size:13px;
+font-weight:600;
+color:#6b7280;
+border-bottom:1px solid #eee;
+}
 
-  .premium-input{
+.premium-table td{
+padding:16px;
+border-bottom:1px solid #f1f1f1;
+vertical-align:middle;
+}
 
-    width:100%;
-    min-width:unset;
+.premium-table tbody tr{
+transition:0.25s;
+}
 
-  }
+.premium-table tbody tr:hover{
+background:#f8fafc;
+}
+
+.user-cell{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.avatar{
+width:38px;
+height:38px;
+border-radius:10px;
+background:linear-gradient(135deg,#6366f1,#4f46e5);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
+}
+
+.user-email{
+font-weight:500;
+font-size:14px;
+}
+
+.role-badge{
+background:#eef2ff;
+color:#4f46e5;
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:500;
+}
+
+.auth-badge{
+background:#ecfdf5;
+color:#059669;
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:500;
+}
+
+.view-btn{
+background:#4f46e5;
+color:white;
+border:none;
+padding:6px 14px;
+border-radius:8px;
+font-size:12px;
+transition:0.25s;
+}
+
+.view-btn:hover{
+background:#4338ca;
+}
+
+/* mobile cards hidden by default */
+
+.mobile-users{
+display:none;
+width:100%;
+}
+
+/* mobile card */
+
+.mobile-user-card{
+background:white;
+border-radius:14px;
+padding:16px;
+margin-bottom:14px;
+box-shadow:0 8px 25px rgba(0,0,0,0.06);
+
+width:100%;
+}
+
+.mobile-user-header{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:10px;
+}
+
+.mobile-user-email{
+font-weight:600;
+font-size:14px;
+word-break:break-all;
+}
+
+.mobile-user-body{
+margin-top:8px;
+}
+
+.mobile-row{
+display:flex;
+justify-content:space-between;
+padding:6px 0;
+font-size:13px;
+border-bottom:1px solid #f1f1f1;
+}
+
+/* Responsive behavior */
+
+@media(max-width:992px){
+
+.table-wrapper{
+display:none;
+}
+
+.mobile-users{
+display:block;
+}
 
 }
 `}</style>
