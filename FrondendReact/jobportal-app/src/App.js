@@ -51,7 +51,7 @@ import JobseekerDashbboard from "./Pages/Jobseeker/JobseekerDashboard.jsx";
 import ViewStatusJobs from "./Pages/Jobseeker/ViewStatusJobs.jsx";
 import ViewStatusInterview from "./Pages/Jobseeker/ViewStatusInterview.jsx";
 import Security from "./settings/Security.jsx";
-
+import UserLists from "./Pages/Admin/UserLists.jsx";
 
 function App() {
   return (
@@ -141,6 +141,7 @@ function App() {
           <Route path="/recruiterLists" element={<PrivateLogin><RecruiterLists /></PrivateLogin>} />
           <Route path="/recruiterPosts" element={<PrivateLogin><RecruiterPosts /></PrivateLogin>} />
           <Route path="/jobListPreview" element={<PrivateLogin><JobListPreview /></PrivateLogin>} />
+          <Route path="/userLists" element={<UserLists/>}/>
         </Routes>
       </BrowserRouter>
     </div>

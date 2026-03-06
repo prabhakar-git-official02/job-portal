@@ -80,6 +80,17 @@ function DrawerAdmin({ visible, hide }){
           </ListItem>
         </List>
 
+             <List onClick={() => navigate("/userLists")}>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon className="text-dark">
+                <ListAltIcon/>
+              </ListItemIcon>
+              <ListItemText primary={`All Users`} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+
                 <List onClick={() => navigate("/recruiterLists")}>
           <ListItem disablePadding>
             <ListItemButton>

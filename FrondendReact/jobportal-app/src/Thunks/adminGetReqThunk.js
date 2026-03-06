@@ -3,6 +3,27 @@ import { IsAllJobseekersSuccess,IsAllJobseekersFailure } from "../Redux/allJobse
 import api from "../api/axios"
 import { showAlert } from "../Scripts/Alert"
 import { allPostsThunk } from "./allPostsThunk"
+import { IsUsersSuccess,IsUsersFailure } from "../Redux/allUsersSlice"
+
+
+// All Users Get
+export const allUsers_Get = () => {
+    return async(dispatch) => {
+        try{
+            const response = await api.get('/admin/allUsers/Get',
+                {withCredentials : true}
+            )
+            if(response){
+                dispatch(IsUsersSuccess(response?.data?.data))
+                console.log("all users",response?.data?.data)
+                return response
+            }
+        } catch(err){
+            dispatch(IsUsersFailure(err.response?.data?.msg))
+            console.log("allUsersThunk-Error",err.response?.data?.msg)
+        }
+    }
+}
 
 // All Recruiters Get
 export const allRecruiters_Get = () => {
@@ -23,6 +44,7 @@ export const allRecruiters_Get = () => {
     }
 }
 
+// All Jobseekers Get
 export const allJobseekers_Get = () => {
     return async(dispatch) => {
         try{
@@ -40,7 +62,7 @@ export const allJobseekers_Get = () => {
     }
 }
 
-
+// Recruiter-Post
 export const Post_Status_Update = (status,id,recruiterId) => {
     return async(dispatch) => {
         try{

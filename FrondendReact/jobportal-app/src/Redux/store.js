@@ -16,6 +16,8 @@ import notificationReducer from './notificationSlice'
 import interviewsReducer from './interviewSlice'
 import allRecruitersReducer from './allRecruitersSlice'
 import allJobseekersReducer from './allJobseekersSlice'
+import allUsersReducer from './allUsersSlice'
+
 export const store = configureStore({
     reducer : {
         auth : authReducer,
@@ -34,6 +36,7 @@ export const store = configureStore({
         notifications : notificationReducer,
         Interviews : interviewsReducer,
         allRecruiters : allRecruitersReducer,
-        allJobseekers : allJobseekersReducer
+        allJobseekers : allJobseekersReducer,
+        allUsers : allUsersReducer
     }
 })

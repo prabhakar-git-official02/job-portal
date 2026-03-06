@@ -29,8 +29,6 @@ function RecruiterLists() {
     (state) => state.allRecruiters.AllRecruiters,
   );
 
-console.log(AllRecruiters)
-
   const industries = [
     "All Industrys",
     "Information Technology",
