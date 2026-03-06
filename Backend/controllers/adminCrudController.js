@@ -158,7 +158,7 @@ export const all_users = async(req,res) => {
       return res.status(404).json({msg : 'Users not found'})
     }
 
-    res.json({msg : 'Users fetched successfully',Users : All_Users})
+    res.json({msg : 'Users fetched successfully',data : All_Users})
   } catch(err){
     res.status(500).json({msg : err.message})
   }
