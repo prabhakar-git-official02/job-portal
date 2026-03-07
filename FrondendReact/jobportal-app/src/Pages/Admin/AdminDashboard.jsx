@@ -8,6 +8,7 @@ import {
 } from "../../Thunks/adminGetReqThunk";
 import { allPostsThunk } from "../../Thunks/allPostsThunk";
 import { useNavigate } from "react-router-dom";
+import { allUsers_Get } from "../../Thunks/adminGetReqThunk";
 
 function AdminDashboard() {
 
@@ -20,11 +21,17 @@ function AdminDashboard() {
     dispatch(allPostsThunk());
   }, [dispatch]);
 
-  const AllRecruiters =
-    useSelector((state) => state.allRecruiters.AllRecruiters) || [];
+   useEffect(() => {
+      dispatch(allUsers_Get());
+    }, [dispatch]);
+  
+    const AllUsers = useSelector((state) => state.allUsers.Users) || [];
 
-  const AllJobseekers =
-    useSelector((state) => state.allJobseekers.AllJobseekers) || [];
+  const AllRecruiters = AllUsers?.filter((r) => r?.role === "recruiter")
+  
+  const AllJobseekers = AllUsers?.filter((j) => j?.role === "user")
+
+  const AllAdmin = AllUsers?.filter((a) => a?.role === "admin")
 
   const Posts =
     useSelector((state) => state.allPosts.Posts) || [];
@@ -96,7 +103,7 @@ function AdminDashboard() {
 const barOptions = {
   chart: { type: "bar", toolbar: { show: false } },
   xaxis: {
-    categories: ["Recruiters", "Jobseekers", "Total Posts"],
+    categories: ["Total Users","Recruiters", "Jobseekers","Admin"],
     labels: {
       rotate: 0,
       hideOverlappingLabels: false,
@@ -128,9 +135,10 @@ const barOptions = {
     {
       name: "Count",
       data: [
-        AllRecruiters.length,
-        AllJobseekers.length,
-        Posts.length,
+        AllUsers?.length,
+        AllRecruiters?.length,
+        AllJobseekers?.length,
+        AllAdmin?.length
       ],
     },
   ];
@@ -153,14 +161,24 @@ const barOptions = {
 
         <div className="kpi-grid">
 
-          <div onClick={() => navigate('/recruiterLists')} className="kpi-card">
+            <div onClick={() => navigate('/userLists')} className="kpi-card">
+            <p>Total Users</p>
+            <h2>{AllUsers?.length}</h2>
+          </div>
+
+          <div onClick={() => navigate('/allRecruiters')} className="kpi-card">
             <p>Total Recruiters</p>
             <h2>{AllRecruiters?.length}</h2>
           </div>
 
-          <div className="kpi-card" onClick={() => navigate('/jobseekerLists')}>
+          <div className="kpi-card" onClick={() => navigate('/allJobseekers')}>
             <p>Total Jobseekers</p>
             <h2>{AllJobseekers?.length}</h2>
+          </div>
+
+            <div className="kpi-card" onClick={() => navigate('/allAdmins')}>
+            <p>Total Admin</p>
+            <h2>{AllAdmin?.length}</h2>
           </div>
 
           <div className="kpi-card" onClick={() => navigate('/recruiterPosts')}>
@@ -178,7 +196,7 @@ const barOptions = {
             <h2 className="premium-red">{RejectedPosts?.length}</h2>
           </div>
 
-                  <div className="kpi-card" onClick={() => navigate(`/jobListPreview?postStatus=pending`) }>
+              <div className="kpi-card" onClick={() => navigate(`/jobListPreview?postStatus=pending`) }>
             <p className="premium-yellow">Pending Posts</p>
             <h2 className="premium-yellow">{PendingPosts?.length}</h2>
           </div>

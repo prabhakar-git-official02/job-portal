@@ -40,7 +40,6 @@ import InterviewCallDescription from "./Pages/Recruiter/InterviewCallDescription
 import PlatformJobs from "./Pages/PlatformJobs.jsx";
 import AdminDashboard from "./Pages/Admin/AdminDashboard.jsx";
 import JobseekerLists from "./Pages/Admin/JobseekerLists.jsx";
-import ManageJobPosts from "./Pages/Admin/ManageJobPosts.jsx";
 import RecruiterLists from "./Pages/Admin/RecruiterLists.jsx";
 import RecruiterPosts from "./Pages/Admin/RecruiterPosts.jsx";
 import JobListPreview from "./Pages/Admin/JobListPreview.jsx";
@@ -53,6 +52,9 @@ import ViewStatusInterview from "./Pages/Jobseeker/ViewStatusInterview.jsx";
 import Security from "./settings/Security.jsx";
 import UserLists from "./Pages/Admin/UserLists.jsx";
 import UserPage from "./Pages/Admin/UserPage.jsx";
+import AllRecruiters from "./Pages/Admin/AllRecruiters.jsx";
+import AllJobseekers from "./Pages/Admin/AllJobseekers.jsx";
+import AllAdmin from "./Pages/Admin/AllAdmin.jsx";
 
 function App() {
   return (
@@ -138,12 +140,14 @@ function App() {
           <Route path="/adminProfileForm" element={<PrivateLogin><AdminProfileForm /></PrivateLogin>} />
           <Route path="/adminDashboard" element={<PrivateLogin><AdminDashboard /></PrivateLogin>} />
           <Route path="/jobseekerLists" element={<PrivateLogin><JobseekerLists /></PrivateLogin>} />
-          <Route path="/manageJobPosts" element={<PrivateLogin><ManageJobPosts /></PrivateLogin>} />
           <Route path="/recruiterLists" element={<PrivateLogin><RecruiterLists /></PrivateLogin>} />
           <Route path="/recruiterPosts" element={<PrivateLogin><RecruiterPosts /></PrivateLogin>} />
           <Route path="/jobListPreview" element={<PrivateLogin><JobListPreview /></PrivateLogin>} />
           <Route path="/userLists" element={<UserLists/>}/>
           <Route path="/userPage" element={<UserPage/>}/>
+          <Route path="/allRecruiters" element={<AllRecruiters/>}/>
+          <Route path="/allJobseekers" element={<AllJobseekers/>}/>
+          <Route path="/allAdmins" element={<AllAdmin/>}/>
         </Routes>
       </BrowserRouter>
     </div>

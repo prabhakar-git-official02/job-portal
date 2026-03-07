@@ -6,11 +6,10 @@ import { useNavigate } from "react-router-dom";
 import DropDown from "../../Components/DropDown";
 import SearchInput from "../../Components/SearchInput";
 
-function UserLists() {
+function AllRecruiters(){
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [roleKey,setRoleKey] = useState("")
   const [authorizedKey,setAuthorizedKey] = useState("")
   const [search,setSearch] = useState("")
 
@@ -20,21 +19,15 @@ function UserLists() {
 
   const AllUsers = useSelector((state) => state.allUsers.Users);
 
-  const FilteredRole = ["User","Recruiter","Admin","All Users"]
+  const Recruiters = AllUsers?.filter((u) => u?.role === "recruiter")
 
   const FilteredAuthorized = ["Local","Google","All Authorized"]
 
-    const filteredUsers = AllUsers?.filter((u) => {
-      const roleMatch =
-      roleKey && roleKey!=="All Users" ?
-      u?.role?.trim().toLowerCase() === roleKey?.trim().toLowerCase() : true
-
+    const filteredUsers = Recruiters?.filter((u) => {
       const authorizedMatch = 
       authorizedKey && authorizedKey!=="All Authorized" ?
       u?.authorizedType?.trim().toLowerCase() === authorizedKey?.trim().toLowerCase() : true
-
-
-    return roleMatch && authorizedMatch;
+    return  authorizedMatch;
   });
 
 
@@ -56,11 +49,11 @@ function UserLists() {
 <div className="title-wrapper text-center mb-4">
 
 <h2 className="dashboard-title">
-Users <span>Directory</span>
+Recruiters <span>Directory</span>
 </h2>
 
 <p className="dashboard-subtitle">
-Manage and monitor all platform users
+Discover recruiters and connect with top companies
 </p>
 
 </div>
@@ -75,15 +68,6 @@ Manage and monitor all platform users
 
         <div className="d-flex align-items-center gap-2 flex-wrap">
 
-
-          <DropDown
-            datas={FilteredRole}
-            dataName={roleKey}
-            dropDirection={"down"}
-            setDatas={setRoleKey}
-            classname={`premium-dropdown`}
-            initialName={`Filter Role`}
-          />
           <DropDown
             datas={FilteredAuthorized}
             dataName={authorizedKey}
@@ -413,4 +397,4 @@ display:block;
   );
 }
 
-export default UserLists;
+export default AllRecruiters

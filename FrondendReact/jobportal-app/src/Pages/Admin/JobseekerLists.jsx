@@ -102,7 +102,7 @@ function JobseekerLists() {
         <div className="title-wrapper text-center mb-4">
 
 <h2 className="dashboard-title">
-Jobseekers <span>Directory</span>
+Jobseekers <span>Profile</span>
 </h2>
 
 <p className="dashboard-subtitle">
@@ -142,7 +142,14 @@ Explore talented candidates and their professional profiles
         {/* Cards */}
 
         {/* Desktop Table */}
-
+{!AllJobseekers ?   <div className="no-data-wrapper">
+            <img
+              src="nodata-image.avif"
+              className="no-data-img"
+              alt="nodata-image"
+            />
+            <h5>No records found</h5>
+          </div> : 
         <div className="table-wrapper">
           <table className="premium-table">
             <thead>
@@ -317,8 +324,18 @@ Explore talented candidates and their professional profiles
             </tbody>
           </table>
         </div>
+}
 
         {/* Mobile Cards */}
+
+        {!AllJobseekers ?   <div className="no-data-wrapper">
+            <img
+              src="nodata-image.avif"
+              className="no-data-img"
+              alt="nodata-image"
+            />
+            <h5>No records found</h5>
+          </div> :
 
         <div className="mobile-users">
           {filteredJobseekers
@@ -473,6 +490,7 @@ Explore talented candidates and their professional profiles
               </div>
             ))}
         </div>
+}
       </div>
 
       {/* Styles */}
@@ -480,6 +498,34 @@ Explore talented candidates and their professional profiles
       <style>{`
       .page-bg{
   background: linear-gradient(135deg,#f8fafc,#eef2f7);
+}
+
+.no-data-wrapper {
+  text-align: center;
+  padding: 60px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.no-data-img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  border-radius : 20px;
+  object-fit: contain;
+  opacity: 0.9;
+  margin-bottom: 25px;
+}
+
+.no-data-title {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.no-data-text {
+  font-size: 14px;
+  color: #888;
 }
 
 .profile-img-table{

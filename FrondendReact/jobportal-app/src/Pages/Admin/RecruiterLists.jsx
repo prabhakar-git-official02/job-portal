@@ -115,7 +115,7 @@ console.log(AllRecruiters)
         <div className="title-wrapper text-center mb-4">
 
 <h2 className="dashboard-title">
-Recruiters <span>Directory</span>
+Recruiters <span>Profile</span>
 </h2>
 
 <p className="dashboard-subtitle">
@@ -176,6 +176,14 @@ Discover recruiters and connect with top companies
         {/* Cards */}
 
        {/* Desktop Table */}
+{!AllRecruiters?        <div className="no-data-wrapper">
+            <img
+              src="nodata-image.avif"
+              className="no-data-img"
+              alt="nodata-image"
+            />
+            <h5>No records found</h5>
+          </div> : 
 
 <div className="table-wrapper">
   <table className="premium-table">
@@ -265,7 +273,18 @@ Discover recruiters and connect with top companies
   </table>
   
 </div>
+}
 
+
+{!AllRecruiters ?      
+  <div className="no-data-wrapper">
+            <img
+              src="nodata-image.avif"
+              className="no-data-img"
+              alt="nodata-image"
+            />
+            <h5>No records found</h5>
+          </div> :
 <div className="mobile-users">
 
   {filteredRecruiters
@@ -346,7 +365,7 @@ Discover recruiters and connect with top companies
     ))}
 
 </div>
-
+}
       </div>
 
 
@@ -354,6 +373,34 @@ Discover recruiters and connect with top companies
       {/* Styles */}
 
       <style>{`
+
+      .no-data-wrapper {
+  text-align: center;
+  padding: 60px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.no-data-img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  border-radius : 20px;
+  object-fit: contain;
+  opacity: 0.9;
+  margin-bottom: 25px;
+}
+
+.no-data-title {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.no-data-text {
+  font-size: 14px;
+  color: #888;
+}
 
 .profile-img-table{
 width:38px;
