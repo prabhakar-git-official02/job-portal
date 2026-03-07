@@ -72,9 +72,14 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
   const handleProfile = () => {
     setAnchorEl(null)
 
-    if(!user && !sessionStorage.getItem("AuthProvider")){
+    if(!user && !sessionStorage.getItem("tabSession")){
      return navigate('/login')
     }
+
+    if(!user && sessionStorage.getItem("tabSession")){
+      return navigate('/Loading')
+    }
+
     if(user?.roleData === "admin"){
       return AdminProfile ? navigate("/adminProfile") : navigate('/adminProfileForm')
     }
@@ -100,7 +105,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
   }
 
   const handleSidebar = () => {
-    if(!user){
+    if(!user && !sessionStorage.getItem("tabSession")){
       return showAlert("Warning","The sidebar is enabled after login","warning")
     }
     setSidebarOpen(true)
@@ -155,7 +160,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
               >
                 
                 <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
-                 {!user ? <MenuItem  onClick={handleLogin}>Login</MenuItem> : null}
+                 {!user && !sessionStorage.getItem("tabSession") ? <MenuItem  onClick={handleLogin}>Login</MenuItem> : null}
                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={handleSettings}>Settings</MenuItem>
               </Menu>

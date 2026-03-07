@@ -71,8 +71,8 @@ function Login() {
         }
         dispatch(loginSuccess(response.data.user));
         sessionStorage.setItem(
-          "AuthProvider",
-          response?.data?.user?.authProvider,
+          "tabSession",
+          "active",
         );
         setEmail("");
         setPassword("");

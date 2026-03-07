@@ -28,7 +28,7 @@ function Home() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!sessionStorage.getItem("AuthProvider")) {
+    if (!sessionStorage.getItem("tabSession")) {
       dispatch(ErraseLoginThunk());
     }
   }, [dispatch]);

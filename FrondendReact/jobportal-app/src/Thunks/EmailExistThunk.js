@@ -63,8 +63,8 @@ export const GoogleApiCallThunk = (token,Role) =>  {
 
     dispatch(loginSuccess(response?.data?.user));
             sessionStorage.setItem(
-              "AuthProvider",
-              response?.data?.user?.authprovider,
+          "tabSession",
+          "active",
             );
             showAlert("Success", response?.data?.msg, "success");
             dispatch(EmailExistAction(null))

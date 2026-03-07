@@ -5,8 +5,7 @@ const api =  axios.create({
   withCredentials: true,
 });
 
-
-
+try{
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
@@ -38,7 +37,8 @@ api.interceptors.response.use(
     return Promise.reject(err);
   }
 );
-
-
+}catch(err){
+  console.log("Axios-Error",err?.message)
+}
 
 export default api;
