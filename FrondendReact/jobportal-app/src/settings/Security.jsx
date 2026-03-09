@@ -6,6 +6,8 @@ import { IsTokenSuccess, IsTokenFailure } from "../Redux/ResetTokenSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressLoad from "../Components/ProgressLoad";
 import SecurityIcon from '@mui/icons-material/Security';
+import Button from "@mui/material/Button";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 function Security() {
   const dispatch = useDispatch();
@@ -296,17 +298,11 @@ const SignOut = async () => {
         {/* Signout Card */}
         <div className="lux-card danger">
 
-          <h2>Secure Sign Out</h2>
+          <h2>Secure Log Out</h2>
+          {captcha ? 
+          <div>
 
-          <p
-            className="lux-generate"
-            onClick={generateCaptcha}
-          >
-            Generate Security Verification
-          </p>
-
-
-          {captcha && (
+                    {captcha && (
 
             <div className="lux-captcha">
 
@@ -316,16 +312,13 @@ const SignOut = async () => {
                   {char}
                 </span>
               ))}
-
+              <span style={{cursor : `pointer`}} onClick={() => generateCaptcha()}><RefreshIcon/></span>
             </div>
 
           )}
 
 
           <div className="lux-field">
-
-            <label>Enter Verification Code</label>
-
             <input
               type="text"
               placeholder="Enter captcha"
@@ -334,19 +327,27 @@ const SignOut = async () => {
             />
 
           </div>
-
+          </div> : null
+             }
 
           {captchaLoading ? 
             <ProgressLoad trigger={1} setSize="20px" msg="Verifying..." /> : null
           }
 
-
+          {captcha ? 
+          <div>
           <ErrorAlert
-            buttonName="Sign Out Securely"
+            buttonName="Logout"
             alertMsg={captchaError}
             handlefn={SignOut}
-            buttonClass="lux-btn lux-danger-btn"
+            buttonClass="btn lux-danger-btn mt-3"
           />
+          </div> : 
+          <div>
+            <p className="text-danger">Click logout to sign out of your account.</p>
+            <Button variant="contained" onClick={generateCaptcha} color="error">Logut</Button>
+          </div>
+            }
 
         </div>
 
@@ -364,6 +365,7 @@ color : white;
     radial-gradient(circle at top, #1a1a2e, #0f0f1a);
 
   border-radius: 20px;
+  height : max-content;
   padding: 25px;
   border: 1px solid rgba(255,215,0,0.15);
 

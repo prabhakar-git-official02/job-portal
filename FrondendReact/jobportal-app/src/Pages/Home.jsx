@@ -17,6 +17,18 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import EmailIcon from '@mui/icons-material/Email';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import PeopleIcon from '@mui/icons-material/People';
+import InfoIcon from '@mui/icons-material/Info';
+import ExploreIcon from '@mui/icons-material/Explore';
+import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LoginIcon from '@mui/icons-material/Login';
 
 function Home() {
   const dispatch = useDispatch();
@@ -49,198 +61,295 @@ function Home() {
     }
   }, [user, dispatch]);
 
-   const jobFields = [
-  "Information Technology",
-  "Software Development",
-  "Web Development",
-  "Mobile App Development",
-  "Data Science",
-  "Artificial Intelligence",
-  "Machine Learning",
-  "Cyber Security",
-  "Cloud Computing",
-  "DevOps",
-  "Networking",
-  "Embedded Systems",
-  "Electronics",
-  "Telecommunication",
-  "Mechanical Engineering",
-  "Civil Engineering",
-  "Electrical Engineering",
-  "Automobile Engineering",
-  "Aerospace Engineering",
-  "Robotics",
-  "Manufacturing",
-  "Quality Assurance",
-  "UI/UX Design",
-  "Graphic Design",
-  "Digital Marketing",
-  "Content Writing",
-  "Human Resources",
-  "Recruitment",
-  "Sales",
-  "Marketing",
-  "Customer Support",
-  "Technical Support",
-  "Business Development",
-  "Finance",
-  "Accounting",
-  "Banking",
-  "Insurance",
-  "Healthcare",
-  "Pharmacy",
-  "Biotechnology",
-  "Education",
-  "Teaching",
-  "Research",
-  "Logistics",
-  "Supply Chain Management",
-  "Operations",
-  "Administration",
-  "Hospitality",
-  "Construction",
-  "Government Services"
-];
+  const jobFields = [
+    "Information Technology",
+    "Software Development",
+    "Web Development",
+    "Mobile App Development",
+    "Data Science",
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Cyber Security",
+    "Cloud Computing",
+    "DevOps",
+    "Networking",
+    "Embedded Systems",
+    "Electronics",
+    "Telecommunication",
+    "Mechanical Engineering",
+    "Civil Engineering",
+    "Electrical Engineering",
+    "Automobile Engineering",
+    "Aerospace Engineering",
+    "Robotics",
+    "Manufacturing",
+    "Quality Assurance",
+    "UI/UX Design",
+    "Graphic Design",
+    "Digital Marketing",
+    "Content Writing",
+    "Human Resources",
+    "Recruitment",
+    "Sales",
+    "Marketing",
+    "Customer Support",
+    "Technical Support",
+    "Business Development",
+    "Finance",
+    "Accounting",
+    "Banking",
+    "Insurance",
+    "Healthcare",
+    "Pharmacy",
+    "Biotechnology",
+    "Education",
+    "Teaching",
+    "Research",
+    "Logistics",
+    "Supply Chain Management",
+    "Operations",
+    "Administration",
+    "Hospitality",
+    "Construction",
+    "Government Services",
+  ];
 
-const theme = useTheme();
-const isXs = useMediaQuery(theme.breakpoints.down("sm")); 
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
 
-
-const visibleCount = seePlatform? jobFields.length: isXs? 3: 12;
-
+  const visibleCount = seePlatform ? jobFields.length : isXs ? 3 : 12;
 
   return (
     <div className="container-fluid p-0">
-      <MainNav   Iconbg={``} />
+      <MainNav Iconbg={``} />
 
-      <div className="hero-section d-flex align-items-center justify-content-center text-center">
-        <div>
-          <h1 className="hero-title">
-            Get The <span className="gradient-text">Right Job</span>
-          </h1>
+      <main>
+        <div className="hero-section d-flex align-items-center justify-content-center text-center">
+          <div>
+            <h1 className="hero-title">
+              Get The <span className="gradient-text">Right Job</span>
+            </h1>
 
-          <h1 className="hero-title">You Deserve</h1>
+            <h1 className="hero-title">You Deserve</h1>
 
-          <p className="hero-subtitle">
-            Discover thousands of opportunities from top companies
-          </p>
+            <p className="hero-subtitle">
+              Discover thousands of opportunities from top companies
+            </p>
 
-          <Button
-            variant="contained"
-            size="large"
-            className="hero-btn mt-3"
-            onClick={() => navigate("/allJobs")}
-          >
-            Explore Jobs
-          </Button>
-        </div>
-      </div>
-
-
-{/* trending job cards */}
-      <div className="container py-5">
-        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-          <h4 className="section-title">🔥 Trending Jobs</h4>
-
-          <span className="see-all" onClick={() => navigate("/allJobs")}>
-            See All Jobs <KeyboardArrowRightIcon />
-          </span>
+            <Button
+              variant="contained"
+              size="large"
+              className="hero-btn mt-3"
+              onClick={() => navigate("/allJobs")}
+            >
+              Explore Jobs
+            </Button>
+          </div>
         </div>
 
-        <div className="row g-4">
-          {Posts?.slice(0, 3).map((post) => (
-            <div key={post._id} className="col-xl-2 col-lg-3 col-md-6 col-12">
-              <div className="job-card h-100">
-                <div className="d-flex align-items-center mb-3">
-                  <img
-                    src={post?.profileImage?.url}
-                    alt=""
-                    className="company-logo"
-                  />
+        {/* platform */}
+        <div className="platform-section text-center">
+          <h2 className="mb-2">One Platform</h2>
 
-                  <div className="ms-3">
-                    <h6 className="job-title">{post?.jobTitle}</h6>
+          <h2>
+            Many <span className="gradient-text">Solutions</span>
+          </h2>
 
-                    <p className="company-name">{post?.companyName}</p>
+          <div className="container mt-4">
+            <div className="row g-3 justify-content-center">
+              {jobFields.slice(0, visibleCount).map((item, index) => (
+                <div key={index} className="col-xl-2 col-lg-3 col-md-4">
+                  <div
+                    className="platform-card"
+                    onClick={() =>
+                      navigate(`/platformJobs?jobPlatform=${item}`)
+                    }
+                  >
+                    {item}
                   </div>
                 </div>
-
-                <p className="job-detail">
-                  <LocationOnIcon className="icon" /> {post?.jobLocation}
-                </p>
-
-                <p className="job-detail">
-                  <WorkIcon className="icon" /> {post?.jobType}
-                </p>
-
-                <div className="d-flex justify-content-between align-items-center mt-3">
-                  <h6 className="salary">
-                    <CurrencyRupeeIcon /> {post?.salary}
-                  </h6>
-
-                  {user?.roleData === "user" ? (
-                    <Button
-                      variant="contained"
-                      size="small"
-                      className="apply-btn"
-                      onClick={() => navigate(`/jobDescription/${post._id}`)}
-                    >
-                      Apply Now
-                    </Button>
-                  ) : (
-                    <span
-                      className="details-link"
-                      onClick={() => navigate(`/jobDescription/${post._id}`)}
-                    >
-                      View Details
-                    </span>
-                  )}
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+
+            <p
+              className="toggle-btn mt-4"
+              onClick={() => setSeePlatform(!seePlatform)}
+            >
+              {seePlatform ? "See Less Platform" : "See All Platform"}
+            </p>
+          </div>
         </div>
-      </div>
 
-     
-{/* platform */}
-      <div className="platform-section text-center">
-        <h2 className="mb-2">One Platform</h2>
+        {/* trending job cards */}
+        <div className="container py-5">
+          <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h4 className="section-title">
+              <TrendingUpIcon sx={{ fontSize: 40, color: "green" }} /> Trending
+              Jobs
+            </h4>
 
-        <h2>
-          Many <span className="gradient-text">Solutions</span>
-        </h2>
-
-        <div className="container mt-4">
-          <div className="row g-3 justify-content-center">
-{jobFields
-  .slice(0, visibleCount)
-  .map((item, index) => (
-    <div key={index} className="col-xl-2 col-lg-3 col-md-4">
-      <div
-        className="platform-card"
-        onClick={() =>
-          navigate(`/platformJobs?jobPlatform=${item}`)
-        }
-      >
-        {item}
-      </div>
-    </div>
-))}
+            <span className="see-all" onClick={() => navigate("/allJobs")}>
+              See All Jobs <KeyboardArrowRightIcon />
+            </span>
           </div>
 
-          <p
-            className="toggle-btn mt-4"
-            onClick={() => setSeePlatform(!seePlatform)}
-          >
-            {seePlatform ? "See Less Platform" : "See All Platform"}
-          </p>
+          <div className="row g-4">
+            {Posts?.filter((post) => post?.status === "approved")?.slice(0, 8).map((post) => (
+              <div key={post._id} className="col-lg-3 col-md-6">
+                <div className="job-card h-100">
+                  <div className="d-flex align-items-center mb-3">
+                    <img
+                      src={post?.profileImage?.url}
+                      alt=""
+                      className="company-logo"
+                    />
+
+                    <div className="ms-3">
+                      <h6 className="job-title">{post?.jobTitle}</h6>
+
+                      <p className="company-name">{post?.companyName}</p>
+                    </div>
+                  </div>
+
+                  <p className="job-detail">
+                    <LocationOnIcon className="icon" /> {post?.jobLocation}
+                  </p>
+
+                  <p className="job-detail">
+                    <WorkIcon className="icon" /> {post?.jobType}
+                  </p>
+
+                  <div className="d-flex justify-content-between align-items-center mt-3">
+                    <h6 className="salary">
+                      <CurrencyRupeeIcon /> {post?.salary}
+                    </h6>
+
+                    {user?.roleData === "user" ? (
+                      <Button
+                        variant="contained"
+                        size="small"
+                        className="apply-btn"
+                        onClick={() => navigate(`/jobDescription/${post._id}`)}
+                      >
+                        Apply Now
+                      </Button>
+                    ) : (
+                      <span
+                        className="details-link"
+                        onClick={() => navigate(`/jobDescription/${post._id}`)}
+                      >
+                        View Details
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+<div className="container-fluid bg-dark text-light p-5">
+  <div className="row g-4 justify-content-lg-around">
+    {/* About Us */}
+    <div className="footer-about col-md-6 col-lg-3 text-start">
+      <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><InfoIcon/><span className="mx-2">About Us</span></h5>
+      <br className="d-md-none"/><br className="d-md-none"/>
+     <hr className="d-lg-block d-md-block d-none"/>
+      <p>
+        Our JobPortal connects talented professionals with top companies. We make job search simple, fast, and effective.
+      </p>
+      <p>
+        <a href="/about" className="text-decoration-none text-light">Learn more</a> |{" "}
+        <a href="/careers" className="text-decoration-none text-light">Careers</a> 
+      </p>
+    </div>
+
+    <hr className="d-md-none"/>
+
+
+    {/* Explore Links */}
+    <div className="footer-links col-md-6 col-lg-3 text-lg-center">
+      <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><ExploreIcon/><span className="mx-2">Explore</span></h5>
+       <br className="d-md-none"/><br className="d-md-none"/>
+      <hr className="d-lg-block d-md-block d-none"/>
+      {user?.roleData === "user" ? (
+        <div className="mt-2 d-flex justify-content-lg-center">
+          <div>
+          <span  className="d-flex " onClick={() => navigate('/allJobs')} style={{cursor : `pointer`}} ><TravelExploreIcon/><span className="mx-2">Browse Jobs</span></span>
+          <br />
+          <span className="d-flex " onClick={() => navigate('/savedJobs')} style={{cursor : `pointer`}} ><BookmarkAddedIcon/><span className="mx-2">Saved Jobs</span></span>
+          <br />
+          <span className="d-flex " onClick={() => navigate('/appliedJobs')} style={{cursor : `pointer`}} ><CheckBoxIcon/><span className="mx-2">Applied Jobs</span></span>
+       </div>
+        </div>
+      ) : 
+      user?.roleData === "recruiter" ? (
+        <div cclassName="mt-2 d-flex justify-content-lg-center">
+          <div>
+          <span className="d-flex " onClick={() => navigate('/allJobs')} style={{cursor : `pointer`}} ><TravelExploreIcon/><span className="mx-2">Browse Jobs</span></span>
+          <br />
+          <span className="d-flex " onClick={() => navigate('/viewPosts')} style={{cursor : `pointer`}} ><WorkIcon/><span className="mx-2">My Posts</span></span>
+          <br />
+          <span className="d-flex " onClick={() => navigate('/myApplicants')} style={{cursor : `pointer`}} ><PeopleIcon/><span className="mx-2">Applicants</span></span>
+          </div>
+        </div>
+      ):
+      user?.roleData === "admin" ? (
+      <div  className="mt-2 d-flex justify-content-lg-center">
+        <div>
+          <span  className="d-flex " onClick={() => navigate('/allJobs')} style={{cursor : `pointer`}} ><TravelExploreIcon/><span className="mx-2">Browse Jobs</span></span>
+          <br />
+          <span  className="d-flex " onClick={() => navigate('/userLists')} style={{cursor : `pointer`}} ><PeopleIcon/><span className="mx-2">All Users</span></span>
+          <br />
+          <span className="d-flex "  onClick={() => navigate('/recruiterPosts')} style={{cursor : `pointer`}} ><WorkIcon/><span className="mx-2">Recruiter Posts</span></span>
+          </div>
       </div>
+      ) : 
+      <div className="mt-2 d-flex justify-content-lg-center">
+        <div>
+           <span  className="d-flex " onClick={() => navigate('/allJobs')} style={{cursor : `pointer`}} ><TravelExploreIcon/><span className="mx-2">Browse Jobs</span></span>
+           <br />
+            <span  className="d-flex " onClick={() => navigate('/setting')} style={{cursor : `pointer`}} ><SettingsIcon/><span className="mx-2">Settings</span></span>
+            <br />
+             <span  className="d-flex " onClick={() => navigate('/login')} style={{cursor : `pointer`}} ><LoginIcon/><span className="mx-2">Login</span></span>
+        </div>
+      </div>}
+    </div>
+
+    <hr className="d-md-none"/>
+
+    {/* Contact */}
+    <div className="footer-contact col-md-6 col-lg-3 text-start">
+      <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><ContactEmergencyIcon/><span className="mx-2" >Contact</span></h5>
+       <br className="d-md-none"/><br className="d-md-none"/>
+     <hr className="d-lg-block d-md-block d-none"/>
+      <p><EmailIcon/><strong className="mx-1">Email: </strong> <a href="mailto:prabhakaroffcl@gmail.com" className="text-light">prabhakaroffcl@gmail.com</a></p>
+      <p><LinkedInIcon/> <strong className="mx-1">Linkedin: </strong> <a href="https://www.linkedin.com/in/prabhakaroffcl02" target="_blank" rel="noopener noreferrer" className="text-light">linkedin.com/in/prabhakaroffcl02</a></p>
+    </div>
+  </div>
+
+  <div className="text-center mt-5 mt-lg-0 mt-xl-0">
+    <small>&copy; 2026 Find Dreams. All Rights Reserved.</small>
+  </div>
+</div>
+      </main>
 
       {/* PREMIUM CSS */}
 
       <style>{`
+
+      html, body {
+  height: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
 
 .hero-section{
 height: 90vh;
@@ -371,8 +480,7 @@ font-weight:600;
 
 .platform-section{
 background:#f1f5f9;
-padding:60px 20px;
-
+padding-Top : 40px;
 }
 
 .platform-card{
