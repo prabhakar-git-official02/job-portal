@@ -250,8 +250,8 @@ function Home() {
 <div className="container-fluid bg-dark text-light p-5">
   <div className="row g-4 justify-content-lg-around">
     {/* About Us */}
-    <div className="footer-about col-md-6 col-lg-3 text-start">
-      <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><InfoIcon/><span className="mx-2">About Us</span></h5>
+    <div className="footer-about col-md-6 col-lg-3 text-start ">
+      <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><InfoIcon/><span className="mx-2 ">About Us</span></h5>
       <br className="d-md-none"/><br className="d-md-none"/>
      <hr className="d-lg-block d-md-block d-none"/>
       <p>

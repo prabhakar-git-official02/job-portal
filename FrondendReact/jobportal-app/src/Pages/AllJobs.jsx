@@ -12,6 +12,8 @@ import { authThunk } from "../Thunks/authThunk";
 import SearchInput from "../Components/SearchInput";
 import DropDown from "../Components/DropDown";
 import Button from "@mui/material/Button";
+
+
 function AllJobs() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -150,12 +152,16 @@ function AllJobs() {
       {/* Content */}
       <div className="container py-4 px-3 px-md-4 px-lg-5 mt-5">
         {/* Title */}
+        
         <div className="modern-title-container mb-3 text-center text-md-start">
-          <h3 className="modern-title">Discover Opportunities</h3>
+          <h2 className="dashboard-title">
+Discover <span>Opportunities</span>
+</h2>
 
-          <p className="modern-subtitle">
-            Find the perfect job that matches your skills and passion
-          </p>
+<p className="dashboard-subtitle">
+ Find the perfect job that matches your skills and passion
+</p>
+
         </div>
 
         {/* Search */}
@@ -329,6 +335,24 @@ function AllJobs() {
   padding: 60px 20px;
   max-width: 500px;
   margin: 0 auto;
+}
+
+.dashboard-title{
+font-size:32px;
+font-weight:700;
+letter-spacing:0.5px;
+}
+
+.dashboard-title span{
+background:linear-gradient(135deg,#4f46e5,#6366f1);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.dashboard-subtitle{
+color:#6b7280;
+font-size:14px;
+margin-top:4px;
 }
 
 .no-data-img {
