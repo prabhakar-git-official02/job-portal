@@ -149,7 +149,7 @@ export const AppliedJob_Delete = async (req, res) => {
   }
 };
 
-// Get all users
+// Get all users 
 export const all_users = async(req,res) => {
   try{
     const All_Users = await User.find()

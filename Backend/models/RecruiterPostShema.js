@@ -62,8 +62,7 @@ const recruiterPostSchema = new mongoose.Schema(
     },
 
     skills: {
-      type: [String], 
-      required: true,
+      type: [String]
     },
 
     jobDescription: {
