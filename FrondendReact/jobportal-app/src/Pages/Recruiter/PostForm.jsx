@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../api/axios";
 import { showAlert } from "../../Scripts/Alert";
 import { useDispatch } from "react-redux";
@@ -41,7 +41,7 @@ function PostForm() {
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
   const [addSkillbtnError, setAddSkillbtnError] = useState(null);
-  const [submitbtnError, setSubmitbtnError] = useState(null);
+
 
   // cloudinary
   const ImageUrl = useSelector((state) => state.cloudinary.ImageUrl);
@@ -54,11 +54,6 @@ function PostForm() {
         setLoad(false)
     }
   },[FileError])
-
-  const ProfileImageObj = {
-    url: ImageUrl,
-    public_id: ImagePublicId,
-  };
 
   // handle Add Skill
   const handleAddSkills = (e) => {
@@ -81,9 +76,9 @@ function PostForm() {
     setStoreSkills(newStoreSkills);
   };
 
-  // Save btn
+
   const handleSave = (e) => {
-    e.preventDefault();
+   
 
     if (
       jobTitle.trim() === "" ||
@@ -112,13 +107,18 @@ function PostForm() {
         })
         return
     }
-
     setLoad(true);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+  const handleSubmit = useCallback( async (e) => {
+  
     try {
+    const ProfileImageObj = {
+    url: ImageUrl,
+    public_id: ImagePublicId,
+  };
+
       const response = await api.post(
         "/Jobs/recruiter/Post",
         {
@@ -129,8 +129,8 @@ function PostForm() {
           jobLocation: jobLocation,
           jobType: jobType,
           jobPlatform : jobPlatform,
-          experience:experience,
-          salary: salary,
+          experience:experience.trim() === "" ? experience : `${experience} years`,
+          salary: salary.trim() === "" ? salary : `${salary}LPA`,
           skills: storeSkills,
           jobDescription: jobDescription,
         },
@@ -153,17 +153,39 @@ function PostForm() {
         setSalary("");
         setStoreSkills(null);
         setJobDescription("");
-        setSubmitbtnError(null);
+        setSavebtnError(null);
         return navigate("/viewPosts");
       }
     } catch (err) {
       setLoad(false);
-      setSubmitbtnError({
+      setSavebtnError({
         msg: err.response?.data?.msg,
         id: Date.now(),
       });
     }
-  };
+  },[
+    ImageUrl,
+    ImagePublicId,
+    companyName,
+    dispatch,
+    experience,
+    jobDescription,
+    jobPlatform,
+    jobLocation,
+    jobType,
+    jobTitle,
+    navigate,
+    salary,
+    storeSkills
+  ])
+
+  useEffect(() => {
+    if(load){
+      if(profileImage && ImageUrl){
+        handleSubmit()
+      }
+    }
+  },[ImageUrl,load,profileImage,handleSubmit])
 
     const jobFields = [
   "Information Technology",
@@ -303,24 +325,9 @@ function PostForm() {
           </Select>
         </FormControl>
 
-        <FormControl fullWidth required>
-          <InputLabel>Experience</InputLabel>
-          <Select value={experience} label="Experience" onChange={(e)=>setExperience(e.target.value)}>
-            <MenuItem value="Less than 1 year">Less than 1 year</MenuItem>
-            {Nums.map((n)=>(
-              <MenuItem key={n} value={`${n} years`}>{`${n} years`}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+<TextField type="number" required fullWidth label="Experience" value={experience} onChange={(e)=>setExperience(e.target.value)} />
 
-        <FormControl fullWidth required>
-          <InputLabel>Salary (LPA)</InputLabel>
-          <Select value={salary} label="Salary" onChange={(e)=>setSalary(e.target.value)}>
-            {Nums.map((n)=>(
-              <MenuItem key={n} value={`${n} LPA`}>{`${n} LPA`}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+<TextField type="number" required fullWidth label="Salary (In LPA)" value={salary} onChange={(e)=>setSalary(e.target.value)} />
       </div>
 
       {/* Skills Section */}
@@ -377,11 +384,10 @@ function PostForm() {
 
         {load && !ImageUrl && (
           <div className="d-flex justify-content-center">
-            <ProgressLoad trigger={1} msg="Uploading..." setSize="20px" />
+            <ProgressLoad trigger={1} msg="Loading.." setSize="20px" />
           </div>
         )}
 
-        {!load && !ImageUrl && (
           <ErrorAlert
             alertMsg={savebtnError}
             buttonName="Save"
@@ -389,16 +395,8 @@ function PostForm() {
             buttonVariant="outlined"
             handlefn={handleSave}
           />
-        )}
 
-        {load && ImageUrl && (
-          <ErrorAlert
-            alertMsg={submitbtnError}
-            buttonName="Submit"
-            buttonVariant="contained"
-            handlefn={handleSubmit}
-          />
-        )}
+
 
       </div>
 

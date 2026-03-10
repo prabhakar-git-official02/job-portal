@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../api/axios";
 import { showAlert } from "../../Scripts/Alert";
 import { useDispatch } from "react-redux";
@@ -9,7 +9,7 @@ import CloudinaryInital from "../../Components/CloudinaryInitial";
 import {
   IsImageUrlSuccess,
   IsImagePublicIdSuccess,
-  IsCloudinaryFailure
+  IsCloudinaryFailure,
 } from "../../Redux/cloudinarySlice";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -44,21 +44,16 @@ function AdminProfileForm() {
   const [country, setCountry] = useState("");
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
-  const [submitbtnError, setSubmitbtnError] = useState(null);
 
 
-  // cloudinary
   const ImageUrl = useSelector((state) => state.cloudinary.ImageUrl);
   const ImagePublicId = useSelector((state) => state.cloudinary.ImagePublicId);
 
-  const ProfileImageObj = {
-    url: ImageUrl,
-    public_id: ImagePublicId,
-  };
 
-  // Save btn
-  const handleSave = (e) => {
-    e.preventDefault();
+
+
+  const handleSave = () => {
+    setLoad(true);
 
     if (
       firstName.trim() === "" ||
@@ -90,30 +85,30 @@ function AdminProfileForm() {
       return;
     }
 
-if (!phone || !isValidPhoneNumber(phone)) {
-  setLoad(false);
-  setSavebtnError({
-    msg: "Invalid Phone Number!",
-    id: Date.now(),
-  });
-  return;
-}
-
-    if (!profileImage) {
+    if (!phone || !isValidPhoneNumber(phone)) {
       setLoad(false);
       setSavebtnError({
-        msg: "Profile Photo Required!",
+        msg: "Invalid Phone Number!",
         id: Date.now(),
       });
       return;
     }
-    setLoad(true);
+
+    if(!profileImage){
+      handleSubmit()
+    }
   };
 
-  // Submit button
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+  const handleSubmit = useCallback( async () => {
+   
     try {
+
+    const ProfileImageObj = {
+    url: ImageUrl ? ImageUrl : null,
+    public_id: ImagePublicId ? ImagePublicId : null,
+  };
+
       const response = await api.post(
         "/admin/profilePost",
         {
@@ -137,6 +132,7 @@ if (!phone || !isValidPhoneNumber(phone)) {
       if (response) {
         showAlert("Success", response.data.msg, "success");
         setLoad(false);
+        setSavebtnError(null)
         dispatch(IsImageUrlSuccess(null));
         dispatch(IsImagePublicIdSuccess(null));
         dispatch(IsCloudinaryFailure(null));
@@ -145,156 +141,192 @@ if (!phone || !isValidPhoneNumber(phone)) {
       }
     } catch (err) {
       setLoad(false);
-      setSubmitbtnError({
+      setSavebtnError({
         msg: err.status === 409 ? "Profile Already Exist" : err.message,
         id: Date.now(),
       });
     }
-  };
+  },[
+    ImagePublicId,
+    ImageUrl,
+    about,
+    age,
+    bio,
+    country,
+    dispatch,
+    email,
+    firstName,
+    lastName,
+    gender,
+    location,
+    navigate,
+    phone,
+    state
+  ])
 
+  useEffect(() => {
+    if(load){
+      if(profileImage && ImageUrl){
+        handleSubmit()
+      }
+    }
+  },[ImageUrl,profileImage,handleSubmit,load])
 
+  
   return (
-   <>
-  {load && profileImage ? (
-    <CloudinaryInital file={profileImage} fileType={"image"} load={load} />
-  ) : null}
+    <>
+      {load && profileImage ? (
+        <CloudinaryInital file={profileImage} fileType={"image"} load={load} />
+      ) : null}
 
-  <MainNav />
+      <MainNav />
 
-  <div className="profile-setting-wrapper">
-    <div className="profile-card">
+      <div className="profile-setting-wrapper">
+        <div className="profile-card">
+          <div className="profile-header">
+            <h2>Admin Profile</h2>
+            <p>Manage your professional information</p>
+          </div>
 
-      <div className="profile-header">
-        <h2>Admin Profile</h2>
-        <p>Manage your professional information</p>
-      </div>
-
-      <div className="profile-body">
-
-        <div className="image-section">
-          <img
-            src={
-              profileImagePreview
-                ? profileImagePreview
-                : "default-profile.jpg"
-            }
-            alt="Preview"
-            className="profile-preview"
-          />
-
-          {!load && (
-            <>
-              <input
-                id="profileUpload"
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (!file) return;
-                  setProfileImage(file);
-                  setProfileImagePreview(URL.createObjectURL(file));
-                }}
+          <div className="profile-body">
+            <div className="image-section">
+              <img
+                src={
+                  profileImagePreview
+                    ? profileImagePreview
+                    : "default-profile.jpg"
+                }
+                alt="Preview"
+                className="profile-preview"
               />
-              <div>
-                <label className="change-btn" htmlFor="profileUpload">
-                  Upload Profile
-                </label>
-              </div>
-            </>
-          )}
-        </div>
 
-        <div className="form-grid">
-
-          <TextField required fullWidth label="First Name" value={firstName} onChange={(e)=>setFirstName(e.target.value)} />
-
-          <TextField required fullWidth label="Last Name" value={lastName} onChange={(e)=>setLastName(e.target.value)} />
-
-          <TextField fullWidth label="Bio" value={bio} onChange={(e)=>setBio(e.target.value)} />
-
-          <TextField fullWidth multiline label="About" value={about} onChange={(e)=>setAbout(e.target.value)} />
-
-          <TextField required fullWidth label="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
-
-          <MuiTelInput
-            fullWidth
-              label="Phone Number"
-  required
-            defaultCountry="IN"
-            value={phone}
-            onChange={(val)=>setPhone(val)}
-            error={phone ? !isValidPhoneNumber(phone) : false}
-            helperText={phone && !isValidPhoneNumber(phone) ? "Invalid phone" : ""}
-          />
-
-          <TextField
-            fullWidth
-              required
-            type="number"
-            label="Age"
-            value={age}
-            onChange={(e)=>setAge(e.target.value)}
-          />
-
-          <FormControl   required fullWidth>
-            <InputLabel>Gender</InputLabel>
-            <Select
-              value={gender}
-              label="Gender"
-              onChange={(e)=>setGender(e.target.value)}
-            >
-              <MenuItem value="Male">Male</MenuItem>
-              <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="Others">Others</MenuItem>
-            </Select>
-          </FormControl>
-
-                    <LocationInput
-            country={country}
-            setCountry={setCountry}
-            state={state}
-            setState={setState}
-            location={location}
-            setLocation={setLocation}
-          />
-
-        </div>
-
-
-        <div className="action-section">
-
-          {load && !ImageUrl ? (
-            <div className="mt-4 d-flex justify-content-center">
-              <ProgressLoad setSize={`20px`} trigger={1} msg={`Loading`} />
+              {!load && (
+                <>
+                  <input
+                    id="profileUpload"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setProfileImage(file);
+                      setProfileImagePreview(URL.createObjectURL(file));
+                    }}
+                  />
+                  <div>
+                    <label className="change-btn" htmlFor="profileUpload">
+                      Upload Profile
+                    </label>
+                  </div>
+                </>
+              )}
             </div>
-          ) : null}
 
-          {!load && !ImageUrl ? (
-            <ErrorAlert
-              alertMsg={savebtnError}
-              buttonName="Save"
-              buttonClass={`mt-3`}
-              buttonVariant="outlined"
-              handlefn={handleSave}
-            />
-          ) : 
-          load && ImageUrl ?
-          (
-            <ErrorAlert
-              alertMsg={submitbtnError}
-              buttonName="Submit"
-              buttonVariant="contained"
-              handlefn={handleSubmit}
-            />
-          ) : null}
+            <div className="form-grid">
+              <TextField
+                required
+                fullWidth
+                label="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
 
+              <TextField
+                required
+                fullWidth
+                label="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+
+              <TextField
+                fullWidth
+                label="Bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+              />
+
+              <TextField
+                fullWidth
+                multiline
+                label="About"
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+              />
+
+              <TextField
+                required
+                fullWidth
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <MuiTelInput
+                fullWidth
+                label="Phone Number"
+                required
+                defaultCountry="IN"
+                value={phone}
+                onChange={(val) => setPhone(val)}
+                error={phone ? !isValidPhoneNumber(phone) : false}
+                helperText={
+                  phone && !isValidPhoneNumber(phone) ? "Invalid phone" : ""
+                }
+              />
+
+              <TextField
+                fullWidth
+                required
+                type="number"
+                label="Age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+
+              <FormControl required fullWidth>
+                <InputLabel>Gender</InputLabel>
+                <Select
+                  value={gender}
+                  label="Gender"
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                  <MenuItem value="Others">Others</MenuItem>
+                </Select>
+              </FormControl>
+
+              <LocationInput
+                country={country}
+                setCountry={setCountry}
+                state={state}
+                setState={setState}
+                location={location}
+                setLocation={setLocation}
+              />
+            </div>
+
+            <div className="action-section">
+              {load  ? (
+                <div className="mt-4 d-flex justify-content-center">
+                  <ProgressLoad setSize={`20px`} trigger={1} msg={`Loading`} />
+                </div>
+              ) : null}
+              
+                <ErrorAlert
+                  alertMsg={savebtnError}
+                  buttonName="Save"
+                  buttonClass={`mt-3`}
+                  buttonVariant="outlined"
+                  handlefn={handleSave}
+                />
+            </div>
+          </div>
         </div>
-
       </div>
-    </div>
-  </div>
-     <style>{`
+      <style>{`
 .profile-setting-wrapper {
   padding: 120px 20px 40px;
   display: flex;

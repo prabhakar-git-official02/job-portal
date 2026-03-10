@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import api from "../../api/axios";
 import { showAlert } from "../../Scripts/Alert";
 import { authThunk } from "../../Thunks/authThunk";
@@ -31,7 +31,6 @@ import LocationInput from "../../Components/LocationInput";
 import { MuiTelInput } from "mui-tel-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 
-
 function JobseekerProfileForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -55,7 +54,7 @@ function JobseekerProfileForm() {
   const [preferredLocation, setPreferredLocation] = useState("");
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
-  const [submitbtnError, setSubmitbtnError] = useState(null);
+
 
   useEffect(() => {
     dispatch(authThunk());
@@ -90,19 +89,11 @@ function JobseekerProfileForm() {
   }, [ErrorMsg]);
 
 
-  const ProfileImageObj = {
-    url: ImageUrl,
-    public_id: ImagePublicId,
-  };
 
-  const ResumeObj = {
-    url: ResumeUrl,
-    public_id: ResumePublicId,
-  };
 
   // Save btn
-  const handleSave = (e) => {
-    e.preventDefault();
+  const handleSave = () => {
+    setLoad(true);
 
     if (!isValidEmail(email)) {
       setLoad(false);
@@ -111,15 +102,6 @@ function JobseekerProfileForm() {
         id: Date.now(),
       });
 
-      return;
-    }
-
-    if (!profileImage || !resume) {
-      setLoad(false);
-      setSavebtnError({
-        msg: "Image/Resume Required!",
-        id: Date.now(),
-      });
       return;
     }
 
@@ -145,19 +127,44 @@ function JobseekerProfileForm() {
     }
 
     if (!phone || !isValidPhoneNumber(phone)) {
-  setLoad(false);
-  setSavebtnError({
-    msg: "Invalid Phone Number!",
-    id: Date.now(),
-  });
-  return;
+      setLoad(false);
+      setSavebtnError({
+        msg: "Invalid Phone Number!",
+        id: Date.now(),
+      });
+      return;
+    }
+
+if(!profileImage && !resume){
+ handleSubmit()
 }
-    setLoad(true);
+
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+  const handleSubmit = useCallback(async () => {
     try {
+
+    const ProfileImageObj =  {
+    url: ImageUrl ? ImageUrl : null,
+    public_id: ImagePublicId ? ImagePublicId : null,
+  }
+
+  const ResumeObj = {
+    url: ResumeUrl ? ResumeUrl : null,
+    public_id: ResumePublicId ? ResumePublicId : null,
+  };
+
+  
+      if (expectedSalary < 0) {
+        setLoad(false);
+        setSavebtnError({
+          msg: "Invalid Expected Salary",
+          id: Date.now(),
+        });
+        return;
+      }
+
       const response = await api.post(
         "/profile/jobseeker-Profile/Post",
         {
@@ -174,7 +181,10 @@ function JobseekerProfileForm() {
           state: state,
           country: country,
           resume: ResumeObj,
-          expectedSalary:expectedSalary,
+          expectedSalary:
+            expectedSalary.trim() === ""
+              ? expectedSalary
+              : `${expectedSalary}LPA`,
           jobType: jobType,
           preferredLocation: preferredLocation,
         },
@@ -190,17 +200,40 @@ function JobseekerProfileForm() {
         dispatch(IsImagePublicIdSuccess(null));
         dispatch(IsResumePublicIdSuccess(null));
         dispatch(IsJobseekerProfileFailure(null));
-        setSubmitbtnError(null);
+        setSavebtnError(null);
         return navigate("/jobseekerProfile");
       }
     } catch (err) {
       setLoad(false);
-      setSubmitbtnError({
+      setSavebtnError({
         msg: err.status === 409 ? "Profile Already Exist" : err.message,
         id: Date.now(),
       });
     }
-  };
+  },[ImageUrl,ImagePublicId,ResumeUrl,ResumePublicId,about,age,bio,country,dispatch,email,expectedSalary,firstName,jobType,gender,lastName,location,navigate,phone,preferredLocation,state])
+
+
+
+  
+  useEffect(() => {
+    if (load) {
+      if (profileImage && resume && ImageUrl && ResumeUrl) {
+        handleSubmit();
+      }
+
+      if (profileImage && !resume && ImageUrl) {
+        handleSubmit();
+      }
+
+      if (!profileImage && resume && ResumeUrl) {
+        handleSubmit();
+      }
+
+      if (!profileImage && !resume) {
+        handleSubmit();
+      }
+    }
+  }, [ImageUrl, ResumeUrl,load,profileImage,resume,handleSubmit]);
 
   const Nums = [];
 
@@ -262,167 +295,218 @@ function JobseekerProfileForm() {
   ];
 
   return (
-  <>
-    {load && profileImage ? (
-      <CloudinaryInital file={profileImage} fileType={"image"} load={load} />
-    ) : null}
+    <>
+      {load && profileImage ? (
+        <CloudinaryInital file={profileImage} fileType={"image"} load={load} />
+      ) : null}
 
-    {load && resume ? (
-      <CloudinaryInital file={resume} fileType={"resume"} load={load} />
-    ) : null}
+      {load && resume ? (
+        <CloudinaryInital file={resume} fileType={"resume"} load={load} />
+      ) : null}
 
-    <MainNav />
+      <MainNav />
 
-    <div className="profile-setting-wrapper">
-      <div className="profile-card">
-
-        <div className="profile-header">
-          <h2>Jobseeker Profile</h2>
-          <p>Create your professional profile</p>
-        </div>
-
-        <div className="profile-body">
-
-          <div className="image-section">
-            <img
-              src={
-                profileImagePreview
-                  ? profileImagePreview
-                  : "default-profile.jpg"
-              }
-              alt="Preview"
-              className="profile-preview"
-            />
-
-            {!load && (
-              <>
-                <input
-                  id="profileUpload"
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    setProfileImage(file);
-                    setProfileImagePreview(URL.createObjectURL(file));
-                  }}
-                />
-<div>
-                  <label className="change-btn" htmlFor="profileUpload">
-                  Upload Profile
-                </label>
-</div>
-              </>
-            )}
+      <div className="profile-setting-wrapper">
+        <div className="profile-card">
+          <div className="profile-header">
+            <h2>Jobseeker Profile</h2>
+            <p>Create your professional profile</p>
           </div>
 
-          <div className="form-grid">
-
-            <TextField required sx={{m : 1}} fullWidth label="First Name" value={firstName} onChange={(e)=>setFirstName(e.target.value)} />
-            <TextField required  sx={{m : 1}} fullWidth label="Last Name" value={lastName} onChange={(e)=>setLastName(e.target.value)} />
-
-            <TextField sx={{m : 1}} fullWidth label="Bio" value={bio} onChange={(e)=>setBio(e.target.value)} />
-            <TextField sx={{m : 1}} fullWidth multiline label="About" value={about} onChange={(e)=>setAbout(e.target.value)} />
-
-            <TextField required  sx={{m : 1}} fullWidth label="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
-
-            <MuiTelInput
-              sx={{m : 1}}
-              label="Phone Number"
-              required 
-              fullWidth
-              defaultCountry="IN"
-              value={phone}
-              onChange={(val)=>setPhone(val)}
-              error={phone ? !isValidPhoneNumber(phone) : false}
-              helperText={phone && !isValidPhoneNumber(phone) ? "Invalid phone" : ""}
-            />
-
-            <TextField required  sx={{m : 1}} fullWidth type="number" label="Age" value={age} onChange={(e)=>setAge(e.target.value)} />
-
-            <FormControl required  sx={{m : 1}} fullWidth>
-              <InputLabel>Gender</InputLabel>
-              <Select value={gender} label="Gender" onChange={(e)=>setGender(e.target.value)}>
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Others">Others</MenuItem>
-              </Select>
-            </FormControl>
-
-
-            <FormControl sx={{m : 1}} fullWidth>
-              <InputLabel>Expected Salary</InputLabel>
-              <Select value={expectedSalary} label="Expected Salary" onChange={(e)=>setExpectedSalary(e.target.value)}>
-                {Nums.map((n)=>(
-                  <MenuItem key={n} value={`${n} LPA`}>{`${n} LPA`}</MenuItem>
-                ))}
-                <MenuItem value="50 LPA+">50 LPA+</MenuItem>
-              </Select>
-            </FormControl>
-
-               <FormControl sx={{m : 1}} fullWidth>
-              <InputLabel>Preferred Location</InputLabel>
-              <Select value={preferredLocation} label="Preferred Location" onChange={(e)=>setPreferredLocation(e.target.value)}>
-                {preferredLocations.map((p)=>(
-                  <MenuItem key={p} value={p}>{p}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <LocationInput
-              country={country}
-              setCountry={setCountry}
-              state={state}
-              setState={setState}
-              location={location}
-              setLocation={setLocation}
-            />
-
-            <FormControl sx={{m : 1}} required fullWidth>
-              <InputLabel>Job Type</InputLabel>
-              <Select value={jobType} label="Job Type" onChange={(e)=>setJobType(e.target.value)}>
-                <MenuItem value="Full Time">Full Time</MenuItem>
-                <MenuItem value="Part Time">Part Time</MenuItem>
-                <MenuItem value="Internship">Internship</MenuItem>
-                <MenuItem value="Contract">Contract</MenuItem>
-              </Select>
-            </FormControl>
-
-            
-
-          </div>
-
-          <div className="mt-3">
-            {!load && (
-              <span >
-              <InputFileUpload
-                name={resume ? "Change Resume" : "Upload Resume"}
-                setdata={setResume}
-                setPreview={setResumePreview}
+          <div className="profile-body">
+            <div className="image-section">
+              <img
+                src={
+                  profileImagePreview
+                    ? profileImagePreview
+                    : "default-profile.jpg"
+                }
+                alt="Preview"
+                className="profile-preview"
               />
-              </span>
-            )}
 
-            {resumePreview ? (
-              <p className="mt-3">
-              <Button  variant="outlined" onClick={()=>window.open(resumePreview,"_blank")}>
-                View Resume
-              </Button>
-              </p>
-            ) : (
-              <p className="no-resume mt-3">Resume Not Uploaded!</p>
-            )}
-          </div>
+              {!load && (
+                <>
+                  <input
+                    id="profileUpload"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setProfileImage(file);
+                      setProfileImagePreview(URL.createObjectURL(file));
+                    }}
+                  />
+                  <div>
+                    <label className="change-btn" htmlFor="profileUpload">
+                      Upload Profile
+                    </label>
+                  </div>
+                </>
+              )}
+            </div>
 
-          <div className="action-section">
-            {load && (!ImageUrl || !ResumeUrl) ? 
-            <div className="mt-4 d-flex justify-content-center">
-            <ProgressLoad setSize={`20px`} trigger={1} msg={`Loading`}/>
-          </div> : null
-            }
+            <div className="form-grid">
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
 
-            {!load && !ImageUrl && !ResumeUrl ? (
+              <TextField
+                sx={{ m: 1 }}
+                fullWidth
+                label="Bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+              />
+              <TextField
+                sx={{ m: 1 }}
+                fullWidth
+                multiline
+                label="About"
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+              />
+
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <MuiTelInput
+                sx={{ m: 1 }}
+                label="Phone Number"
+                required
+                fullWidth
+                defaultCountry="IN"
+                value={phone}
+                onChange={(val) => setPhone(val)}
+                error={phone ? !isValidPhoneNumber(phone) : false}
+                helperText={
+                  phone && !isValidPhoneNumber(phone) ? "Invalid phone" : ""
+                }
+              />
+
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                type="number"
+                label="Age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+
+              <FormControl required sx={{ m: 1 }} fullWidth>
+                <InputLabel>Gender</InputLabel>
+                <Select
+                  value={gender}
+                  label="Gender"
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                  <MenuItem value="Others">Others</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                type="number"
+                sx={{ m: 1 }}
+                fullWidth
+                label="Expected Salary (In LPA)"
+                value={expectedSalary}
+                onChange={(e) => setExpectedSalary(e.target.value)}
+              />
+
+              <FormControl sx={{ m: 1 }} fullWidth>
+                <InputLabel>Preferred Location</InputLabel>
+                <Select
+                  value={preferredLocation}
+                  label="Preferred Location"
+                  onChange={(e) => setPreferredLocation(e.target.value)}
+                >
+                  {preferredLocations.map((p) => (
+                    <MenuItem key={p} value={p}>
+                      {p}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <LocationInput
+                country={country}
+                setCountry={setCountry}
+                state={state}
+                setState={setState}
+                location={location}
+                setLocation={setLocation}
+              />
+
+              <FormControl sx={{ m: 1 }} required fullWidth>
+                <InputLabel>Job Type</InputLabel>
+                <Select
+                  value={jobType}
+                  label="Job Type"
+                  onChange={(e) => setJobType(e.target.value)}
+                >
+                  <MenuItem value="Full Time">Full Time</MenuItem>
+                  <MenuItem value="Part Time">Part Time</MenuItem>
+                  <MenuItem value="Internship">Internship</MenuItem>
+                  <MenuItem value="Contract">Contract</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+
+            <div className="mt-3">
+              {!load && (
+                <span>
+                  <InputFileUpload
+                    name={resume ? "Change Resume" : "Upload Resume"}
+                    setdata={setResume}
+                    setPreview={setResumePreview}
+                  />
+                </span>
+              )}
+
+              {resumePreview ? (
+                <p className="mt-3">
+                  <Button
+                    variant="outlined"
+                    onClick={() => window.open(resumePreview, "_blank")}
+                  >
+                    View Resume
+                  </Button>
+                </p>
+              ) : (
+                <p className="no-resume mt-3">Resume Not Uploaded!</p>
+              )}
+            </div>
+
+            <div className="action-section">
+              {load ? (
+                <div className="mt-4 d-flex justify-content-center">
+                  <ProgressLoad setSize={`20px`} trigger={1} msg={`Loading`} />
+                </div>
+              ) : null}
               <ErrorAlert
                 alertMsg={savebtnError}
                 buttonName="Save"
@@ -430,22 +514,12 @@ function JobseekerProfileForm() {
                 buttonVariant="outlined"
                 handlefn={handleSave}
               />
-            ) :
-            load && ImageUrl && ResumeUrl ? (
-              <ErrorAlert
-                alertMsg={submitbtnError}
-                buttonName="Submit"
-                buttonVariant="contained"
-                handlefn={handleSubmit}
-              />
-            ) : null}
+            </div>
           </div>
-
         </div>
       </div>
-    </div>
 
- <style>{`
+      <style>{`
 .profile-setting-wrapper {
   padding: 120px 20px 40px;
   display: flex;

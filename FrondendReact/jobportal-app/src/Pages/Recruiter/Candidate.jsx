@@ -178,7 +178,7 @@ function Candidate() {
                     <span className="meta-value">
                       {timeAgo(
                         job?.jobId
-                          ?.updatedAt
+                          ?.createdAt
                       )}
                     </span>
                   </div>

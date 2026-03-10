@@ -81,7 +81,7 @@ function PostDetails() {
               <div>
                 <span className="meta-label">Posted</span>
                 <span className="meta-value">
-                  {timeAgo(Post?.updatedAt)}
+                  {timeAgo(Post?.createdAt)}
                 </span>
               </div>
 

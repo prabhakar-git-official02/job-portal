@@ -26,7 +26,7 @@ export const jobseekerProfileThunk = () => {
 
 
 // Jobseeker Profile Field Update
-export const jobseekerProfileUpdateThunk = (UpdateDatas) => {
+export const jobseekerProfileUpdateThunk = (UpdateDatas,alertSts) => {
     return async(dispatch) => {
         try{
         const response = await api.patch('/profile/jobseeker-Profile/Update',

@@ -60,20 +60,17 @@ function CloudinaryInital({file,fileType,load}){
         dispatch(IsImageUrlSuccess(response?.data?.url));
         dispatch(IsImagePublicIdSuccess(response?.data?.publicId));
         dispatch(IsCloudinaryFailure(null))
-        showAlert("Success", "Image Saved successfully", "success");
         setAlertMsg(null)
       } 
       else if(fileType === "resume") {
         dispatch(IsResumeUrlSuccess(response?.data?.url));
         dispatch(IsResumePublicIdSuccess(response?.data?.publicId));
-        showAlert("Success", "Resume Saved successfully", "success");
         dispatch(IsCloudinaryFailure(null))
         setAlertMsg(null)
       } else {
         dispatch(IsResumeUrlSuccess(response?.data?.url));
         dispatch(IsResumePublicIdSuccess(response?.data?.publicId));
         dispatch(IsCloudinaryFailure(null))
-        showAlert("Success", "File Saved successfully", "success");
         setAlertMsg(null)
       }
       }

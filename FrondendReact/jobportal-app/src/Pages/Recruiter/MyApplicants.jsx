@@ -354,7 +354,7 @@ function MyApplicants() {
 
                         <p>
                           <strong>Posted: </strong>{" "}
-                          {timeAgo(job?.jobId?.updatedAt)}
+                          {timeAgo(job?.jobId?.createdAt)}
                         </p>
                       </div>
                     )}

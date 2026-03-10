@@ -31,6 +31,7 @@ import { MuiTelInput } from "mui-tel-input";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import LocationInput from "../Components/LocationInput";
 import Cloudinary from "../Components/Cloudinary";
+import { useCallback } from "react";
 
 function ProfileSetting() {
   const navigate = useNavigate();
@@ -101,45 +102,6 @@ function ProfileSetting() {
   const [resumePreview, setResumePreview] = useState(Profile?.resume?.url);
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
-  const [updateLoading,setUpdateLoading] = useState(false)
-
-
-  const UpdateDatas =
-    user?.roleData === "user"
-      ? {
-          profileImage: {
-            url: ImageUrl || Profile?.profileImage?.url,
-            public_id: ImagePublicId || Profile?.profileImage?.public_id,
-          },
-          firstName: firstName || Profile?.firstName,
-          lastName: lastName || Profile?.lastName,
-          email: email || Profile?.email,
-          phone: phone || Profile?.phone,
-          age: age || Profile?.age,
-          gender: gender || Profile?.gender,
-          location: location || Profile?.location,
-          state: state || Profile?.state,
-          country: country || Profile?.country,
-          resume: {
-            url: ResumeUrl || Profile?.resume?.url,
-            public_id: ResumePublicId || Profile?.resume?.public_id,
-          },
-        }
-      : {
-          profileImage: {
-            url: ImageUrl || Profile?.profileImage?.url,
-            public_id: ImagePublicId || Profile?.profileImage?.public_id,
-          },
-          firstName: firstName || Profile?.firstName,
-          lastName: lastName || Profile?.lastName,
-          email: email || Profile?.email,
-          phone: phone || Profile?.phone,
-          age: age || Profile?.age,
-          gender: gender || Profile?.gender,
-          location: location || Profile?.location,
-          state: state || Profile?.state,
-          country: country || Profile?.country,
-        };
 
   useEffect(() => {
     if (UploadError) {
@@ -148,188 +110,118 @@ function ProfileSetting() {
   }, [UploadError]);
 
   const handleSave = () => {
-    try{
-    if (
-      !firstName ||
-      firstName.trim() === "" ||
-      !lastName ||
-      lastName.trim() === "" ||
-      !email ||
-      email.trim() === "" ||
-      !phone ||
-      phone.trim() === "" ||
-      phone <= 0 ||
-      !age ||
-      age.trim() === "" ||
-      age <= 0 ||
-      !gender ||
-      gender.trim() === "" ||
-      !location ||
-      location.trim() === "" ||
-      !state ||
-      state.trim() === "" ||
-      !country ||
-      country.trim() === ""
-    ) {
+    try {
+      if (
+        !firstName ||
+        firstName.trim() === "" ||
+        !lastName ||
+        lastName.trim() === "" ||
+        !email ||
+        email.trim() === "" ||
+        !phone ||
+        phone.trim() === "" ||
+        phone <= 0 ||
+        !age ||
+        age.trim() === "" ||
+        age <= 0 ||
+        !gender ||
+        gender.trim() === "" ||
+        !location ||
+        location.trim() === "" ||
+        !state ||
+        state.trim() === "" ||
+        !country ||
+        country.trim() === ""
+      ) {
+        setLoad(false);
+        setSavebtnError({
+          msg: "Invalid Form Update!",
+          id: Date.now(),
+        });
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        setLoad(false);
+        setSavebtnError({
+          msg: "Invalid Email!",
+          id: Date.now(),
+        });
+
+        return;
+      }
+
+      if (!phone || !isValidPhoneNumber(phone)) {
+        setLoad(false);
+        setSavebtnError({
+          msg: "Invalid Phone Number!",
+          id: Date.now(),
+        });
+        return;
+      }
+
+      setLoad(true);
+
+      if (!profileImage) {
+        handleSubmit();
+      }
+    } catch (err) {
       setLoad(false);
       setSavebtnError({
-        msg: "Invalid Form Update!",
+        msg: "Something went wrong",
         id: Date.now(),
       });
-      return;
+      console.log("Settings/ProfileSetting-handleSave-Err", err?.message);
     }
-
-    if (!isValidEmail(email)) {
-      setLoad(false);
-      setSavebtnError({
-        msg: "Invalid Email!",
-        id: Date.now(),
-      });
-
-      return;
-    }
-
-    if (!phone || !isValidPhoneNumber(phone)) {
-      setLoad(false);
-      setSavebtnError({
-        msg: "Invalid Phone Number!",
-        id: Date.now(),
-      });
-      return;
-    }
-
-    setLoad(true);
-  }catch(err){
-    console.log("Settings/ProfileSetting-handleSave-Err",err?.message)
-  }
   };
 
-  const handleSubmit = async () => {
-    try{
-    setUpdateLoading(true)
-    if (
-      !firstName ||
-      firstName.trim() === "" ||
-      !lastName ||
-      lastName.trim() === "" ||
-      !email ||
-      email.trim() === "" ||
-      !phone ||
-      phone.trim() === "" ||
-      phone <= 0 ||
-      !age ||
-      age === "" ||
-      age <= 0 ||
-      !gender ||
-      gender.trim() === "" ||
-      !location ||
-      location.trim() === "" ||
-      !state ||
-      state.trim() === "" ||
-      !country ||
-      country.trim() === ""
-    ) {
-      setLoad(false);
-      setSavebtnError({
-        msg: "Invalid Form Update!",
-        id: Date.now(),
-      });
-      setUpdateLoading(false)
-      return;
-    }
+  const handleSubmit = useCallback(async () => {
+    try {
+      const UpdateDatas =
+        user?.roleData === "user"
+          ? {
+              profileImage: {
+                url: ImageUrl || Profile?.profileImage?.url,
+                public_id: ImagePublicId || Profile?.profileImage?.public_id,
+              },
+              firstName: firstName || Profile?.firstName,
+              lastName: lastName || Profile?.lastName,
+              email: email || Profile?.email,
+              phone: phone || Profile?.phone,
+              age: age || Profile?.age,
+              gender: gender || Profile?.gender,
+              location: location || Profile?.location,
+              state: state || Profile?.state,
+              country: country || Profile?.country,
+              resume: {
+                url: ResumeUrl || Profile?.resume?.url,
+                public_id: ResumePublicId || Profile?.resume?.public_id,
+              },
+            }
+          : {
+              profileImage: {
+                url: ImageUrl || Profile?.profileImage?.url,
+                public_id: ImagePublicId || Profile?.profileImage?.public_id,
+              },
+              firstName: firstName || Profile?.firstName,
+              lastName: lastName || Profile?.lastName,
+              email: email || Profile?.email,
+              phone: phone || Profile?.phone,
+              age: age || Profile?.age,
+              gender: gender || Profile?.gender,
+              location: location || Profile?.location,
+              state: state || Profile?.state,
+              country: country || Profile?.country,
+            };
 
-    if (!isValidEmail(email)) {
-      setLoad(false);
-      setSavebtnError({
-        msg: "Invalid Email!",
-        id: Date.now(),
-      });
-      setUpdateLoading(false)
-      return;
-    }
-
-    if (!phone || !isValidPhoneNumber(phone)) {
-      setLoad(false);
-      setSavebtnError({
-        msg: "Invalid Phone Number!",
-        id: Date.now(),
-      });
-      setUpdateLoading(false)
-      return;
-    }
-
-    user?.roleData === "user"
-      ? dispatch(jobseekerProfileUpdateThunk(UpdateDatas))
-          .then(() => {
-            showAlert("Success", "Profile Updated", "success");
-          })
-          .then(() => setUpdateLoading(false))
-          .then(() => {
-            setLoad(false);
-          })
-          .then(() => {
-            setProfileImage(null);
-          })
-          .then(() => {
-            dispatch(IsImageUrlSuccess(null));
-          })
-          .then(() => {
-            dispatch(IsImagePublicIdSuccess(null));
-          })
-          .then(() => {
-            dispatch(IsCloudinaryFailure(null));
-          })
-          .then(() => {
-            setProfileImage(Profile?.profileImage?.url);
-          })
-          .then(() => {
-            setFirstName(Profile?.firstName);
-          })
-          .then(() => {
-            setLastName(Profile?.lastName);
-          })
-          .then(() => {
-            setEmail(Profile?.email);
-          })
-          .then(() => {
-            setPhone(Profile?.phone);
-          })
-          .then(() => {
-            setAge(Profile?.age);
-          })
-          .then(() => {
-            setGender(Profile?.gender);
-          })
-          .then(() => {
-            setLocation(Profile?.location);
-          })
-          .then(() => {
-            setState(Profile?.state);
-          })
-          .then(() => {
-            setCountry(Profile?.country);
-          })
-          .then(() => {
-            dispatch(IsResumeUrlSuccess(null));
-          })
-          .then(() => {
-            dispatch(IsResumePublicIdSuccess(null));
-          })
-          .then(() => {
-            setResume(Profile?.resume?.url);
-          })
-          .then(() => {
-            navigate("/jobseekerProfile");
-          })
-      : user?.roleData === "recruiter"
-        ? dispatch(recruiterProfileUpdateThunk(UpdateDatas))
+      user?.roleData === "user"
+        ? dispatch(jobseekerProfileUpdateThunk(UpdateDatas))
             .then(() => {
               showAlert("Success", "Profile Updated", "success");
             })
             .then(() => {
               setLoad(false);
             })
-            .then(() => setUpdateLoading(false))
             .then(() => {
               setProfileImage(null);
             })
@@ -373,17 +265,25 @@ function ProfileSetting() {
               setCountry(Profile?.country);
             })
             .then(() => {
-              navigate("/recruiterProfile");
+              dispatch(IsResumeUrlSuccess(null));
             })
-        : user?.roleData === "admin"
-          ? dispatch(adminProfileUpdateThunk(UpdateDatas))
+            .then(() => {
+              dispatch(IsResumePublicIdSuccess(null));
+            })
+            .then(() => {
+              setResume(Profile?.resume?.url);
+            })
+            .then(() => {
+              navigate("/jobseekerProfile");
+            })
+        : user?.roleData === "recruiter"
+          ? dispatch(recruiterProfileUpdateThunk(UpdateDatas))
               .then(() => {
                 showAlert("Success", "Profile Updated", "success");
               })
               .then(() => {
                 setLoad(false);
               })
-              .then(() => setUpdateLoading(false))
               .then(() => {
                 setProfileImage(null);
               })
@@ -427,34 +327,118 @@ function ProfileSetting() {
                 setCountry(Profile?.country);
               })
               .then(() => {
-                navigate("/adminProfile");
+                navigate("/recruiterProfile");
               })
-          : navigate("/pageNotFound");
-            }catch(err){
-              console.log("Settings/ProfileSetting-handlesubmit-Err",err?.message)
-            }
-  };
+          : user?.roleData === "admin"
+            ? dispatch(adminProfileUpdateThunk(UpdateDatas))
+                .then(() => {
+                  showAlert("Success", "Profile Updated", "success");
+                })
+                .then(() => {
+                  setLoad(false);
+                })
+                .then(() => {
+                  setProfileImage(null);
+                })
+                .then(() => {
+                  dispatch(IsImageUrlSuccess(null));
+                })
+                .then(() => {
+                  dispatch(IsImagePublicIdSuccess(null));
+                })
+                .then(() => {
+                  dispatch(IsCloudinaryFailure(null));
+                })
+                .then(() => {
+                  setProfileImage(Profile?.profileImage?.url);
+                })
+                .then(() => {
+                  setFirstName(Profile?.firstName);
+                })
+                .then(() => {
+                  setLastName(Profile?.lastName);
+                })
+                .then(() => {
+                  setEmail(Profile?.email);
+                })
+                .then(() => {
+                  setPhone(Profile?.phone);
+                })
+                .then(() => {
+                  setAge(Profile?.age);
+                })
+                .then(() => {
+                  setGender(Profile?.gender);
+                })
+                .then(() => {
+                  setLocation(Profile?.location);
+                })
+                .then(() => {
+                  setState(Profile?.state);
+                })
+                .then(() => {
+                  setCountry(Profile?.country);
+                })
+                .then(() => {
+                  navigate("/adminProfile");
+                })
+            : navigate("/pageNotFound");
+    } catch (err) {
+      setLoad(false);
+      setSavebtnError({
+        msg: "Something went wrong",
+        id: Date.now(),
+      });
+      console.log("Settings/ProfileSetting-handlesubmit-Err", err?.message);
+    }
+  }, [
+    ImagePublicId,
+    ImageUrl,
+    Profile,
+    ResumePublicId,
+    ResumeUrl,
+    age,
+    country,
+    dispatch,
+    email,
+    firstName,
+    gender,
+    lastName,
+    location,
+    navigate,
+    phone,
+    state,
+    user,
+  ]);
 
   useEffect(() => {
-    if (UploadError) {
-      return setLoad(false);
+    if (load) {
+      if (profileImage && ImageUrl) {
+        handleSubmit();
+      }
     }
-  }, [UploadError]);
+  }, [ImageUrl, load, profileImage, handleSubmit]);
 
   return (
     <>
-    {load ?                       <Cloudinary
-                        file={profileImage}
-                        fileType="image"
-                        model={
-                          user?.roleData === "user" ? "jobseekerProfile" :
-                          user?.roleData === "recruiter" ? "recruiterProfile" :
-                          user?.roleData === "admin" ? "adminProfile" : null
-                        }
-                        id={Profile?._id}
-                        field="image"
-                        existingFile={Profile?.profileImage}
-                      /> : null}
+      {load ? (
+        <Cloudinary
+          file={profileImage}
+          fileType="image"
+          model={
+            user?.roleData === "user"
+              ? "jobseekerProfile"
+              : user?.roleData === "recruiter"
+                ? "recruiterProfile"
+                : user?.roleData === "admin"
+                  ? "adminProfile"
+                  : null
+          }
+          id={Profile?._id}
+          field="image"
+          existingFile={Profile?.profileImage}
+        />
+      ) : null}
       <div className="">
         <div className="profile-header">
           <h2>Profile Settings</h2>
@@ -583,13 +567,13 @@ function ProfileSetting() {
 
           {/* Buttons */}
           <div className="action-section">
-            {load && profileImage && !ImageUrl  ? (
+            {load ? (
               <div className="d-flex justify-content-center">
                 {" "}
                 <ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`} />
               </div>
             ) : null}
-            {!load  ? (
+            
               <ErrorAlert
                 buttonName={`Save`}
                 buttonVariant={`outlined`}
@@ -597,20 +581,6 @@ function ProfileSetting() {
                 handlefn={handleSave}
                 alertMsg={savebtnError}
               />
-            ) : (
-              <div>
-                {updateLoading ?                 <div className="d-flex justify-content-center">
-                <ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`} />
-              </div> : null}
-              <Button
-               variant="contained"
-                onClick={handleSubmit}
-                className="mt-2"
-                >
-                Update
-              </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>

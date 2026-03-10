@@ -74,9 +74,10 @@ const Status = ({ label, value, type }) => (
 );
 
  return (
-  <div>
-    <MainNav />
-    <div className="interview-page page-bg">
+  <div className="container-fluid vh-100">
+  <MainNav/>
+  <div className="row  d-flex align-items-center page-bg justify-content-center">
+\
 
       {Recruiter_Interviews
         ?.filter(
@@ -169,13 +170,15 @@ const Status = ({ label, value, type }) => (
               />
             </div>
 
+            {user?.roleData === "user"?
             <div className="message-box">
               {i?.interviewMessage}
             </div>
+            : null}
 
             <div className="status-row">
               <Status
-                label="Applicant Result"
+                label="Applicant Intrest"
                 value={i?.applicantResult}
                 type={
                   i?.applicantResult === "accepted"
@@ -337,7 +340,7 @@ const Status = ({ label, value, type }) => (
 }
 
 `}</style>
-  </div>
+</div>
 );
 }
 

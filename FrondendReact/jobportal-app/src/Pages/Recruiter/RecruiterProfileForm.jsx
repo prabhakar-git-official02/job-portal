@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import api from "../../api/axios";
 import { showAlert } from "../../Scripts/Alert";
 import { useDispatch } from "react-redux";
@@ -52,38 +52,40 @@ function RecruiterProfileForm() {
   const [designation, setDesignation] = useState("");
   const [load, setLoad] = useState(false);
   const [savebtnError, setSavebtnError] = useState(null);
-  const [submitbtnError, setSubmitbtnError] = useState(null);
-    const [countryCodeKey,setCountryCodeKey] = useState("")
-    const [stateCodeKey,setStateCodeKey] = useState("")
+
+  const [countryCodeKey, setCountryCodeKey] = useState("");
+  const [stateCodeKey, setStateCodeKey] = useState("");
   // cloudinary
   const ImageUrl = useSelector((state) => state.cloudinary.ImageUrl);
   const ImagePublicId = useSelector((state) => state.cloudinary.ImagePublicId);
 
-  const ProfileImageObj = {
-    url: ImageUrl,
-    public_id: ImagePublicId,
-  };
-
   const countries = Country.getAllCountries();
   const states = State.getStatesOfCountry(countryCodeKey);
-  const cities = City.getCitiesOfState(countryCodeKey,stateCodeKey);
+  const cities = City.getCitiesOfState(countryCodeKey, stateCodeKey);
 
-  console.log(countries)
-  console.log(states)
-  console.log(cities)
+  console.log(countries);
+  console.log(states);
+  console.log(cities);
 
   useEffect(() => {
-    if(country){
-       countries?.find((c) => c.name.trim().toLowerCase() === country.trim().toLowerCase() ? setCountryCodeKey(c?.isoCode ) : null)
+    if (country) {
+      countries?.find((c) =>
+        c.name.trim().toLowerCase() === country.trim().toLowerCase()
+          ? setCountryCodeKey(c?.isoCode)
+          : null,
+      );
     }
-  },[countries,country])
-  
-  
+  }, [countries, country]);
+
   useEffect(() => {
-    if( country && state){
-      states?.find((s) => s.name.trim().toLowerCase() === state.trim().toLowerCase() ? setStateCodeKey(s?.isoCode) : null)
+    if (country && state) {
+      states?.find((s) =>
+        s.name.trim().toLowerCase() === state.trim().toLowerCase()
+          ? setStateCodeKey(s?.isoCode)
+          : null,
+      );
     }
-  },[states,state,country])
+  }, [states, state, country]);
 
   const industries = [
     "Information Technology",
@@ -190,8 +192,9 @@ function RecruiterProfileForm() {
   ];
 
   // Save btn
-  const handleSave = (e) => {
-    e.preventDefault();
+  const handleSave = () => {
+
+    setLoad(true);
 
     if (
       firstName.trim() === "" ||
@@ -230,215 +233,322 @@ function RecruiterProfileForm() {
     }
 
     if (!phone || !isValidPhoneNumber(phone)) {
-  setLoad(false);
-  setSavebtnError({
-    msg: "Invalid Phone Number!",
-    id: Date.now(),
-  });
-  return;
-}
-
-    if (!profileImage) {
       setLoad(false);
       setSavebtnError({
-        msg: "Profile Image Required!",
+        msg: "Invalid Phone Number!",
         id: Date.now(),
       });
       return;
     }
 
-    setLoad(true);
-    setSavebtnError(null);
-    dispatch(IsCloudinaryFailure(null));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await api.post(
-        "/profile/recruiter-Profile/Post",
-        {
-          profileImage: ProfileImageObj,
-          bio: bio,
-          about: about,
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          phone: phone,
-          gender: gender,
-          age: age,
-          location: location,
-          state: state,
-          country: country,
-          companyName: company,
-          companyWebsite: companyWebsite,
-          companyAddress: companyAddress,
-          industry: industry,
-          companySize: companySize,
-          designation: designation,
-        },
-        {
-          withCredentials: true,
-        },
-      );
-      if (response) {
-        dispatch(IsRecruiterProfileFailure(null));
-        showAlert("Success", response.data.msg, "success");
-        setLoad(false);
-        dispatch(IsImageUrlSuccess(null));
-        dispatch(IsImagePublicIdSuccess(null));
-        dispatch(IsCloudinaryFailure(null));
-        return navigate("/recruiterProfile");
-      }
-    } catch (err) {
-      setLoad(false);
-      setSubmitbtnError({
-        msg: err.status === 409 ? "Profile Already Exist" : err.message,
-        id: Date.now(),
-      });
+    if(!profileImage){
+      handleSubmit()
     }
   };
 
- return (
-  <>
-    {load && profileImage ? (
-      <CloudinaryInital file={profileImage} fileType={"image"} load={load} />
-    ) : null}
+  const handleSubmit = useCallback(async () => {
+      try {
+        const ProfileImageObj = {
+          url: ImageUrl ? ImageUrl : null,
+          public_id: ImagePublicId ? ImagePublicId : null,
+        };
 
-    <MainNav />
+        const response = await api.post(
+          "/profile/recruiter-Profile/Post",
+          {
+            profileImage: ProfileImageObj,
+            bio: bio,
+            about: about,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            phone: phone,
+            gender: gender,
+            age: age,
+            location: location,
+            state: state,
+            country: country,
+            companyName: company,
+            companyWebsite: companyWebsite,
+            companyAddress: companyAddress,
+            industry: industry,
+            companySize: companySize,
+            designation: designation,
+          },
+          {
+            withCredentials: true,
+          },
+        );
+        if (response) {
+          dispatch(IsRecruiterProfileFailure(null));
+          showAlert("Success", response.data.msg, "success");
+          setLoad(false);
+          dispatch(IsImageUrlSuccess(null));
+          setSavebtnError(null);
+          dispatch(IsImagePublicIdSuccess(null));
+          dispatch(IsCloudinaryFailure(null));
+          return navigate("/recruiterProfile");
+        }
+      } catch (err) {
+        setLoad(false);
+        setSavebtnError({
+          msg: err.status === 409 ? "Profile Already Exist" : err.message,
+          id: Date.now(),
+        });
+      }
+    },
+    [
+      ImagePublicId,
+      ImageUrl,
+      about,
+      age,
+      bio,
+      company,
+      companyAddress,
+      companySize,
+      companyWebsite,
+      country,
+      state,
+      location,
+      designation,
+      dispatch,
+      email,
+      firstName,
+      lastName,
+      industry,
+      navigate,
+      gender,
+      phone,
+    ],
+  );
 
-    <div className="profile-setting-wrapper">
-      <div className="profile-card">
+  useEffect(() => {
+    if (load) {
+      if (profileImage && ImageUrl) {
+        handleSubmit();
+      }
+    }
+  }, [profileImage, handleSubmit, ImageUrl, load]);
 
-        <div className="profile-header">
-          <h2>Recruiter Profile</h2>
-          <p>Create your professional recruiter profile</p>
-        </div>
+  return (
+    <>
+      {load && profileImage ? (
+        <CloudinaryInital file={profileImage} fileType={"image"} load={load} />
+      ) : null}
 
-        <div className="profile-body">
+      <MainNav />
 
-          <div className="image-section">
-            <img
-              src={
-                profileImagePreview
-                  ? profileImagePreview
-                  : "default-profile.jpg"
-              }
-              alt="Preview"
-              className="profile-preview"
-            />
+      <div className="profile-setting-wrapper">
+        <div className="profile-card">
+          <div className="profile-header">
+            <h2>Recruiter Profile</h2>
+            <p>Create your professional recruiter profile</p>
+          </div>
 
-            {!load && (
-              <>
-                <input
-                  id="profileUpload"
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    setProfileImage(file);
-                    setProfileImagePreview(URL.createObjectURL(file));
-                  }}
-                />
+          <div className="profile-body">
+            <div className="image-section">
+              <img
+                src={
+                  profileImagePreview
+                    ? profileImagePreview
+                    : "default-profile.jpg"
+                }
+                alt="Preview"
+                className="profile-preview"
+              />
 
-                <div>
-                  <label className="change-btn" htmlFor="profileUpload">
-                    Upload Profile
-                  </label>
+              {!load && (
+                <>
+                  <input
+                    id="profileUpload"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setProfileImage(file);
+                      setProfileImagePreview(URL.createObjectURL(file));
+                    }}
+                  />
+
+                  <div>
+                    <label className="change-btn" htmlFor="profileUpload">
+                      Upload Profile
+                    </label>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="form-grid">
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+
+              <TextField
+                sx={{ m: 1 }}
+                fullWidth
+                label="Bio"
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+              />
+              <TextField
+                sx={{ m: 1 }}
+                fullWidth
+                multiline
+                label="About"
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+              />
+
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <MuiTelInput
+                label="Phone Number"
+                required
+                fullWidth
+                sx={{ m: 1 }}
+                defaultCountry="IN"
+                value={phone}
+                onChange={(val) => setPhone(val)}
+                error={phone ? !isValidPhoneNumber(phone) : false}
+                helperText={
+                  phone && !isValidPhoneNumber(phone) ? "Invalid phone" : ""
+                }
+              />
+
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                type="number"
+                label="Age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+
+              <FormControl required sx={{ m: 1 }} fullWidth>
+                <InputLabel>Gender</InputLabel>
+                <Select
+                  value={gender}
+                  label="Gender"
+                  onChange={(e) => setGender(e.target.value)}
+                >
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                  <MenuItem value="Others">Others</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="Company Name"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+              />
+
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="Company Website"
+                value={companyWebsite}
+                onChange={(e) => setCompanyWebsite(e.target.value)}
+              />
+
+              <TextField
+                required
+                sx={{ m: 1 }}
+                fullWidth
+                label="Company Address"
+                value={companyAddress}
+                onChange={(e) => setCompanyAddress(e.target.value)}
+              />
+
+              <FormControl required sx={{ m: 1 }} fullWidth>
+                <InputLabel>Industry</InputLabel>
+                <Select
+                  value={industry}
+                  label="Industry"
+                  onChange={(e) => setIndustry(e.target.value)}
+                >
+                  {industries.map((ind) => (
+                    <MenuItem key={ind} value={ind}>
+                      {ind}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl required sx={{ m: 1 }} fullWidth>
+                <InputLabel>Company Size</InputLabel>
+                <Select
+                  value={companySize}
+                  label="Company Size"
+                  onChange={(e) => setCompanySize(e.target.value)}
+                >
+                  {companySizes.map((size) => (
+                    <MenuItem key={size} value={size}>
+                      {size}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl required sx={{ m: 1 }} fullWidth>
+                <InputLabel>Designation</InputLabel>
+                <Select
+                  value={designation}
+                  label="Designation"
+                  onChange={(e) => setDesignation(e.target.value)}
+                >
+                  {recruiterDesignations.map((des) => (
+                    <MenuItem key={des} value={des}>
+                      {des}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <LocationInput
+                country={country}
+                setCountry={setCountry}
+                state={state}
+                setState={setState}
+                location={location}
+                setLocation={setLocation}
+              />
+            </div>
+
+            <div className="action-section">
+              {load ? (
+                <div className="d-flex justify-content-center">
+                  <ProgressLoad setSize="20px" trigger={1} msg="Loading" />
                 </div>
-              </>
-            )}
-          </div>
+              ) : null}
 
-          <div className="form-grid">
-
-            <TextField required sx={{m:1}} fullWidth label="First Name" value={firstName} onChange={(e)=>setFirstName(e.target.value)} />
-            <TextField required  sx={{m:1}} fullWidth label="Last Name" value={lastName} onChange={(e)=>setLastName(e.target.value)} />
-
-            <TextField  sx={{m:1}} fullWidth label="Bio" value={bio} onChange={(e)=>setBio(e.target.value)} />
-            <TextField  sx={{m:1}} fullWidth multiline label="About" value={about} onChange={(e)=>setAbout(e.target.value)} />
-
-            <TextField required   sx={{m:1}} fullWidth label="Email" value={email} onChange={(e)=>setEmail(e.target.value)} />
-
-            <MuiTelInput
-             label="Phone Number"
-  required
-              fullWidth
-               sx={{m:1}}
-              defaultCountry="IN"
-              value={phone}
-              onChange={(val)=>setPhone(val)}
-              error={phone ? !isValidPhoneNumber(phone) : false}
-              helperText={phone && !isValidPhoneNumber(phone) ? "Invalid phone" : ""}
-            />
-
-            <TextField   required  sx={{m:1}} fullWidth type="number" label="Age" value={age} onChange={(e)=>setAge(e.target.value)} />
-
-            <FormControl   required sx={{m:1}} fullWidth>
-              <InputLabel>Gender</InputLabel>
-              <Select value={gender} label="Gender" onChange={(e)=>setGender(e.target.value)}>
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Others">Others</MenuItem>
-              </Select>
-            </FormControl>
-
-
-
-            <TextField   required  sx={{m:1}} fullWidth label="Company Name" value={company} onChange={(e)=>setCompany(e.target.value)} />
-
-            <TextField   required  sx={{m:1}} fullWidth label="Company Website" value={companyWebsite} onChange={(e)=>setCompanyWebsite(e.target.value)} />
-
-            <TextField   required  sx={{m:1}} fullWidth label="Company Address" value={companyAddress} onChange={(e)=>setCompanyAddress(e.target.value)} />
-
-            <FormControl   required sx={{m:1}} fullWidth>
-              <InputLabel>Industry</InputLabel>
-              <Select value={industry} label="Industry" onChange={(e)=>setIndustry(e.target.value)}>
-                {industries.map((ind)=>(
-                  <MenuItem key={ind} value={ind}>{ind}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl   required sx={{m:1}} fullWidth>
-              <InputLabel>Company Size</InputLabel>
-              <Select value={companySize} label="Company Size" onChange={(e)=>setCompanySize(e.target.value)}>
-                {companySizes.map((size)=>(
-                  <MenuItem key={size} value={size}>{size}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl   required  sx={{m:1}} fullWidth>
-              <InputLabel>Designation</InputLabel>
-              <Select value={designation} label="Designation" onChange={(e)=>setDesignation(e.target.value)}>
-                {recruiterDesignations.map((des)=>(
-                  <MenuItem key={des} value={des}>{des}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-                        <LocationInput
-              country={country}
-              setCountry={setCountry}
-              state={state}
-              setState={setState}
-              location={location}
-              setLocation={setLocation}
-            />
-
-          </div>
-
-          <div className="action-section">
-
-            {load && !ImageUrl ? 
-              <div className="d-flex justify-content-center">
-                <ProgressLoad setSize="20px" trigger={1} msg="Loading" />
-              </div>
-            : null}
-
-            {!load && !ImageUrl ? (
               <ErrorAlert
                 alertMsg={savebtnError}
                 buttonName="Save"
@@ -446,24 +556,11 @@ function RecruiterProfileForm() {
                 buttonVariant="outlined"
                 handlefn={handleSave}
               />
-            ) 
-            : 
-            load && ImageUrl ?
-            (
-              <ErrorAlert
-                alertMsg={submitbtnError}
-                buttonName="Submit"
-                buttonVariant="contained"
-                handlefn={handleSubmit}
-              />
-            ) : null}
-
+            </div>
           </div>
-
         </div>
       </div>
-    </div>
-    <style>{`
+      <style>{`
 .profile-setting-wrapper {
   padding: 120px 20px 40px;
   display: flex;
