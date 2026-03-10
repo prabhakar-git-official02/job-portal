@@ -55,6 +55,9 @@ import UserPage from "./Pages/Admin/UserPage.jsx";
 import AllRecruiters from "./Pages/Admin/AllRecruiters.jsx";
 import AllJobseekers from "./Pages/Admin/AllJobseekers.jsx";
 import AllAdmin from "./Pages/Admin/AllAdmin.jsx";
+import Careers from "./Pages/Careers.jsx";
+import LearnMore from "./Pages/LearnMore.jsx";
+
 
 function App() {
   return (
@@ -148,6 +151,8 @@ function App() {
           <Route path="/allRecruiters" element={<AllRecruiters/>}/>
           <Route path="/allJobseekers" element={<AllJobseekers/>}/>
           <Route path="/allAdmins" element={<AllAdmin/>}/>
+          <Route path="/careers" element={<Careers/>}/>
+          <Route path="/learnMore" element={<LearnMore/>}/>
         </Routes>
       </BrowserRouter>
     </div>

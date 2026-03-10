@@ -251,15 +251,18 @@ function Home() {
   <div className="row g-4 justify-content-lg-around">
     {/* About Us */}
     <div className="footer-about col-md-6 col-lg-3 text-start ">
-      <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><InfoIcon/><span className="mx-2 ">About Us</span></h5>
+      <div className="text-lg-center">
+      <h5   style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><InfoIcon/><span className="mx-2 ">About Us</span></h5>
+      </div>
+      
       <br className="d-md-none"/><br className="d-md-none"/>
      <hr className="d-lg-block d-md-block d-none"/>
       <p>
         Our JobPortal connects talented professionals with top companies. We make job search simple, fast, and effective.
       </p>
       <p>
-        <a href="/about" className="text-decoration-none text-light">Learn more</a> |{" "}
-        <a href="/careers" className="text-decoration-none text-light">Careers</a> 
+        <span style={{cursor : `pointer`}} onClick={() => navigate('/learnMore')} className="text-decoration-none text-light">Learn more</span> |{" "}
+        <span style={{cursor : `pointer`}} onClick={() => navigate('/careers')}  className="text-decoration-none text-light">Careers</span> 
       </p>
     </div>
 
@@ -271,6 +274,7 @@ function Home() {
       <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><ExploreIcon/><span className="mx-2">Explore</span></h5>
        <br className="d-md-none"/><br className="d-md-none"/>
       <hr className="d-lg-block d-md-block d-none"/>
+
       {user?.roleData === "user" ? (
         <div className="mt-2 d-flex justify-content-lg-center">
           <div>
@@ -283,7 +287,7 @@ function Home() {
         </div>
       ) : 
       user?.roleData === "recruiter" ? (
-        <div cclassName="mt-2 d-flex justify-content-lg-center">
+        <div className="mt-2 d-flex justify-content-lg-center">
           <div>
           <span className="d-flex " onClick={() => navigate('/allJobs')} style={{cursor : `pointer`}} ><TravelExploreIcon/><span className="mx-2">Browse Jobs</span></span>
           <br />
@@ -319,7 +323,10 @@ function Home() {
 
     {/* Contact */}
     <div className="footer-contact col-md-6 col-lg-3 text-start">
-      <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><ContactEmergencyIcon/><span className="mx-2" >Contact</span></h5>
+      <div className="text-lg-center">
+           <h5 style={{ cursor: "pointer", display: "inline-flex", alignItems: "center" }}><ContactEmergencyIcon/><span className="mx-2" >Contact</span></h5>
+      </div>
+   
        <br className="d-md-none"/><br className="d-md-none"/>
      <hr className="d-lg-block d-md-block d-none"/>
       <p><EmailIcon/><strong className="mx-1">Email: </strong> <a href="mailto:prabhakaroffcl@gmail.com" className="text-light">prabhakaroffcl@gmail.com</a></p>
@@ -479,7 +486,6 @@ font-weight:600;
 }
 
 .platform-section{
-background:#f1f5f9;
 padding-Top : 40px;
 }
 

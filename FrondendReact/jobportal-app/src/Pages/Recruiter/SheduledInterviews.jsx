@@ -157,7 +157,7 @@ function SheduledInterviews() {
                       key={interview?._id}
                     >
 
-                      <div className="candidate-card" style={{cursor : `pointer`}} onClick={() => navigate(`/interviewCallDescription/${interview?.applicantId}/${interview?.jobId}`)}>
+                      <div className="candidate-card" >
                         <img src={interview?.jobDetails?.profileImage?.url} style={{width : `100px`,height : `100px`,borderRadius : `100%`}} alt="company-logo" />
                         <h5 className="mt-5 text-light">
                           {interview?.jobDetails?.jobTitle}
@@ -196,6 +196,8 @@ function SheduledInterviews() {
                         <div className={`status-badge ${key}`}>
                           {key}
                         </div>
+
+                        <button onClick={() => navigate(`/interviewCallDescription/${interview?.applicantId}/${interview?.jobId}`)} className="btn btn-primary mt-2">View Details</button>
 
                         {!interview?.interviewCancelledReason && (
 

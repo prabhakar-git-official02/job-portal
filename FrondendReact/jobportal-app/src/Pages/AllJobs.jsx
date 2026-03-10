@@ -141,7 +141,7 @@ function AllJobs() {
   });
 
   return (
-    <div className="container-fluid page-bg min-vh-100 px-0">
+    <div className="container-fluid  page-bg min-vh-100 px-0">
       {/* Navbar */}
       <div className="row m-0">
         <MainNav />
@@ -150,10 +150,10 @@ function AllJobs() {
       <br />
       <br />
       {/* Content */}
-      <div className="container py-4 px-3 px-md-4 px-lg-5 mt-5">
+      <div className="container   py-4 px-3 px-md-4 px-lg-5 mt-5">
         {/* Title */}
         
-        <div className="modern-title-container mb-3 text-center text-md-start">
+        <div className="modern-title-container  mb-3 text-center text-md-start">
           <h2 className="dashboard-title">
 Discover <span>Opportunities</span>
 </h2>
@@ -213,8 +213,9 @@ Discover <span>Opportunities</span>
   </p>
 </div>: 
 <div>
+
         {/* Job Cards */}
-        <div className="row g-3 g-md-4">
+        <div className="row g-3 g-md-4 ">
           {filteredPosts
             ?.filter((post) =>
               post?.jobTitle?.toLowerCase().includes(search.toLowerCase()),
