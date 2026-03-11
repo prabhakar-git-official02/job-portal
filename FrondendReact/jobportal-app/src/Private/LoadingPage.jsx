@@ -8,7 +8,7 @@ function LoadingPage(){
         <div>
             <MainNav/>
         </div>
-       <ProgressLoad trigger={1} msgClass={`h2`} msg={`Loading..`}/>
+       <ProgressLoad trigger={1} setSize={`30px`} msgClass={`h2`} msg={`Loading..`}/>
        </div>
         </>
     )

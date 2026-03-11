@@ -9,7 +9,7 @@ import Button from "@mui/material/Button"
 import { allRecruiters_Get, Post_Status_Update } from "../../Thunks/adminGetReqThunk"
 import SearchInput from "../../Components/SearchInput"
 import DropDown from "../../Components/DropDown"
-
+import ProgressLoad from '../../Components/ProgressLoad'
 function RecruiterPosts(){
 
         const dispatch = useDispatch()
@@ -17,6 +17,7 @@ function RecruiterPosts(){
   const [jobTypeKey, setJobTypekey] = useState("");
   const [jobPlatformKey, setJobPlatformKey] = useState("");
   const [locationKey,setLocationKey] = useState("")
+  const [loading,setLoading] = useState(false)
     
     useEffect(() => {
       dispatch(authThunk())
@@ -44,12 +45,19 @@ function RecruiterPosts(){
 
 
     const handlePostUpdate = (status,id,recruiterId) => {
+      try{
+        setLoading(true)
         if(status && id && recruiterId ){
           console.log("status",status)
           console.log("id",id);
           console.log("recruiterid",recruiterId);
           dispatch(Post_Status_Update(status,id,recruiterId))
+          .then(() => setLoading(false))
         }
+      }catch(err){
+        setLoading(false)
+        console.log("Admin/RecruiterPosts-Err",err?.message)
+      }
     }
 
       const FilteredJobFields = ["All Posts","Information Technology","Software Development","Web Development","Mobile App Development","Data Science","Artificial Intelligence",
@@ -265,6 +273,12 @@ function RecruiterPosts(){
                       ))}
                   </div>
                 )}
+
+                {loading ? 
+                <div className="mt-3">
+                  <ProgressLoad trigger={1} setSize={`20px`} msg={`Loading..`} />
+                </div> : null
+                }
 
                 {/* Buttons */}
                 <div className="mt-3 d-flex gap-2">

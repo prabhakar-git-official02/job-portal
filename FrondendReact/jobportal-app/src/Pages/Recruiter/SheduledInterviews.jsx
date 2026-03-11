@@ -100,7 +100,7 @@ function SheduledInterviews() {
 
             <div className="dashboard-sidebar">
 
-              <h4 className="sidebar-title">
+              <h4 className="sidebar-title mt-5">
                 Interviews
               </h4>
 
@@ -109,7 +109,7 @@ function SheduledInterviews() {
                 <div
                   key={status}
                   onClick={() => setKey(status)}
-                  className={`sidebar-item ${key===status ? "active" : ""}`}
+                  className={`sidebar-item mt-2 ${key===status ? "active" : ""}`}
                 >
                   {status.charAt(0).toUpperCase() + status.slice(1)}
                 </div>

@@ -32,6 +32,7 @@ import { isValidPhoneNumber } from "libphonenumber-js";
 import LocationInput from "../Components/LocationInput";
 import Cloudinary from "../Components/Cloudinary";
 import { useCallback } from "react";
+import CachedIcon from '@mui/icons-material/Cached';
 
 function ProfileSetting() {
   const navigate = useNavigate();
@@ -460,7 +461,7 @@ function ProfileSetting() {
               className="profile-preview"
             />
 
-            {!load && !ImageUrl && (
+            {!load ? (
               <>
                 <input
                   id="profileUpload"
@@ -479,7 +480,7 @@ function ProfileSetting() {
                   </label>
                 </div>
               </>
-            )}
+            ) : <p onClick={() =>  window.location.reload()} style={{cursor : `pointer`}}>Refresh Page <CachedIcon/></p>}
           </div>
 
           {/* Form Grid */}
