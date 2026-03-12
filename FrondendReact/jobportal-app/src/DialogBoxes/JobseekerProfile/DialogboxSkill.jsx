@@ -140,7 +140,7 @@ function DialogboxSkillAdd(){
     buttonName={`Add Skill`}
     buttonVariant={`contained`}
     colorbg={`green`}
-    buttonClass={`mt-3`}
+    buttonClass={`mt-4`}
     handlefn={handleSkillAdd}
     />
 </Dialog>

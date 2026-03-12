@@ -182,7 +182,7 @@ function DialogboxSheduleInterview({ApplicantId,ApplicantEmail,JobDetails,JobId}
                       <ErrorAlert
                       alertMsg={AlertMsg}
                       buttonName={`Shedule Interview`}
-                      buttonClass={`mt-3`}
+                       buttonClass={`mt-4`}
                       buttonVariant={`contained`}
                       colorbg={`teal`}
                       handlefn={handleSheduleInterview}

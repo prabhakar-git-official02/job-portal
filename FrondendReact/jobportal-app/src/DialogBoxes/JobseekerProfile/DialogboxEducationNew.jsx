@@ -230,6 +230,7 @@ function DialogboxEducationNew() {
         <ErrorAlert
           alertMsg={AlertMsg}
           buttonName={`Add Education`}
+           buttonClass={`mt-4`}
           buttonVariant={`contained`}
           colorbg={`teal`}
           handlefn={handleSubmit}

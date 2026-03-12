@@ -241,6 +241,7 @@ onChange={(e) => setWorkExperience(e.target.value)}
         <ErrorAlert
           alertMsg={AlertMsg}
           buttonName={`Add Experience`}
+           buttonClass={`mt-4`}
           buttonVariant={`contained`}
           colorbg={`teal`}
           handlefn={handleSubmit}

@@ -621,7 +621,7 @@ const [storeSkill, setStoreSkill] = useState([]);
           buttonName={`Add Skill`}
           buttonVariant={`contained`}
           colorbg={`green`}
-          buttonClass={`mt-3`}
+           buttonClass={`mt-4`}
           handlefn={handleSkillAdd}
         />
         {load ? (
@@ -634,7 +634,7 @@ const [storeSkill, setStoreSkill] = useState([]);
           <ErrorAlert
             alertMsg={savebtnError}
             buttonName={`Save`}
-            buttonClass={`mt-3`}
+            buttonClass={`mt-4`}
             buttonVariant={`outlined`}
             handlefn={handleSave}
           />

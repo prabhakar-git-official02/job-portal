@@ -328,7 +328,7 @@ header="Find Dreams"
           alertMsg={AlertMsg}
           buttonName={`Apply`}
           buttonVariant={`contained`}
-          buttonClass={`mt-3`}
+           buttonClass={`mt-4`}
           handlefn={handleJobApply}
         />
       </Dialog>

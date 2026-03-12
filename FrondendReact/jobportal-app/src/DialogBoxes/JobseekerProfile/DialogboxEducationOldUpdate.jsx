@@ -237,6 +237,7 @@ function DialogboxEducationOld({ index,EdId,JsId }) {
         <ErrorAlert
           alertMsg={AlertMsg}
           buttonName={`Update`}
+           buttonClass={`mt-4`}
           buttonVariant={`contained`}
           colorbg={`teal`}
           handlefn={handleSubmit}
