@@ -11,7 +11,7 @@ import { authThunk } from '../../Thunks/authThunk';
 import { jobseekerProfileThunk } from '../../Thunks/jobseekerProfileThunk';
 import ErrorAlert from '../../Components/ErrorAlert';
 import ProgressLoad from '../../Components/ProgressLoad';
-import CircularProgress from '@mui/material/CircularProgress';
+
 
 function DialogboxSkillAdd(){
 
