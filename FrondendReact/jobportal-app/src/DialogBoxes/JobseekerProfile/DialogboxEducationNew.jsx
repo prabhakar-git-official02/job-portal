@@ -18,6 +18,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import ProgressLoad from "../../Components/ProgressLoad";
+
 function DialogboxEducationNew() {
   const dispatch = useDispatch();
 
@@ -41,6 +43,7 @@ function DialogboxEducationNew() {
   const [qualification, setQualification] = useState("");
   const [yearStart, setYearStart] = useState(null);
   const [yearEnd, setYearEnd] = useState(null);
+  const [loading,setLoading] = useState(false)
 
   const UpdateDatas = {
     institute: institute,
@@ -83,6 +86,7 @@ function DialogboxEducationNew() {
 
   const handleSubmit = async () => {
     try{
+      setLoading(true)
     if (
       !institute ||
       institute.trim() === "" ||
@@ -91,12 +95,15 @@ function DialogboxEducationNew() {
       !yearStart ||
       !yearEnd
     ) {
-      return setAlertMsg({
+      setLoading(false)
+      setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
       });
+      return
     }
     dispatch(jobseekerProfileEduAddThunk(UpdateDatas, JobseekerProfile));
+    setLoading(false)
     setAlertMsg(null);
     setInstitute("");
     setQualification("");
@@ -104,6 +111,7 @@ function DialogboxEducationNew() {
     setYearEnd(null);
     setVisible(false);
   }catch(err){
+    setLoading(false)
     console.log("JobseekerProfile/DialogboxEducationNew/handlesubmit-Err",err?.message)
   }
   };
@@ -133,6 +141,7 @@ function DialogboxEducationNew() {
         onHide={() => {
           if (!visible) return;
           setVisible(false);
+          setLoading(false)
           setInstitute("");
           setQualification("");
           setYearStart("");
@@ -213,6 +222,11 @@ function DialogboxEducationNew() {
 
         <br />
         <br />
+                        {loading ? 
+                        <div className="mt-4">
+                          <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                        </div> : null
+                        }
         <ErrorAlert
           alertMsg={AlertMsg}
           buttonName={`Add Education`}

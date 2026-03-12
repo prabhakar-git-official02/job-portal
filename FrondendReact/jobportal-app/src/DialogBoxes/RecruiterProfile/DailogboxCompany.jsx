@@ -16,6 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
+import ProgressLoad from "../../Components/ProgressLoad";
 
 function DialogboxAbout() {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function DialogboxAbout() {
   const [industry, setIndustry] = useState(RecruiterProfile?.industry);
   const [companySize, setCompanySize] = useState(RecruiterProfile?.companySize);
   const [designation, setDesignation] = useState(RecruiterProfile?.designation);
+  const [loading,setLoading] = useState(false)
 
   const UpdateDatas = {
     companyName: company || RecruiterProfile?.companyName,
@@ -58,6 +60,7 @@ function DialogboxAbout() {
 
   const handleSubmit = async () => {
     try{
+      setLoading(true)
     if (
       company.trim() === "" ||
       !company ||
@@ -72,14 +75,17 @@ function DialogboxAbout() {
       designation === "" ||
       !designation
     ) {
-      return setAlertMsg({
+      setLoading(false)
+       setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
       });
+      return
     }
     dispatch(recruiterProfileUpdateThunk(UpdateDatas)).then(
       dispatch(recruiterProfileThunk()),
-    );
+    )
+    .then(() => setLoading(false))
     setCompany(UpdateDatas?.companyName);
     setCompanyWebsite(UpdateDatas?.companyWebsite);
     setCompanyAddress(UpdateDatas?.companyAddress);
@@ -89,6 +95,7 @@ function DialogboxAbout() {
     setAlertMsg(null);
     setVisible(false);
   }catch(err){
+    setLoading(false)
     console.log("RecruiterProfile/DialogboxCompany-handlesubmit-Err",err?.message)
   }
   };
@@ -222,6 +229,7 @@ function DialogboxAbout() {
         onHide={() => {
           if (!visible) return;
           setVisible(false);
+          setLoading(false)
           setCompany(RecruiterProfile?.companyName);
           setCompanyWebsite(RecruiterProfile?.companyWebsite);
           setCompanyAddress(RecruiterProfile?.companyAddress);
@@ -353,6 +361,12 @@ function DialogboxAbout() {
             </Select>
           </FormControl>
         </Box>
+
+                                {loading ? 
+                                <div className="mt-4">
+                                  <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                                </div> : null
+                                }
 
         <ErrorAlert
           alertMsg={AlertMsg}

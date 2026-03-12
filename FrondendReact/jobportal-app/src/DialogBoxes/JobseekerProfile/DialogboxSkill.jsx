@@ -10,6 +10,8 @@ import Box from '@mui/material/Box';
 import { authThunk } from '../../Thunks/authThunk';
 import { jobseekerProfileThunk } from '../../Thunks/jobseekerProfileThunk';
 import ErrorAlert from '../../Components/ErrorAlert';
+import ProgressLoad from '../../Components/ProgressLoad';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function DialogboxSkillAdd(){
 
@@ -30,20 +32,27 @@ function DialogboxSkillAdd(){
     const [visible,setVisible] = useState(false)
     const [AddSkill,setAddSkill] = useState("")
     const [AlertMsg,setAlertMsg] = useState(null)
+    const [addLoading,setAddLoading] = useState(false)
+    const [deleteLoading,setDeleteLoading] = useState(false)
 
   // handle skill add
    const handleSkillAdd = () => {
     try{
+    setAddLoading(true)
     if(AddSkill.trim() ===""){
-        return setAlertMsg({
+      setAddLoading(false)
+         setAlertMsg({
             msg : 'Invalid Skill Add!',
             id: Date.now()
         })
+        return
     }
     dispatch(jobseeker_Profile_skill_Add_Thunk(AddSkill))
+    .then(() => setAddLoading(false))
     setAlertMsg(null)
     setAddSkill("")
   }catch(err){
+    setAddLoading(false)
     console.log("JobseekerProfile/DialogboxSkill/handleSkillAdd-Err",err?.message)
   }
    }
@@ -51,8 +60,11 @@ function DialogboxSkillAdd(){
    // handle skill delete
      const handleFieldDelete = (caughtSkill) => {
       try{
+        setDeleteLoading(true)
        dispatch(jobseeker_Profile_skill_Delete_Thunk(caughtSkill))
+       .then(() => setDeleteLoading(false))
       }catch(err){
+        setDeleteLoading(false)
         console.log("JobseekerProfile/DialogboxSkill/handleSkillDelete-Err",err?.message)
       }
      }
@@ -71,7 +83,8 @@ function DialogboxSkillAdd(){
     "768px": "80vw",
     "560px": "95vw",
     "480px": "98vw"
-  }} header={JobseekerProfile?.firstName} visible={visible} style={{ width: '50vw' }} onHide={() => {if (!visible) return; setVisible(false); }}>
+  }} header={JobseekerProfile?.firstName} visible={visible} style={{ width: '50vw' }} 
+  onHide={() => {if (!visible) return; setVisible(false); setAddLoading(false) ; setDeleteLoading(false)}}>
     <div>
         <h5>Update Skills</h5>
         <br/>
@@ -91,8 +104,15 @@ function DialogboxSkillAdd(){
             ><FontAwesomeIcon icon={faDeleteLeft}/></span>
             </span>
         ))}
-    </div>
-        <br/>
+                    {deleteLoading ? 
+                    <div className="mt-4">
+                      <ProgressLoad trigger={1} msg={`Deleting Skill..`} setSize={`20px`}/>
+                    </div> : null
+                    }
+                    </div>
+                    <br/>
+
+
                       <Box
                         component="form"
                         sx={{ "& > :not(style)": { width: `100%` } }}
@@ -110,6 +130,11 @@ function DialogboxSkillAdd(){
                         />
                       </Box>
     </div>
+                    {addLoading ? 
+                    <div className="mt-4">
+                      <ProgressLoad trigger={1} msg={`Adding Skill..`} setSize={`20px`}/>
+                    </div> : null
+                    }
     <ErrorAlert
     alertMsg={AlertMsg}
     buttonName={`Add Skill`}

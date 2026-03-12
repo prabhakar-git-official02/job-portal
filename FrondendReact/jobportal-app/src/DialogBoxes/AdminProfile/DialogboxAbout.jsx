@@ -9,7 +9,7 @@ import { authThunk } from "../../Thunks/authThunk";
 import ErrorAlert from "../../Components/ErrorAlert";
 import ImageAvatar from "../../Components/ImageAvatar";
 import { adminProfileThunk, adminProfileUpdateThunk } from "../../Thunks/adminProfileThunk";
-
+import ProgressLoad from "../../Components/ProgressLoad";
 
 function DialogboxAbout() {
   const dispatch = useDispatch();
@@ -33,6 +33,7 @@ function DialogboxAbout() {
   const [AlertMsg, setAlertMsg] = useState(null);
   const [about, setAbout] = useState(AdminProfile?.about);
   const [bio, setBio] = useState(AdminProfile?.bio);
+  const [loading,setLoading] = useState(false)
 
   const UpdateDatas = {
     about: about || AdminProfile?.about,
@@ -41,10 +42,12 @@ function DialogboxAbout() {
 
   const handleSubmit = async () => {
     try{
+      setLoading(true)
     if (about.trim() === "" || 
         bio.trim() === "" ||
          !about || !bio
         ) {
+          setLoading(false)
        setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
@@ -54,12 +57,14 @@ function DialogboxAbout() {
 
     dispatch(adminProfileUpdateThunk(UpdateDatas)).then(
       dispatch(adminProfileThunk()),
-    );
+    )
+    .then(() => setLoading(false))
     setAbout(UpdateDatas?.about);
     setBio(UpdateDatas?.bio);
     setAlertMsg(null);
     setVisible(false);
   } catch(err){
+    setLoading(false)
     console.log("AdminProfile-DialogboxAbout-handleSubmit-Error",err?.message)
   }
   };
@@ -94,6 +99,7 @@ function DialogboxAbout() {
         onHide={() => {
           if (!visible) return;
           setVisible(false);
+          setLoading(false)
           setAbout(AdminProfile?.about);
           setBio(AdminProfile?.bio);
           setAlertMsg(null);
@@ -144,6 +150,12 @@ function DialogboxAbout() {
             label={"Edit your About"}
           />
         </Box>
+
+                                {loading ? 
+                                <div className="mt-4">
+                                  <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                                </div> : null
+                                }
 
         <ErrorAlert
           alertMsg={AlertMsg}

@@ -14,10 +14,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import ErrorAlert from "../../Components/ErrorAlert";
 import { useNavigate } from "react-router-dom";
+import ProgressLoad from "../../Components/ProgressLoad";
 
 function DialogboxApplyJob({ btnName,JobId}) {
   const dispatch = useDispatch();
   const navigate = useNavigate()
+  
 
   const [qualification, setQualification] = useState("");
   const [experience, setExperience] = useState("");
@@ -25,6 +27,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
   const [preferredLocation, setPreferredLocation] = useState("");
   const [visible, setVisible] = useState(false);
   const [AlertMsg, setAlertMsg] = useState(null);
+  const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     dispatch(authThunk());
@@ -155,12 +158,14 @@ function DialogboxApplyJob({ btnName,JobId}) {
 
   const handleJobApply = () => {
     try{
+      setLoading(true)
     if (
       qualification.trim() === "" ||
       experience === 0 || experience === "" ||
       preferredLocation.trim() === "" ||
       expectedSalary === 0 || expectedSalary === "" 
     ) {
+      setLoading(false)
       setAlertMsg({
         msg: "Invalid Apply",
         id: Date.now(),
@@ -169,6 +174,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
     }
 
     dispatch(applyJobPostThunk(JobId,applicantData))
+    .then(() => setLoading(false))
     .then(() => setQualification(""))
     .then(() => setExperience(""))
     .then(() => setPreferredLocation(""))
@@ -176,6 +182,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
     .then(()=> setAlertMsg(null))
     .then(() => {navigate('/allJobs')})
   }catch(err){
+    setLoading(false)
     console.log("JobseekerProfile/DialogboxApplyJob/handleJobApply-Err",err?.message)
   }
   };
@@ -205,6 +212,7 @@ header="Find Dreams"
   style={{ width: "40vw" }}
   onHide={() => {
     setVisible(false);
+    setLoading(false)
     setQualification("");
     setExperience("");
     setExpectedSalary("");
@@ -309,6 +317,13 @@ header="Find Dreams"
           </Box>
           <br />
         </div>
+
+                {loading ? 
+                <div className="mt-4">
+                  <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                </div> : null
+                }
+
         <ErrorAlert
           alertMsg={AlertMsg}
           buttonName={`Apply`}

@@ -16,6 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { jobseekerProfileThunk } from "../../Thunks/jobseekerProfileThunk";
+import ProgressLoad from "../../Components/ProgressLoad";
 
 function DialogboxExperienceNew({ btnName, btnType }) {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function DialogboxExperienceNew({ btnName, btnType }) {
   const [yearEnd, setYearEnd] = useState(null);
   const [workExperience, setWorkExperience] = useState();
   const [CTC, setCTC] = useState();
+  const [loading,setLoadig] = useState(false)
 
   const UpdateDatas = {
     company: company,
@@ -64,6 +66,7 @@ function DialogboxExperienceNew({ btnName, btnType }) {
 
   const handleSubmit = async () => {
     try{
+      setLoadig(true)
     if (
       !company ||
       company.trim() === "" ||
@@ -76,12 +79,15 @@ function DialogboxExperienceNew({ btnName, btnType }) {
       !CTC ||
       CTC.trim() === ""
     ) {
-      return setAlertMsg({
+      setLoadig(false)
+      setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
       });
+      return
     }
     dispatch(jobseekerProfileExpAddThunk(UpdateDatas, JobseekerProfile));
+    setLoadig(false)
     setAlertMsg(null);
     setCompany("");
     setField("");
@@ -91,6 +97,7 @@ function DialogboxExperienceNew({ btnName, btnType }) {
     setCTC("");
     setVisible(false);
   }catch(err){
+    setLoadig(false)
     console.log("JobseekerProfile/DialogboxExperienceNew/handlesubmit-Err",err?.message)
   }
   };
@@ -126,6 +133,7 @@ function DialogboxExperienceNew({ btnName, btnType }) {
         onHide={() => {
           if (!visible) return;
           setVisible(false);
+          setLoadig(false)
           setCompany("");
           setField("");
           setWorkExperience("");
@@ -225,6 +233,11 @@ onChange={(e) => setWorkExperience(e.target.value)}
 
         <br />
         <br />
+                        {loading ? 
+                        <div className="mt-4">
+                          <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                        </div> : null
+                        }
         <ErrorAlert
           alertMsg={AlertMsg}
           buttonName={`Add Experience`}

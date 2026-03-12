@@ -10,6 +10,7 @@ import { jobseekerProfileThunk } from "../../Thunks/jobseekerProfileThunk";
 import ErrorAlert from "../../Components/ErrorAlert";
 import { jobseekerProfileUpdateThunk } from "../../Thunks/jobseekerProfileThunk";
 import ImageAvatar from "../../Components/ImageAvatar";
+import ProgressLoad from "../../Components/ProgressLoad";
 
 function DialogboxAbout() {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ function DialogboxAbout() {
   const [AlertMsg, setAlertMsg] = useState(null);
   const [about, setAbout] = useState(JobseekerProfile?.about);
   const [bio, setBio] = useState(JobseekerProfile?.bio);
+  const [loading,setLoading] = useState(false)
  
 
  const UpdateDatas = {
@@ -42,24 +44,29 @@ function DialogboxAbout() {
  
      const handleSubmit = async() => {
       try{
+         setLoading(true)
           if(
           about.trim() === "" ||
           bio.trim() === "" ||
           !about || 
           !bio
       ){
-          return setAlertMsg({
+        setLoading(false)
+          setAlertMsg({
             msg : 'Invalid Update',
             id : Date.now()
           })
+          return
       }
       dispatch(jobseekerProfileUpdateThunk(UpdateDatas))
-      .then(dispatch(jobseekerProfileThunk()))
+      .then(() => dispatch(jobseekerProfileThunk()))
+      .then(() => setLoading(false))
       setAbout(UpdateDatas?.about)
       setBio(UpdateDatas?.bio)
       setAlertMsg(null)
       setVisible(false)
     }catch(err){
+      setLoading(false)
       console.log("JobseekerProfile/DialogboxAbout/handlesubmit-Err",err?.message)
     }
      }
@@ -100,6 +107,7 @@ function DialogboxAbout() {
         onHide={() => {
           if (!visible) return;
           setVisible(false);
+          setLoading(false)
           setAbout(JobseekerProfile?.about)
           setBio(JobseekerProfile?.bio)
           setAlertMsg(null)
@@ -151,7 +159,11 @@ function DialogboxAbout() {
           />
         </Box>
 
-
+        {loading ? 
+        <div className="mt-4">
+          <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+        </div> : null
+        }
         <ErrorAlert
         alertMsg={AlertMsg}
         buttonName={`Update`}

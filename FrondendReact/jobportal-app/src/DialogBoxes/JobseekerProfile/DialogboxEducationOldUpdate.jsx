@@ -20,8 +20,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import ProgressLoad from "../../Components/ProgressLoad";
+
 function DialogboxEducationOld({ index,EdId,JsId }) {
   const dispatch = useDispatch();
+
+  const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     dispatch(authThunk());
@@ -91,6 +95,7 @@ function DialogboxEducationOld({ index,EdId,JsId }) {
 
   const handleSubmit = async () => {
     try{
+      setLoading(true)
     if (
       !institute ||
       institute.trim() === "" ||
@@ -99,13 +104,16 @@ function DialogboxEducationOld({ index,EdId,JsId }) {
       !yearStart ||
       !yearEnd
     ) {
-      return setAlertMsg({
+      setLoading(false)
+      setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
       });
+      return
     }
     dispatch(jobseekerProfileEduFieldUpdateThunk(JsId,EdId,UpdateDatas))
     .then((res) => dispatch(jobseekerProfileThunk()))
+    .then(() => setLoading(false))
     setAlertMsg(null);
     setInstitute(UpdateDatas?.institute);
     setQualification(UpdateDatas?.qualification);
@@ -113,6 +121,7 @@ function DialogboxEducationOld({ index,EdId,JsId }) {
     setYearEnd(UpdateDatas?.yearEnd);
     setVisible(false);
   }catch(err){
+    setLoading(false)
     console.log("JobseekerProfile/DialogboxEducationOld/handlesubmit-Err",err?.message)
   }
   };
@@ -139,6 +148,7 @@ function DialogboxEducationOld({ index,EdId,JsId }) {
         onHide={() => {
           if (!visible) return;
           setVisible(false);
+          setLoading(false)
           setInstitute(EducationIndex?.institute);
           setQualification(EducationIndex?.qualification);
           setYearStart(EducationIndex?.yearStart);
@@ -219,6 +229,11 @@ function DialogboxEducationOld({ index,EdId,JsId }) {
 
         <br />
         <br />
+                        {loading ? 
+                        <div className="mt-4">
+                          <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                        </div> : null
+                        }
         <ErrorAlert
           alertMsg={AlertMsg}
           buttonName={`Update`}

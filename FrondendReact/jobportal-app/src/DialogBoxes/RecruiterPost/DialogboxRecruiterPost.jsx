@@ -59,6 +59,7 @@ const [storeSkill, setStoreSkill] = useState([]);
   const [skillbtnError, setSkillbtnError] = useState(null);
   const [savebtnError, setSavebtnError] = useState(null);
 
+
   useEffect(() => {
   if (Post?.skills) {
     setStoreSkill(Post.skills);
