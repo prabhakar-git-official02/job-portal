@@ -11,10 +11,12 @@ import DialogboxEducationNew from "../../DialogBoxes/JobseekerProfile/DialogboxE
 import DialogboxEducationOld from "../../DialogBoxes/JobseekerProfile/DialogboxEducationOldUpdate";
 import DialogboxExperienceNew from "../../DialogBoxes/JobseekerProfile/DialogboxExperienceNew";
 import DialogboxExperienceOld from "../../DialogBoxes/JobseekerProfile/DialogboxExperienceOld";
-import DeleteIcon from '@mui/icons-material/Delete';
-import DialogboxSkill from '../../DialogBoxes/JobseekerProfile/DialogboxSkill'
+import DeleteIcon from "@mui/icons-material/Delete";
+import DialogboxSkill from "../../DialogBoxes/JobseekerProfile/DialogboxSkill";
 import DialogboxAbout from "../../DialogBoxes/JobseekerProfile/DialogboxAbout";
-
+import domtoimage from "dom-to-image-more";
+import { useRef } from "react";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 function JobseekerProfile() {
   const dispatch = useDispatch();
@@ -49,12 +51,31 @@ function JobseekerProfile() {
     dispatch(jobseekerProfileEduDeleteIndexThunk(index));
   };
 
+  const profileRef = useRef();
+
+  const handleDownloadScreenshot = () => {
+    if (!profileRef.current) return;
+
+domtoimage.toPng(profileRef.current, {
+  bgcolor: "#f4f6f9", 
+})
+.then((dataUrl) => {
+  const link = document.createElement("a");
+  link.download = "profile.png";
+  link.href = dataUrl;
+  link.click();
+})
+.catch((err) => console.log("Screenshot Error:", err));
+  };
+
+
   return (
     <>
       <MainNav />
-      <br /><br /><br />
-      <div className="profile-wrapper">
-
+      <br />
+      <br />
+      <br />
+      <div className="profile-wrapper"  style={{ backgroundColor: "#f4f6f9" }} ref={profileRef}>
         {/* HEADER */}
         <div className="profile-header">
           <div className="profile-image-container">
@@ -70,25 +91,47 @@ function JobseekerProfile() {
           </div>
 
           <div className="profile-top-info">
-            <h3>{profile?.firstName} {profile?.lastName}</h3>
+            <h3>
+              {profile?.firstName} {profile?.lastName}
+            </h3>
             <p>{profile?.bio || "Professional Job Seeker"}</p>
             <h5>{user?.roleData.toUpperCase()}</h5>
           </div>
         </div>
 
         <div className="profile-content">
-
           {/* BASIC INFO */}
           <div className="section-card">
             <div className="section-title">Basic Information</div>
             <div className="basic-grid">
-              <div className="basic-item"><span>Email</span>{profile?.email}</div>
-              <div className="basic-item"><span>Phone</span>{profile?.phone}</div>
-              <div className="basic-item"><span>Age</span>{profile?.age}</div>
-              <div className="basic-item"><span>Gender</span>{profile?.gender}</div>
-              <div className="basic-item"><span>Country</span>{profile?.country}</div>
-              <div className="basic-item"><span>State</span>{profile?.state}</div>
-              <div className="basic-item"><span>City</span>{profile?.location}</div>
+              <div className="basic-item">
+                <span>Email</span>
+                {profile?.email}
+              </div>
+              <div className="basic-item">
+                <span>Phone</span>
+                {profile?.phone}
+              </div>
+              <div className="basic-item">
+                <span>Age</span>
+                {profile?.age}
+              </div>
+              <div className="basic-item">
+                <span>Gender</span>
+                {profile?.gender}
+              </div>
+              <div className="basic-item">
+                <span>Country</span>
+                {profile?.country}
+              </div>
+              <div className="basic-item">
+                <span>State</span>
+                {profile?.state}
+              </div>
+              <div className="basic-item">
+                <span>City</span>
+                {profile?.location}
+              </div>
             </div>
           </div>
 
@@ -97,7 +140,7 @@ function JobseekerProfile() {
             <div className="section-title">About</div>
             <p>{profile?.about || "No About Added"}</p>
             <div>
-             <DialogboxAbout/>
+              <DialogboxAbout />
             </div>
           </div>
 
@@ -106,11 +149,13 @@ function JobseekerProfile() {
             <div className="section-title">Skills</div>
             <div className="skill-container">
               {profile?.skills?.map((s, i) => (
-                <span className="skill" key={i}>{s}</span>
+                <span className="skill" key={i}>
+                  {s}
+                </span>
               ))}
             </div>
             <div className="mt-4">
-              <DialogboxSkill/>
+              <DialogboxSkill />
             </div>
           </div>
 
@@ -120,24 +165,27 @@ function JobseekerProfile() {
             {profile?.education?.map((ed, index) => (
               <div className="inner-card" key={ed?._id}>
                 <h6>{ed?.qualification}</h6>
-                <p><strong>Institute:</strong> {ed?.institute}</p>
+                <p>
+                  <strong>Institute:</strong> {ed?.institute}
+                </p>
                 <p>
                   <strong>Years:</strong>{" "}
                   {new Date(ed?.yearStart).getFullYear()} -
-                  {ed?.yearEnd
-                    ? new Date(ed.yearEnd).getFullYear()
-                    : "Present"}
+                  {ed?.yearEnd ? new Date(ed.yearEnd).getFullYear() : "Present"}
                 </p>
                 <div className="d-flex mt-3">
                   <span className="flex-grow-1">
-                  <DialogboxEducationOld
-                    index={index}
-                    EdId={ed?._id}
-                    JsId={profile?._id}
-                  />
+                    <DialogboxEducationOld
+                      index={index}
+                      EdId={ed?._id}
+                      JsId={profile?._id}
+                    />
                   </span>
-                  <span style={{cursor : `pointer`}} onClick={() => handleEduDelete(index)}>
-                    <DeleteIcon/>
+                  <span
+                    style={{ cursor: `pointer` }}
+                    onClick={() => handleEduDelete(index)}
+                  >
+                    <DeleteIcon />
                   </span>
                 </div>
               </div>
@@ -151,37 +199,55 @@ function JobseekerProfile() {
             {profile?.experience?.map((ex, index) => (
               <div className="inner-card" key={ex?._id}>
                 <h6>{ex?.company}</h6>
-                <p><strong>Field:</strong> {ex?.field}</p>
+                <p>
+                  <strong>Field:</strong> {ex?.field}
+                </p>
                 <p>
                   <strong>Years:</strong>{" "}
                   {new Date(ex?.yearStart).getFullYear()} -
-                  {ex?.yearEnd
-                    ? new Date(ex.yearEnd).getFullYear()
-                    : "Present"}
+                  {ex?.yearEnd ? new Date(ex.yearEnd).getFullYear() : "Present"}
                 </p>
-                <p><strong>CTC:</strong> {ex?.CTC}</p>
-                <p><strong>Work:</strong> {ex?.workExperience}</p>
+                <p>
+                  <strong>CTC:</strong> {ex?.CTC}
+                </p>
+                <p>
+                  <strong>Work:</strong> {ex?.workExperience}
+                </p>
                 <div className="d-flex mt-3">
                   <span className="flex-grow-1">
                     <DialogboxExperienceOld
-                    index={index}
-                    ExId={ex?._id}
-                    JsId={profile?._id}
+                      index={index}
+                      ExId={ex?._id}
+                      JsId={profile?._id}
                     />
                   </span>
-                  <span style={{cursor : `pointer`}} onClick={() => handleExpDelete(index)}>
-                    <DeleteIcon/>
+                  <span
+                    style={{ cursor: `pointer` }}
+                    onClick={() => handleExpDelete(index)}
+                  >
+                    <DeleteIcon />
                   </span>
                 </div>
               </div>
             ))}
             <DialogboxExperienceNew />
           </div>
-
+          <div className="section-card">
+            <div className="section-title">Download</div>
+            <a
+              href={`${profile?.resume?.url}?fl_attachment=true`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <FileDownloadIcon/>
+              Download Resume
+            </a>
+            <p className="mt-2 text-success" style={{cursor : `pointer`,textDecoration : `underline`}} onClick={handleDownloadScreenshot}><FileDownloadIcon/>Dowload Profile</p>
+          </div>
         </div>
       </div>
 
-     <style>{`
+      <style>{`
 
 *{
   box-sizing:border-box;
@@ -377,7 +443,6 @@ body{
 }
 
 `}</style>
-     
     </>
   );
 }
