@@ -51,6 +51,8 @@ function JobseekerProfile() {
     dispatch(jobseekerProfileEduDeleteIndexThunk(index));
   };
 
+
+  
   const profileRef = useRef();
 
   const handleDownloadScreenshot = () => {

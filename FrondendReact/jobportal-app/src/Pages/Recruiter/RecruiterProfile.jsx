@@ -5,6 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import MainNav from "../../Navbar/MainNav";
 import DialogboxCompany from '../../DialogBoxes/RecruiterProfile/DailogboxCompany'
 import DialogboxAbout from "../../DialogBoxes/RecruiterProfile/DialogboxAbout";
+import domtoimage from "dom-to-image-more";
+import { useRef } from "react";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 function RecruiterProfile() {
   const dispatch = useDispatch();
 
@@ -27,11 +31,29 @@ function RecruiterProfile() {
 
   console.log(profile)
 
+    const profileRef = useRef();
+  
+    const handleDownloadScreenshot = () => {
+      if (!profileRef.current) return;
+  
+  domtoimage.toPng(profileRef.current, {
+    bgcolor: "#f4f6f9", 
+  })
+  .then((dataUrl) => {
+    const link = document.createElement("a");
+    link.download = "profile.png";
+    link.href = dataUrl;
+    link.click();
+  })
+  .catch((err) => console.log("Screenshot Error:", err));
+    };
+  
+
   return (
     <>
       <MainNav />
       <br /><br /><br />
-      <div className="profile-wrapper">
+      <div className="profile-wrapper" style={{ backgroundColor: "#f4f6f9" }} ref={profileRef}>
 
         {/* HEADER */}
         <div className="profile-header">
@@ -94,6 +116,10 @@ function RecruiterProfile() {
             </div>
           </div>
 
+          <div className="section-card">
+            <div className="section-title">Download Profile</div>
+            <p className="mt-2 text-success" style={{cursor : `pointer`,textDecoration : `underline`}} onClick={handleDownloadScreenshot}><FileDownloadIcon/>Dowload Profile</p>
+          </div>
         </div>
       </div>
 
