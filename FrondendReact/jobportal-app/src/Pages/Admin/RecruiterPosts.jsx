@@ -176,7 +176,7 @@ function RecruiterPosts(){
                 {/* Top */}
                 <div className="d-flex gap-3">
                   <img
-                    src={p?.profileImage?.url}
+                    src={p?.profileImage?.url || "default-profile.jpg"}
                     alt="profile"
                     className="profile-img"
                   />

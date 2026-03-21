@@ -68,7 +68,7 @@ function UserPage() {
 
             <div className="profile-header">
               <img
-                src={UserDetails?.profileImage?.url}
+                src={UserDetails?.profileImage?.url || "default-profile.jpg"}
                 className="profile-avatar"
                 alt="user-img"
               />

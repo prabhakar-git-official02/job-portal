@@ -173,7 +173,7 @@ Explore talented candidates and their professional profiles
                     <tr key={j._id}>
                       <td className="user-cell">
                         <img
-                          src={j?.profileImage?.url}
+                          src={j?.profileImage?.url || "default-profile.jpg"}
                           className="profile-img-table"
                           alt="profile"
                         />
@@ -348,7 +348,7 @@ Explore talented candidates and their professional profiles
               <div key={j._id} className="mobile-user-card">
                 <div className="mobile-user-header">
                   <img
-                    src={j?.profileImage?.url}
+                    src={j?.profileImage?.url || "default-profile.jpg"}
                     className="profile-img-mobile"
                     alt="profile"
                   />

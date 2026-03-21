@@ -210,7 +210,7 @@ Discover recruiters and connect with top companies
             <td className="user-cell">
 
               <img
-                src={r?.profileImage?.url}
+                src={r?.profileImage?.url || "default-profile.jpg"}
                 className="profile-img-table"
                 alt="profile"
               />
@@ -300,7 +300,7 @@ Discover recruiters and connect with top companies
         <div className="mobile-user-header">
 
           <img
-            src={r?.profileImage?.url}
+            src={r?.profileImage?.url || "default-profile.jpg"}
             className="profile-img-mobile"
             alt="profile"
           />
