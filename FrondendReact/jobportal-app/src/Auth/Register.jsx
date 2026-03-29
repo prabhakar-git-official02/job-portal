@@ -13,6 +13,8 @@ function Register() {
   const [Alertmsg, setAlertmsg] = useState(null);
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState("");
+
+
   const register = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -33,14 +35,16 @@ function Register() {
       });
       return;
     }
-    if (role.length === 0) {
-      setLoading(false);
-      setAlertmsg({
-        msg: "Role Required!",
-        id: Date.now(),
-      });
-      return;
-    }
+
+if (!role || role.trim() === "") {
+  setLoading(false);
+  setAlertmsg({
+    msg: "Role Required!",
+    id: Date.now(),
+  });
+  return;
+}
+
     if (email.trim() === "") {
       setLoading(false);
       setAlertmsg({

@@ -20,8 +20,7 @@ import DrawerJobseeker from './DrawerJobseeker';
 import { adminProfileThunk } from '../Thunks/adminProfileThunk';
 import { recruiterProfileThunk } from '../Thunks/recruiterProfileThunk';
 import { jobseekerProfileThunk } from '../Thunks/jobseekerProfileThunk';
-import { showAlert } from '../Scripts/Alert';
-
+import Drawer from './Drawer';
 
 export default function MainNav({Navbg,Iconbg,textColor}) {
 
@@ -105,9 +104,6 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
   }
 
   const handleSidebar = () => {
-    if(!user && !sessionStorage.getItem("tabSession")){
-      return showAlert("Warning","The sidebar is enabled after login","warning")
-    }
     setSidebarOpen(true)
   }
 
@@ -173,7 +169,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
     user?.roleData === "user"?<DrawerJobseeker visible={sidebarOpen} hide={setSidebarOpen}/>:
     user?.roleData === "recruiter" ? <DrawerRecruiter  visible={sidebarOpen} hide={setSidebarOpen}/> :
     user?.roleData === "admin" ? <DrawerAdmin visible={sidebarOpen} hide={setSidebarOpen}/> :
-     null
+     <Drawer visible={sidebarOpen} hide={setSidebarOpen}/>
     }
     <style>{`
     .premium-btn {
