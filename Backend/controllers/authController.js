@@ -6,10 +6,13 @@ import { OAuth2Client } from "google-auth-library";
 import LoginActivity from "../models/UserLoginActivity.js";
 import sgMail from "@sendgrid/mail";
 
+
 // register
 export const setRegister = async (req, res) => {
   try {
     const { email, password, role } = req.body;
+
+    console.log("register-details", email, password, role);
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -31,7 +34,7 @@ export const setRegister = async (req, res) => {
       role,
     });
 
-    return res.status(201).json({
+    res.status(201).json({
       msg: "Registered Successfully",
       data: true,
       authorizedType: "local",
@@ -40,6 +43,8 @@ export const setRegister = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
+
 
 // Login
 export const Login = async (req, res) => {
@@ -57,7 +62,7 @@ export const Login = async (req, res) => {
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.status(404).json({ msg: "Login Failed" });
+    return res.status(404).json({ msg: "UnAuthorized User" });
   }
   try {
     const Accesstoken = jwt.sign(
@@ -83,18 +88,18 @@ export const Login = async (req, res) => {
     );
 
     res.cookie("accessToken", Accesstoken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
       maxAge: 5 * 60 * 1000, // 15 mins
     });
 
     res.cookie("refreshToken", RefreshToken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -160,7 +165,6 @@ export const EmailExist = async (req, res) => {
   }
 };
 
-
 // google login
 export const googleAuthLogin = async (req, res) => {
   try {
@@ -211,18 +215,18 @@ export const googleAuthLogin = async (req, res) => {
     );
 
     res.cookie("accessToken", AccessToken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", RefreshToken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -244,8 +248,6 @@ export const googleAuthLogin = async (req, res) => {
   }
 };
 
-
-
 // Refresh Token
 export const RefreshToken = async (req, res) => {
   try {
@@ -255,10 +257,7 @@ export const RefreshToken = async (req, res) => {
       return res.sendStatus(401);
     }
 
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_JWT_SECRET
-    );
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_JWT_SECRET);
 
     const newAccessToken = jwt.sign(
       {
@@ -268,14 +267,14 @@ export const RefreshToken = async (req, res) => {
         authProvider: decoded.authProvider,
       },
       process.env.ACCESS_JWT_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "15m" },
     );
 
     res.cookie("accessToken", newAccessToken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
       maxAge: 15 * 60 * 1000,
     });
 
@@ -284,8 +283,6 @@ export const RefreshToken = async (req, res) => {
     return res.sendStatus(403);
   }
 };
-
-
 
 // Forget password
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -297,12 +294,15 @@ export const ForgetPassword = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ msg: "User Not Found" });
-    if (user.authorizedType === "google") 
+    if (user.authorizedType === "google")
       return res.status(400).json({ msg: "This account uses Google Sign-In" });
 
     // Generate reset token
     const resetToken = crypto.randomBytes(32).toString("hex");
-    user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    user.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
     user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hour
     await user.save();
 
@@ -310,17 +310,17 @@ export const ForgetPassword = async (req, res) => {
     console.log("Generated Reset URL:", reseturl);
 
     // Send email via SendGrid
-const msg = {
-  to: email,
-  from: process.env.SENDGRID_VERIFIED_SENDER,
-  replyTo: process.env.SENDGRID_VERIFIED_SENDER,
-  subject: "Reset Your Password",
-  text: `Hello ${email},\nClick here to reset: ${reseturl}`,
-  html: `<p>Hello ${email},</p>
+    const msg = {
+      to: email,
+      from: process.env.SENDGRID_VERIFIED_SENDER,
+      replyTo: process.env.SENDGRID_VERIFIED_SENDER,
+      subject: "Reset Your Password",
+      text: `Hello ${email},\nClick here to reset: ${reseturl}`,
+      html: `<p>Hello ${email},</p>
          <p>Click the link below to reset your password:</p>
          <p><a href="${reseturl}">Reset Password</a></p>
-         <p>Link expires in 1 hour.</p>`
-};
+         <p>Link expires in 1 hour.</p>`,
+    };
 
     console.log("Sending email...");
     await sgMail.send(msg);
@@ -376,9 +376,7 @@ export const privateMsg = (req, res) => {
   });
 };
 
-
-
-// Login Refresh
+// Me
 export const Me = async (req, res) => {
   try {
     const { userId } = req.user;
@@ -392,6 +390,7 @@ export const Me = async (req, res) => {
     res.status(200).json({
       user: {
         isLogin: true,
+        
         roleData: user.role,
         email: user.email,
         name: user.name,
@@ -410,17 +409,17 @@ export const Me = async (req, res) => {
 export const Logout = async (req, res) => {
   try {
     res.clearCookie("accessToken", {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/"
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
     });
 
     res.clearCookie("refreshToken", {
-  httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/"
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
     });
 
     res.status(200).json({

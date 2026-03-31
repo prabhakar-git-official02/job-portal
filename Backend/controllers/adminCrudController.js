@@ -6,7 +6,6 @@ import Recruiter from '../models/RecruiterProfileShema.js'
 import Notification from '../models/NotificationSchema.js'
 import User from '../models/UsersShema.js'
 
-
 // Posted job Update
 export const Post_Update = async(req,res) => {
     const {id} = req.params
@@ -230,3 +229,4 @@ export const Post_Status_Update = async(req,res) => {
     res.status(500).json({msg : err.message})
   }
 }
+

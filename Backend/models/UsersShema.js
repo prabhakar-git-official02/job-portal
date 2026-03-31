@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
       sparse: true, 
     },
 
-      authProvider: {
+   authProvider: {
       type: String,
       enum: ["google", "local"],
     },
