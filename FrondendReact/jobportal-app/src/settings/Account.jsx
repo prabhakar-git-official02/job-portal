@@ -5,7 +5,7 @@ import { jobseekerProfileThunk } from "../Thunks/jobseekerProfileThunk";
 import { recruiterProfileThunk } from "../Thunks/recruiterProfileThunk";
 import { adminProfileThunk } from "../Thunks/adminProfileThunk";
 import { LoginActivityThunk } from "../Thunks/LoginActivityThunk";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 function Account() {
   const dispatch = useDispatch();
@@ -27,10 +27,10 @@ function Account() {
   }, [user, dispatch]);
 
   const JobseekerProfile = useSelector(
-    (state) => state.jobseekerProfile.profile
+    (state) => state.jobseekerProfile.profile,
   );
   const RecruiterProfile = useSelector(
-    (state) => state.recruiterProfile.profile
+    (state) => state.recruiterProfile.profile,
   );
   const AdminProfile = useSelector((state) => state.adminProfile.profile);
 
@@ -38,94 +38,103 @@ function Account() {
     user?.roleData === "admin"
       ? AdminProfile
       : user?.roleData === "recruiter"
-      ? RecruiterProfile
-      : user?.roleData === "user"
-      ? JobseekerProfile
-      : null;
+        ? RecruiterProfile
+        : user?.roleData === "user"
+          ? JobseekerProfile
+          : null;
 
-          useEffect(() => {
-              dispatch(LoginActivityThunk())
-          },[user,dispatch])
-      
-         const date = new Date(user?.loginActivity).toLocaleString("en-IN");
-      
-         const loginHistory = useSelector(state => state.loginActivity.loginHistory)
-      
-          console.log(`User Data`,user)
-      
-          console.log(`refreshTime`,date)
-      
-          const lastLogin = loginHistory?.loginHistory[loginHistory?.loginHistory.length-1]
-          const LastLogin =  new Date(lastLogin).toLocaleString("en-IN")
+  useEffect(() => {
+    dispatch(LoginActivityThunk());
+  }, [user, dispatch]);
 
-return (
-  <>
-    <div className="">
-      <div className="account-header">
-        <h1><AccountCircleIcon sx={{ fontSize: 50 }}/></h1>
-        <h2>Account  Overview</h2>
+  const date = new Date(user?.loginActivity).toLocaleString("en-IN");
+
+  const loginHistory = useSelector((state) => state.loginActivity.loginHistory);
+
+  console.log(`User Data`, user);
+
+  console.log(`refreshTime`, date);
+
+  const lastLogin =
+    loginHistory?.loginHistory[loginHistory?.loginHistory.length - 1];
+  const LastLogin = new Date(lastLogin).toLocaleString("en-IN");
+
+
+  return (
+    <>
+      <div className="">
+        <div className="account-header">
+          <h1>
+            <AccountCircleIcon sx={{ fontSize: 50 }} />
+          </h1>
+          <h2>Account Overview</h2>
+        </div>
+
+        <div className="account-body">
+          {/* Profile Image & Name */}
+          <div className="profile-section">
+            <img
+              src={
+                user?.picture ??
+                Profile?.profileImage?.url ??
+                "default-profile.jpg"
+              }
+              alt="profile"
+              className="profile-image"
+            />
+            <h3>
+              {user?.name
+                ? user.name
+                : Profile?.firstName && Profile?.lastName
+                  ? Profile?.firstName + " " + Profile?.lastName
+                  : null}
+            </h3>
+          </div>
+
+          {/* Info Section */}
+          <div className="info-grid">
+            <div>
+              <label>Role</label>
+              <p>{user?.roleData ? user?.roleData : "Role Not Found"}</p>
+            </div>
+            <div>
+              <label>Email</label>
+              <p>{user?.email ? user?.email : "Email Not Found"}</p>
+            </div>
+            <div>
+              <label>Authentication</label>
+              <p>
+                {user?.authProvider
+                  ? user?.authProvider
+                  : "Authprovider Not Found"}
+              </p>
+            </div>
+          </div>
+
+          {/* Login Activity */}
+          <div className="login-section">
+            <h3>Login Activity</h3>
+            <div className="login-info">
+              <p>
+                <strong>Status:</strong>{" "}
+                <span className={user ? "active" : "inactive"}>
+                  {user ? "User Logged" : "User not Logged"}
+                </span>
+              </p>
+              <p>
+                <strong>Last Login:</strong>{" "}
+                {LastLogin ? LastLogin : "Last login Not Found"}
+              </p>
+              <p>
+                <strong>Login Refresh:</strong>{" "}
+                {date ? date : "Last Referesh not Found"}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="account-body">
-
-        {/* Profile Image & Name */}
-        <div className="profile-section">
-<img
-  src={
-    user?.picture ??
-    Profile?.profileImage?.url ??
-    "default-profile.jpg"
-  }
-  alt="profile"
-  className="profile-image"
-/>
-          <h3>
-            {user?.name
-              ? user.name
-              : Profile?.firstName && Profile?.lastName
-              ? Profile?.firstName + " " + Profile?.lastName
-              : null}
-          </h3>
-        </div>
-
-        {/* Info Section */}
-        <div className="info-grid">
-          <div>
-            <label>Role</label>
-            <p>{user?.roleData ? user?.roleData  : "Role Not Found"}</p>
-          </div>
-          <div>
-            <label>Email</label>
-            <p>{user?.email ? user?.email : "Email Not Found"}</p>
-          </div>
-          <div>
-            <label>Authentication</label>
-            <p>{user?.authProvider ? user?.authProvider : "Authprovider Not Found"}</p>
-          </div>
-        </div>
-
-        {/* Login Activity */}
-        <div className="login-section">
-          <h3>Login Activity</h3>
-          <div className="login-info">
-            <p>
-              <strong>Status:</strong>{" "}
-              <span className={user ? "active" : "inactive"}>
-                {user ? "User Logged" : "User not Logged"}
-              </span>
-            </p>
-            <p>
-              <strong>Last Login:</strong> {LastLogin ? LastLogin : "Last login Not Found"}
-            </p>
-            <p>
-              <strong>Login Refresh:</strong> {date ? date : "Last Referesh not Found"}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <style>{`
+      <style>{`
       .account-wrapper {
         width: 100%;
         max-width: 900px;
@@ -243,8 +252,8 @@ return (
         }
       }
     `}</style>
-  </>
-);
+    </>
+  );
 }
 
 export default Account;

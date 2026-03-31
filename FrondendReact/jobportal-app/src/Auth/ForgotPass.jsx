@@ -270,7 +270,7 @@ if (response) {
 
   color: white;
 
-  font-size: 26px;
+  font-size: 20px;
 
   font-weight: 600;
 

@@ -26,6 +26,7 @@ useEffect(() => {
     if(AuthStatus === 500) return navigate('/networkError');
 
     if(!checked) return;
+    
 
     if(!user){
       navigate('/login')
