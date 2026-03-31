@@ -162,7 +162,6 @@ function InterviewCall() {
           Applicant Intrest : {Interview?.applicantResult}
         </span>
 
-
         <span className={`status-chip ${
           Interview?.interviewStatus === "completed"
           ? "success"
@@ -172,8 +171,8 @@ function InterviewCall() {
         }`}>
           Interview Status : {Interview?.interviewStatus}
         </span>
-
       </div>
+      <div><p><span className="text-danger">Cancelled Reason:</span> <span>{Interview?.interviewCancelledReason}</span></p></div>
 
 
      {Interview?.applicantResult === "pending" ?

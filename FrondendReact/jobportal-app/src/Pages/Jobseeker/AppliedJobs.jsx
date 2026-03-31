@@ -97,7 +97,7 @@ console.log(Applicant)
   ];
 
  const FilterJobStatus = [
-  "Shortlisted","Rejected","Pending","All Posts"
+  "Shortlisted","Rejected","Applied","All Posts"
   ]
 
   const filteredPosts = Applicant?.populateData?.filter((p) => {
