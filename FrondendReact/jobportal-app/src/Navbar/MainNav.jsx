@@ -33,6 +33,8 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
 
   const user = useSelector((state) => state.auth.user);
 
+  const AuthStatus = useSelector((state) => state.auth.status)
+
   console.log(user);
 
 
@@ -71,12 +73,12 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
   const handleProfile = () => {
     setAnchorEl(null)
 
-    if(!user && !sessionStorage.getItem("tabSession")){
+    if(!user && AuthStatus!==500){
      return navigate('/login')
     }
 
-    if(!user && sessionStorage.getItem("tabSession")){
-      return navigate('/Loading')
+    if(!user && AuthStatus === 500){
+      return navigate('/networkError')
     }
 
     if(user?.roleData === "admin"){
@@ -156,7 +158,7 @@ export default function MainNav({Navbg,Iconbg,textColor}) {
               >
                 
                 <MenuItem onClick={() => navigate('/')}>Home</MenuItem>
-                 {!user && !sessionStorage.getItem("tabSession") ? <MenuItem  onClick={handleLogin}>Login</MenuItem> : null}
+                 {!user && AuthStatus!==500 ? <MenuItem  onClick={handleLogin}>Login</MenuItem> : null}
                 <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={handleSettings}>Settings</MenuItem>
               </Menu>

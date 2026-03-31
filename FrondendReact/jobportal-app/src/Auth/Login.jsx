@@ -70,10 +70,6 @@ function Login() {
           showAlert("Error", err?.response?.data?.msg);
         }
         dispatch(loginSuccess(response.data.user));
-        sessionStorage.setItem(
-          "tabSession",
-          "active",
-        );
         setEmail("");
         setPassword("");
         setAlertmsg(null);
@@ -141,6 +137,8 @@ function Login() {
                   />
                 </div>
 
+                 {loading && <p className="d-flex justify-content-center mt-5"><ProgressLoad textColor={`text-light`} trigger={1} msg="Please wait..."  setSize={`20px`}/></p>}
+
                 <ErrorAlert
                   alertMsg={Alertmsg}
                   buttonName={loading ? "Signing in..." : "Sign in"}
@@ -149,9 +147,6 @@ function Login() {
                 />
 
               </form>
-
-              {loading && <p className="d-flex justify-content-center mt-3"><ProgressLoad textColor={`text-light`} trigger={1} msg="Please wait..."  setSize={`20px`}/></p>}
-             
 
               <div className="ultra-footer">
                 <span style={{cursor : `pointer`}} onClick={() => navigate("/forgotPassword")}>

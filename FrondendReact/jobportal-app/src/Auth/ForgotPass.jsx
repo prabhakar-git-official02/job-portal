@@ -112,9 +112,13 @@ if (response) {
 
           </Box>
 
+          {loading && email && (
+            <div className="mt-5 d-flex justify-content-center">
+              <ProgressLoad trigger={1} textColor={`text-light`} msg="Sending..." setSize="20px"/>
+            </div>
+          )}
 
           <div className="mt-3">
-
             <ErrorAlert
               alertMsg={Alertmsg}
               buttonName={"Send Reset Link"}
@@ -124,14 +128,6 @@ if (response) {
             />
 
           </div>
-
-
-          {loading && email && (
-            <div className="mt-3 d-flex justify-content-center">
-              <ProgressLoad trigger={1} textColor={`text-light`} msg="Sending..." setSize="20px"/>
-            </div>
-          )}
-
         </div>
 
       </div>

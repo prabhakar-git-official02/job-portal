@@ -57,6 +57,7 @@ import AllJobseekers from "./Pages/Admin/AllJobseekers.jsx";
 import AllAdmin from "./Pages/Admin/AllAdmin.jsx";
 import Careers from "./Pages/Careers.jsx";
 import LearnMore from "./Pages/LearnMore.jsx";
+import NetworkError from "./Pages/NetworkError.jsx";
 
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
           <Route path="/Loading" element={<LoadingPage />} />
           <Route path="/notification" element={<PrivateLogin><Notifications /></PrivateLogin>} />
           <Route path="/platformJobs" element={<PlatformJobs />} />
+          <Route path="networkError" element={<NetworkError/>}/>
 
 
           {/* Settings */}

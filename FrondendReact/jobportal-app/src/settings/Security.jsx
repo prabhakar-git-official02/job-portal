@@ -181,7 +181,6 @@ const SignOut = async () => {
 
     if (response) {
       setCaptchaLoading(false)
-      sessionStorage.clear();
       window.location.href = "/"
     }
 

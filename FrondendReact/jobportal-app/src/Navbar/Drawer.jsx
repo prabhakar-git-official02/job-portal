@@ -11,14 +11,25 @@ import { useNavigate } from "react-router-dom";
 import { Divider } from "@mui/material";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LoginIcon from '@mui/icons-material/Login';
-
+import { useSelector,useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { authThunk } from "../Thunks/authThunk";
 function Drawer({ visible, hide }){
   const navigate = useNavigate()
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(authThunk())
+  },[dispatch])
+
+  const user = useSelector((state) => state.auth.user)
+
+  const AuthStatus = useSelector((state) => state.auth.status)
 
   const toggleDrawer = (newOpen ) => () => {
     hide(newOpen);
   };
-
 
       const DrawerList = (
     <>
@@ -55,6 +66,7 @@ function Drawer({ visible, hide }){
           </ListItem>
         </List>
 
+        {!user && AuthStatus!==500 ? 
         <List onClick={() => navigate("/login")}>
           <ListItem disablePadding>
             <ListItemButton>
@@ -64,9 +76,8 @@ function Drawer({ visible, hide }){
               <ListItemText primary={`Login`} />
             </ListItemButton>
           </ListItem>
-        </List>
-
-
+        </List> : null
+        }
 
         <Divider/>
         <List onClick={() => navigate("/setting")}>

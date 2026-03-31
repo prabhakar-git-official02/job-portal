@@ -39,11 +39,6 @@ function Home() {
     dispatch(authThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!sessionStorage.getItem("tabSession")) {
-      dispatch(ErraseLoginThunk());
-    }
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(allPostsThunk());

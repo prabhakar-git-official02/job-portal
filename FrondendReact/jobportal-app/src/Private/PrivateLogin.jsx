@@ -4,69 +4,39 @@ import { useNavigate } from "react-router-dom";
 import { authThunk } from "../Thunks/authThunk";
 import LoadingPage from "./LoadingPage";
 
-
 function PrivateLogin({ children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
+  const AuthStatus = useSelector((state) => state.auth.status)
+  const [checked,setChecked] = useState(false)
 
-  const [loading, setLoading] = useState(true);        
-  const [authChecked, setAuthChecked] = useState(false); 
-  const [error, setError] = useState(null);         
+   console.log("AuthStatus",AuthStatus)
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        await dispatch(authThunk());
-        setError(null); 
-      } catch (err) {
-        console.log("PrivateLogin-AuthError:", err.message);
-        setError("Network or auth error. Retrying...");
-      } finally {
-        setAuthChecked(true); 
-        setLoading(false);
-      }
-    };
-    fetchUser();
-  }, [dispatch]);
+useEffect(() => {
+  const checkAuth = async () => {
+    await dispatch(authThunk());
+    setChecked(true);
+  };
+  checkAuth();
+}, [dispatch]);
 
   useEffect(() => {
-    if (authChecked && !loading && !error) {
-      if (!user || !sessionStorage.getItem("tabSession")) {
-        navigate("/login");
-      }
+
+    if(AuthStatus === 500) return navigate('/networkError');
+
+    if(!checked) return;
+
+    if(!user){
+      navigate('/login')
     }
-  }, [user, authChecked, loading, error, navigate]);
+  },[AuthStatus,checked,navigate,user]);
 
-  if (loading) {
-    return (
-     <LoadingPage/>
-    );
-  }
+  if(!checked) return <LoadingPage/>;
 
-  if (error) {
-    return (
-      <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-        <p className="text-danger mb-3">{error}</p>
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            setLoading(true);
-            setAuthChecked(false);
-            setError(null);
-          }}
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
+  if(!user) return null
 
-  if (user && sessionStorage.getItem("tabSession")) {
-    return children;
-  }
-
-  return null;
+  return<>{children}</>
 }
 
 export default PrivateLogin;

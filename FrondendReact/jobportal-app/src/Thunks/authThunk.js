@@ -1,5 +1,5 @@
 import api from "../api/axios";
-import { loginSuccess,logout} from "../Redux/authSlice";
+import { loginSuccess,logout,IsStatus} from "../Redux/authSlice";
 import { IsTokenSuccess,IsTokenFailure } from "../Redux/ResetTokenSlice";
 import { showAlert } from "../Scripts/Alert";
 
@@ -12,11 +12,14 @@ export const authThunk = () => {
             )
             if(response){
             dispatch(loginSuccess(response?.data?.user))
+            dispatch(IsStatus(response?.status || 200))
             return response
             }
         }catch(err){
-            dispatch(logout(err.response?.data?.msg))
+            dispatch(logout(err?.response?.data?.msg))
+            dispatch(IsStatus(err?.response?.status || 500))
             console.log("Authentication-Error",err.response?.data?.msg)
+            return null; 
         }
     }
 }

@@ -11,173 +11,152 @@ import ProgressLoad from "../Components/ProgressLoad";
 import { authThunk } from "../Thunks/authThunk";
 import { useDispatch } from "react-redux";
 
-
 function ResetPass() {
-    const [newPassword, setNewPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const [SavebtnError, setSavebtnError] = useState(null)
-    const [loading,setLoading] = useState(false)
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [SavebtnError, setSavebtnError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(authThunk())
-    },[dispatch])
+  useEffect(() => {
+    dispatch(authThunk());
+  }, [dispatch]);
 
+  const { token } = useParams();
+  console.log(token);
+  // Reset password
+  const ResetPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-
-    const { token } = useParams()
-    console.log(token)
-    // Reset password
-    const ResetPassword = async (e) => {
-        e.preventDefault();
-        setLoading(true)
-
-        if (newPassword.trim() === "") {
-            setSavebtnError({
-                msg: "New Password Required!",
-                id: Date.now(),
-            })
-            setLoading(false)
-            return
-        }
+    if (newPassword.trim() === "") {
+      setSavebtnError({
+        msg: "New Password Required!",
+        id: Date.now(),
+      });
+      setLoading(false);
+      return;
+    }
 
     if (confirmPassword.trim() === "") {
-            setSavebtnError({
-                msg: "Confirm Password Required!",
-                id: Date.now(),
-            })
-            setLoading(false)
-            return
-        }
-
-        if (newPassword !== confirmPassword) {
-                        setSavebtnError({
-                msg: "New Password & Confirm Password does not matched!",
-                id: Date.now(),
-            })
-            setLoading(false)
-            return
-        }
-try{
-        const response = await api.post(`/auth/reset-password/${token}`,
-            {
-                password: newPassword,
-            },
-            {
-                withCredentials: true,
-            }
-        );
-        if (response) {
-            showAlert("Success", "Password Reserted Successfully", "success")
-            setLoading(false)
-            setNewPassword("")
-            setConfirmPassword("")
-             navigate("/login")
-            return;
-
-        }
-    } catch (err) {
-        showAlert("Error", err.response?.data?.msg, "error")
-        setLoading(false)
+      setSavebtnError({
+        msg: "Confirm Password Required!",
+        id: Date.now(),
+      });
+      setLoading(false);
+      return;
     }
-};
 
-return (
-<div className="container-fluid m-0 p-0">
-    <MainNav Navbg={`#1e293b`}/>
-    <div className="row m-0 d-flex align-items-center">
-  <div className="reset-container">
+    if (newPassword !== confirmPassword) {
+      setSavebtnError({
+        msg: "New Password & Confirm Password does not matched!",
+        id: Date.now(),
+      });
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await api.post(
+        `/auth/reset-password/${token}`,
+        {
+          password: newPassword,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+      if (response) {
+        showAlert("Success", "Password Reserted Successfully", "success");
+        setLoading(false);
+        setNewPassword("");
+        setConfirmPassword("");
+        navigate("/login");
+        return;
+      }
+    } catch (err) {
+      showAlert("Error", err.response?.data?.msg, "error");
+      setLoading(false);
+    }
+  };
 
-    <div className="reset-wrapper">
+  return (
+    <div className="container-fluid m-0 p-0">
+      <MainNav Navbg={`#1e293b`} />
+      <div className="row m-0 d-flex align-items-center">
+        <div className="reset-container">
+          <div className="reset-wrapper">
+            {/* LEFT SLOGAN */}
+            <div className="reset-left">
+              <div className="reset-brand">
+                <h1>
+                  Create your new
+                  <br />
+                  <span>Secure Password</span>
+                </h1>
 
-      {/* LEFT SLOGAN */}
-      <div className="reset-left">
+                <p>
+                  Your security is our priority.
+                  <br />
+                  Set a strong password to protect your account and continue
+                  your journey safely.
+                </p>
+              </div>
+            </div>
 
-        <div className="reset-brand">
+            {/* RIGHT FORM */}
+            <div className="reset-right">
+              <div className="reset-card">
+                <div className="reset-title">Reset Password</div>
 
-          <h1>
-            Create your new
-            <br/>
-            <span>Secure Password</span>
-          </h1>
+                <div className="reset-sub">Enter your new password below</div>
 
-          <p>
-            Your security is our priority.
-            <br/>
-            Set a strong password to protect your account
-            and continue your journey safely.
-          </p>
+                <Box className="reset-input">
+                  <TextField
+                    fullWidth
+                    type="password"
+                    label="New Password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                </Box>
 
-        </div>
+                <Box className="reset-input">
+                  <TextField
+                    fullWidth
+                    type="password"
+                    label="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </Box>
 
-      </div>
+                {loading && newPassword && confirmPassword && (
+                  <div className="mt-5 d-flex justify-content-center">
+                    <ProgressLoad
+                      trigger={1}
+                      textColor={`text-light`}
+                      msg="New Password Resetting..."
+                      setSize="20px"
+                    />
+                  </div>
+                  
+                )}
 
-
-      {/* RIGHT FORM */}
-      <div className="reset-right">
-
-        <div className="reset-card">
-
-          <div className="reset-title">
-            Reset Password
+                <ErrorAlert
+                  alertMsg={SavebtnError}
+                  buttonName={"Save Password"}
+                  buttonVariant={"contained"}
+                  buttonClass={"reset-btn"}
+                  handlefn={ResetPassword}
+                />
+              </div>
+            </div>
           </div>
-
-          <div className="reset-sub">
-            Enter your new password below
-          </div>
-
-
-          <Box className="reset-input">
-
-            <TextField
-              fullWidth
-              type="password"
-              label="New Password"
-              value={newPassword}
-              onChange={(e)=>setNewPassword(e.target.value)}
-            />
-
-          </Box>
-
-
-          <Box className="reset-input">
-
-            <TextField
-              fullWidth
-              type="password"
-              label="Confirm Password"
-              value={confirmPassword}
-              onChange={(e)=>setConfirmPassword(e.target.value)}
-            />
-
-          </Box>
-
-
-          <ErrorAlert
-            alertMsg={SavebtnError}
-            buttonName={"Save Password"}
-            buttonVariant={"contained"}
-            buttonClass={"reset-btn"}
-            handlefn={ResetPassword}
-          />
-
-                    {loading && newPassword  && confirmPassword && (
-                      <div className="mt-3 d-flex justify-content-center">
-                        <ProgressLoad trigger={1} textColor={`text-light`} msg="Sending..." setSize="20px"/>
-                      </div>
-                    )}
-
         </div>
-
       </div>
-
-    </div>
-
-  </div>
-    </div>
-    <style>{`
+      <style>{`
     /* CONTAINER */
 .reset-container {
 
@@ -411,8 +390,8 @@ return (
 
 }
     `}</style>
-</div>
-);
+    </div>
+  );
 }
 
 export default ResetPass;

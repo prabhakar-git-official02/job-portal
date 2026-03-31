@@ -6,6 +6,7 @@ const authSlice = createSlice({
         emailExist : null,
         emailRole:null,
         user : null,
+        status : null
     },
     reducers : {
         loginSuccess : (state,action) => {
@@ -21,9 +22,12 @@ const authSlice = createSlice({
         },
         EmailExistRole : (state,action) => {
             state.emailRole = action.payload
+        },
+        IsStatus : (state,action) => {
+            state.status = action.payload
         }
     }
 })
 
-export const {loginSuccess,logout,EmailExistAction,EmailExistRole} = authSlice.actions
+export const {loginSuccess,logout,EmailExistAction,EmailExistRole,IsStatus} = authSlice.actions
 export default authSlice.reducer

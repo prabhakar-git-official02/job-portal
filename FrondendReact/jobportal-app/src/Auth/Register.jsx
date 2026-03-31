@@ -160,15 +160,14 @@ if (!role || role.trim() === "") {
                 />
               </div>
 
-              {/* BUTTON */}
+                {loading && <p className="d-flex justify-content-center mt-5"><ProgressLoad textColor={`text-light`} trigger={1} msg="Please wait..."  setSize={`20px`}/></p>}
+
               <ErrorAlert
                 alertMsg={Alertmsg}
                 buttonName={loading ? "Creating..." : "Create account"}
                 buttonClass="ureg-btn"
                 handlefn={register}
               />
-
-              {loading && <p className="d-flex justify-content-center mt-3"><ProgressLoad textColor={`text-light`} trigger={1} msg="Please wait..."  setSize={`20px`}/></p>}
 
               <div className="ureg-footer">
                 <span>Already registered?</span>
