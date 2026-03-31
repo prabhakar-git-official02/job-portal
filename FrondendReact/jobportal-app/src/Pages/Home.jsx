@@ -8,8 +8,6 @@ import { adminProfileThunk } from "../Thunks/adminProfileThunk";
 import { applicantThunk } from "../Thunks/applicantThunk";
 import { allPostsThunk } from "../Thunks/allPostsThunk";
 import { useNavigate } from "react-router-dom";
-import { ErraseLoginThunk } from "../Thunks/ErraseLoginThunk";
-
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import WorkIcon from "@mui/icons-material/Work";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
