@@ -159,6 +159,10 @@ function DialogboxApplyJob({ btnName,JobId}) {
   const handleJobApply = () => {
     try{
       setLoading(true)
+
+    if(!JobseekerProfile){
+      return navigate('/jobseekerProfileForm')
+    }
     if (
       qualification.trim() === "" ||
       experience === 0 || experience === "" ||

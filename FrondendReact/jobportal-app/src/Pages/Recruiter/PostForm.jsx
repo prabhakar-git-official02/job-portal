@@ -48,6 +48,9 @@ function PostForm() {
   const ImagePublicId = useSelector((state) => state.cloudinary.ImagePublicId);
   const FileError = useSelector((state) => state.cloudinary.error)
 
+  const Recruiterprofile = useSelector(
+    (state) => state.recruiterProfile.profile,
+  );
 
   useEffect(() => {
     if(FileError){
@@ -112,8 +115,15 @@ function PostForm() {
 
 
   const handleSubmit = useCallback( async (e) => {
-  
+
+    if(!Recruiterprofile){
+      return navigate('/recruiterProfileForm');
+    }
+
+    setLoad(true)
+
     try {
+
     const ProfileImageObj = {
     url: ImageUrl,
     public_id: ImagePublicId,
@@ -176,7 +186,8 @@ function PostForm() {
     jobTitle,
     navigate,
     salary,
-    storeSkills
+    storeSkills,
+    Recruiterprofile
   ])
 
   useEffect(() => {
@@ -382,9 +393,9 @@ function PostForm() {
       {/* Actions */}
       <div className="action-section">
 
-        {load && !ImageUrl && (
+        {load && (
           <div className="d-flex justify-content-center">
-            <ProgressLoad trigger={1} msg="Loading.." setSize="20px" />
+            <ProgressLoad trigger={1} msg="Posting.." setSize="20px" />
           </div>
         )}
 
