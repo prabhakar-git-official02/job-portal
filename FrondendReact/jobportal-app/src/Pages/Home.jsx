@@ -27,6 +27,7 @@ import ExploreIcon from '@mui/icons-material/Explore';
 import ContactEmergencyIcon from '@mui/icons-material/ContactEmergency';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LoginIcon from '@mui/icons-material/Login';
+import ProgressLoad from "../Components/ProgressLoad";
 
 function Home() {
   const dispatch = useDispatch();
@@ -173,6 +174,7 @@ function Home() {
           </div>
         </div>
 
+        
         {/* trending job cards */}
         <div className="container py-5">
           <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
@@ -186,6 +188,7 @@ function Home() {
             </span>
           </div>
 
+          {!Posts?<p className="d-flex justify-content-center"><ProgressLoad trigger={1} setSize={`20px`} msg={'Finding Jobs..'} msgClass={`fs-5`}/></p>:
           <div className="row g-4">
             {Posts?.filter((post) => post?.status === "approved")?.slice(0, 8).map((post) => (
               <div key={post._id} className="col-lg-3 col-md-6">
@@ -239,7 +242,9 @@ function Home() {
               </div>
             ))}
           </div>
+}
         </div>
+          
 <div className="container-fluid bg-dark text-light p-5">
   <div className="row g-4 justify-content-lg-around">
     {/* About Us */}

@@ -15,7 +15,7 @@ import { savedJobsThunk, SavedJobsPostThunk } from "../Thunks/savedJobsThunk";
 
 import { timeAgo } from "../Components/timeago";
 import DropDown from "../Components/DropDown";
-
+import ProgressLoad from "../Components/ProgressLoad";
 function PlatformJobs() {
 
   const location = useLocation();
@@ -151,8 +151,9 @@ function PlatformJobs() {
         </div>
 
         {/* No Data */}
-
-        {!PlatformPost?.length ? (
+  {!PlatformPost?<p className="d-flex justify-content-center mt-5"><ProgressLoad trigger={1} setSize={`20px`} msg={'Finding Jobs..'} msgClass={`fs-5`}/></p>:
+  <div>
+  {PlatformPost?.length===0 ? (
 <div className="no-data-wrapper">
   <img
     src="nodata-image.avif"
@@ -311,7 +312,8 @@ function PlatformJobs() {
           </div>
 
         )}
-
+        </div>
+}
       </div>
 <style>{` 
   .no-data-wrapper {
