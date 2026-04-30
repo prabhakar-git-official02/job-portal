@@ -33,7 +33,6 @@ export const applyJobPostThunk = (JobId,userData) => {
 
         if(response){
             dispatch(applicantThunk())
-            showAlert("Success",response?.data?.msg,"success")
         }
     } catch(err){
         showAlert("Warning",err.response?.data?.msg,"warning")

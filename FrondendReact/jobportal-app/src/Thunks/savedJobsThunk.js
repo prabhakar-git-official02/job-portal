@@ -31,7 +31,6 @@ export const SavedJobsPostThunk = (SavedJob) => {
                 }
             )
             if(response){
-                showAlert("Success",response.data.msg,"success")
                 dispatch(savedJobsThunk())
                 return response
             }
@@ -50,7 +49,6 @@ export const SavedJobsRemoveThunk = (id) => {
                 {withCredentials : true}
             )
             if(response){
-                showAlert("Success","Removed from Saved","success")
                 dispatch(savedJobsThunk())
             }
         } catch(err){

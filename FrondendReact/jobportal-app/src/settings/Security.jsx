@@ -6,8 +6,8 @@ import { IsTokenSuccess, IsTokenFailure } from "../Redux/ResetTokenSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressLoad from "../Components/ProgressLoad";
 import SecurityIcon from '@mui/icons-material/Security';
-import Button from "@mui/material/Button";
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { Button } from "@mui/material";
+
 
 function Security() {
   const dispatch = useDispatch();
@@ -20,10 +20,10 @@ function Security() {
   const [resetAlertmsg, setResetAlertmsg] = useState("");
   const [forgetloading, setForgetLoading] = useState(false);
   const [resetloading, setResetLoading] = useState(false);
- const [captcha, setCaptcha] = useState(null);
- const [captchaIp,setCaptchaIp] = useState("")
- const [captchaLoading,setCaptchaLoading] = useState(false)
- const [captchaError,setCaptchaError] = useState(null)
+
+
+ const [logoutLoading,setLogoutLoading] = useState(false)
+
 
 
   const ResetLink = useSelector((state) => state.resetToken.token);
@@ -133,60 +133,27 @@ function Security() {
     }
   };
 
-  const generateCaptcha = () => {
-    try{
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let value = "";
-    for (let i = 0; i < 6; i++) {
-      value += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    setCaptcha(value);
-  }catch(err){
-    console.log("generateCaptcha-Error",err.message)
-  }
-  };
 
-  const getRandomColor = () => {
-    const colors = ["red", "blue", "green", "purple", "orange", "brown"];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
+
 
 // sign out
 const SignOut = async () => {
   try {
 
-    setCaptchaLoading(true)
-
-    if (captchaIp.trim() === "") {
-      setCaptchaError({
-        msg: 'Captcha Required',
-        id: Date.now()
-      })
-      setCaptchaLoading(false)
-      return
-    }
-
-    if (captchaIp.trim().toLowerCase() !== captcha.trim().toLowerCase()) {
-      setCaptchaError({
-        msg: 'Captcha not matched',
-        id: Date.now()
-      })
-      setCaptchaLoading(false)
-      return
-    }
+    setLogoutLoading(true)
 
     const response = await api.delete('/auth/logout', {
       withCredentials: true
     })
 
     if (response) {
-      setCaptchaLoading(false)
+      setLogoutLoading(false)
       window.location.href = "/"
     }
 
   } catch (err) {
     showAlert("Error", "Sign Out Failed.Try again later", "error")
-    setCaptchaLoading(false)
+    setLogoutLoading(false)
     console.log(" SignOut-Error", err.response?.data?.msg)
   }
 }
@@ -298,55 +265,16 @@ const SignOut = async () => {
         <div className="lux-card danger">
 
           <h2>Secure Log Out</h2>
-          {captcha ? 
-          <div>
 
-                    {captcha && (
-
-            <div className="lux-captcha">
-
-              {captcha.split("").map((char, i) => (
-                <span key={i}
-                  style={{ color: getRandomColor() }}>
-                  {char}
-                </span>
-              ))}
-              <span style={{cursor : `pointer`}} onClick={() => generateCaptcha()}><RefreshIcon/></span>
-            </div>
-
-          )}
-
-
-          <div className="lux-field">
-            <input
-              type="text"
-              placeholder="Enter captcha"
-              value={captchaIp}
-              onChange={(e) => setCaptchaIp(e.target.value)}
-            />
-
-          </div>
-          </div> : null
-             }
-
-          {captchaLoading ? 
-            <ProgressLoad trigger={1} setSize="20px" msg="Verifying..." /> : null
+          {logoutLoading ? 
+            <ProgressLoad trigger={1} setSize="20px" msg="Please Wait..." /> : null
           }
-
-          {captcha ? 
+      
           <div>
-          <ErrorAlert
-            buttonName="Logout"
-            alertMsg={captchaError}
-            handlefn={SignOut}
-            buttonClass="btn lux-danger-btn mt-3"
-          />
-          </div> : 
-          <div>
-            <p className="text-danger">Click logout to sign out of your account.</p>
-            <Button variant="contained" onClick={generateCaptcha} color="error">Logut</Button>
+            {!logoutLoading ? <p className="text-danger">Click logout to sign out of your account.</p> : null}
+            <Button onClick={SignOut} className="btn lux-danger-btn mt-3">Logout</Button>
           </div>
-            }
+            
 
         </div>
 

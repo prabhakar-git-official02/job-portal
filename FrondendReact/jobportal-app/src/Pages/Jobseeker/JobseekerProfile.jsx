@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { authThunk } from "../../Thunks/authThunk";
 import { jobseekerProfileThunk } from "../../Thunks/jobseekerProfileThunk";
@@ -17,10 +17,17 @@ import DialogboxAbout from "../../DialogBoxes/JobseekerProfile/DialogboxAbout";
 import domtoimage from "dom-to-image-more";
 import { useRef } from "react";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import ProgressLoad from "../../Components/ProgressLoad";
 
 function JobseekerProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [deleteEduLoading,setDeleteEduLoading] = useState(false)
+  const [findEdu,setFindEdu] = useState(null)
+
+    const [deleteExpLoading,setDeleteExpLoading] = useState(false)
+  const [findExp,setFindExp] = useState(null)
 
   useEffect(() => {
     dispatch(authThunk());
@@ -43,12 +50,20 @@ function JobseekerProfile() {
     }
   }, [error, navigate, user]);
 
-  const handleExpDelete = (index) => {
-    dispatch(jobseekerProfileExpDeleteIndexThunk(index));
+  const handleExpDelete = async(index) => {
+   setDeleteExpLoading(true)
+   setFindExp(index)
+   await  dispatch(jobseekerProfileExpDeleteIndexThunk(index))
+    setDeleteExpLoading(false)
+    setFindExp(null)
   };
 
-  const handleEduDelete = (index) => {
-    dispatch(jobseekerProfileEduDeleteIndexThunk(index));
+  const handleEduDelete = async(index) => {
+     setDeleteEduLoading(true)
+     setFindEdu(index)
+    await dispatch(jobseekerProfileEduDeleteIndexThunk(index))
+    .then(() => setDeleteEduLoading(false))
+    .then(() => setFindEdu(null))
   };
 
 
@@ -187,7 +202,7 @@ domtoimage.toPng(profileRef.current, {
                     style={{ cursor: `pointer` }}
                     onClick={() => handleEduDelete(index)}
                   >
-                    <DeleteIcon />
+                  {deleteEduLoading && findEdu === index ? <p><ProgressLoad trigger={1} setSize={"15px"} msg={"Deleting Education.."}/></p> :   <DeleteIcon />}
                   </span>
                 </div>
               </div>
@@ -227,7 +242,7 @@ domtoimage.toPng(profileRef.current, {
                     style={{ cursor: `pointer` }}
                     onClick={() => handleExpDelete(index)}
                   >
-                    <DeleteIcon />
+                     {deleteExpLoading && findExp === index ? <p><ProgressLoad trigger={1} setSize={"15px"} msg={"Deleting Experience.."}/></p> :   <DeleteIcon />}
                   </span>
                 </div>
               </div>

@@ -35,6 +35,7 @@ function DialogboxSkillAdd(){
     const [addLoading,setAddLoading] = useState(false)
     const [deleteLoading,setDeleteLoading] = useState(false)
 
+
   // handle skill add
    const handleSkillAdd = () => {
     try{

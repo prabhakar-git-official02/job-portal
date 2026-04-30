@@ -1,7 +1,6 @@
 import api from "../api/axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { showAlert } from "../Scripts/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../Redux/authSlice";
 import ErrorAlert from "../Components/ErrorAlert";
@@ -58,23 +57,24 @@ function Login() {
       );
       if (response) {
         try {
-          const response = await api.post(
+           await api.post(
             "/auth/loginActivity",
             {},
             { withCredentials: true },
           );
-          if (response) {
-            console.log(response?.data?.msg)
-          }
         } catch (err) {
-          showAlert("Error", err?.response?.data?.msg);
+        setAlertmsg({
+            msg : err?.response?.data?.msg,
+            id : Date.now()
+        })
+        setLoading(false)
         }
+
         dispatch(loginSuccess(response.data.user));
         setEmail("");
         setPassword("");
         setAlertmsg(null);
         setLoading(false);
-        showAlert("Success", "Login Success", "success");
         return navigate("/");
       }
     } catch (err) {

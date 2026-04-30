@@ -10,6 +10,7 @@ import ErrorAlert from "../../Components/ErrorAlert";
 import ImageAvatar from "../../Components/ImageAvatar";
 import { recruiterProfileThunk, recruiterProfileUpdateThunk } from "../../Thunks/recruiterProfileThunk";
 import ProgressLoad from "../../Components/ProgressLoad";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 function DialogboxAbout() {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function DialogboxAbout() {
   const [about, setAbout] = useState( RecruiterProfile?.about);
   const [bio, setBio] = useState( RecruiterProfile?.bio);
   const [loading,setLoading] = useState(false)
+  const [updated,setUpdated] = useState(false)
 
  const UpdateDatas = {
     about : about ||   RecruiterProfile?.about,
@@ -49,21 +51,23 @@ function DialogboxAbout() {
           !bio
       ){
         setLoading(false)
+        setUpdated(false)
            setAlertMsg({
             msg : 'Invalid Update',
             id : Date.now()
           })
           return
       }
-      dispatch(recruiterProfileUpdateThunk(UpdateDatas))
+     await dispatch(recruiterProfileUpdateThunk(UpdateDatas))
       .then(dispatch(recruiterProfileThunk()))
       .then(() => setLoading(false))
+      .then(() => setUpdated(true))
       setAbout(UpdateDatas?.about)
       setBio(UpdateDatas?.bio)
       setAlertMsg(null)
-      setVisible(false)
     }catch(err){
       setLoading(false)
+      setUpdated(false)
       console.log("RecruiterProfile/DialogboxAbout-handlesubmit-Err",err?.message)
     }
      }
@@ -105,6 +109,7 @@ function DialogboxAbout() {
           if (!visible) return;
           setVisible(false);
           setLoading(false)
+          setUpdated(false)
           setAbout(RecruiterProfile?.about)
           setBio(RecruiterProfile?.bio)
           setAlertMsg(null)
@@ -155,10 +160,11 @@ function DialogboxAbout() {
             label={ "Edit your About"}
           />
         </Box>
+        {updated && !loading? <p className="text-success mt-3 d-flex"><span>About Updated Successfully</span> <span className="mx-1"><ThumbUpAltIcon/></span></p>:null}
 
                                 {loading ? 
                                 <div className="mt-4">
-                                  <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                                  <ProgressLoad trigger={1} msg={`Updating..`} setSize={`20px`}/>
                                 </div> : null
                                 }
         <ErrorAlert

@@ -1,8 +1,38 @@
-
+import { GoogleLogin } from "@react-oauth/google"
+import { useDispatch } from "react-redux";
+import { EmailExistThunk, GoogleApiCallThunk } from "../Thunks/EmailExistThunk";
+import { useSelector } from "react-redux";
+import RoleDialog from "./RoleDialog";
+import {  useState } from "react";
+import { EmailExistAction,EmailExistRole } from "../Redux/authSlice";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import MainNav from "../Navbar/MainNav"
-import GoogleAuthLogin from "./GoogleAuthLogin"
+import ProgressLoad from "../Components/ProgressLoad";
+
 
 function GoogleLoginPage(){
+      const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const EmailExistRes = useSelector(state => state.auth.emailExist)
+    const EmailRole = useSelector(state => state.auth.emailRole)
+
+    const [Token,setToken] = useState(null)
+    const [loading,setLoading] = useState(false)
+
+    console.log(EmailExistRes)
+
+        useEffect(() => {
+        if(EmailExistRes === true && EmailRole && Token){
+            dispatch(GoogleApiCallThunk(Token, EmailRole))
+            .then(() => dispatch(EmailExistAction(null)))
+            .then(() => dispatch(EmailExistRole(null)))
+            .then(() => navigate('/')) 
+            .then(() => setLoading(false))
+        }
+    }, [EmailExistRes, EmailRole, Token,dispatch,navigate])
+
   return(
 
     <>
@@ -47,9 +77,20 @@ function GoogleLoginPage(){
               <div className="google-sub">
                 Use your Google account to continue
               </div>
-              
+             {loading ?<p className="mt-3 d-flex justify-content-center"><ProgressLoad trigger={1} setSize={'20px'} msg={'Please Wait..'} textColor={"text-white"} /></p> : null }
               <div className="google-btn-wrapper">
-               <GoogleAuthLogin/>
+                       <GoogleLogin
+        onSuccess={async (credentialResponse) => {
+            const token = credentialResponse.credential
+                setToken(token)
+                dispatch(EmailExistThunk(token))
+                setLoading(true)
+        }}
+        onError={() => {console.log("Login Failed");setLoading(false)}}
+        /> 
+        {EmailExistRes === false &&
+        <RoleDialog visibleRes={EmailExistRes} tokenRes={Token}/>
+        }
               </div>
             </div>
 

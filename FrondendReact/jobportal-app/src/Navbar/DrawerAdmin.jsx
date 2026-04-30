@@ -53,7 +53,7 @@ function DrawerAdmin({ visible, hide }){
         className="smooth"
         style={{ transition: `0.3s ease` }}
       >
-        <div className="d-flex justify-content-center mt-5">
+        <div className="d-flex justify-content-center mt-5" onClick={() => !AdminProfile ? navigate('/adminProfileForm') : navigate('/adminProfile')} style={{cursor : "pointer"}}>
           <img
             src={`${AdminProfile?.profileImage?.url ? AdminProfile?.profileImage?.url : "default-profile.jpg"}`}
             alt="profile-logo"

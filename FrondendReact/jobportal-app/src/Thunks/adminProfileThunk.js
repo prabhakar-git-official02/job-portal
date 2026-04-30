@@ -1,7 +1,6 @@
 import api from "../api/axios";
 
 import { IsAdminProfileSuccess,IsAdminProfileFailure } from "../Redux/adminProfileSlice";
-import { showAlert } from "../Scripts/Alert";
 
 export const adminProfileThunk = () => {
     return async(dispatch) => {
@@ -32,7 +31,6 @@ export const adminProfileUpdateThunk = (UpdateDatas) => {
         )
 
         if(response){
-            showAlert("Success","Profile Updated","success")
             dispatch(adminProfileThunk())
         }
     } catch(err){

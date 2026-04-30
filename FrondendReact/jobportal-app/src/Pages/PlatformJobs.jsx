@@ -27,6 +27,8 @@ function PlatformJobs() {
   const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
+    const [saveloading,setSaveLoading] = useState(false)
+  const [savedFind,setSavedFind] = useState(null)
 
   useEffect(() => {
     dispatch(authThunk());
@@ -70,8 +72,10 @@ function PlatformJobs() {
     return jobTypeMatch  && locationMatch;
   });
 
-  const handleSave = (post) => {
-
+  const handleSave = async(post) => {
+    try{
+          setSaveLoading(true)
+    setSavedFind(post?._id)
     const savedJob = {
       jobId: post?._id,
       recruiterId: post?.recruiterId,
@@ -86,10 +90,17 @@ function PlatformJobs() {
       skills: post?.skills,
       jobDescription: post?.jobDescription,
       updatedAt: post?.updatedAt,
+      jobPlatform : post?.jobPlatform,
     };
 
-    dispatch(SavedJobsPostThunk(savedJob));
-
+    await dispatch(SavedJobsPostThunk(savedJob))
+       .then(() => setSaveLoading(false))
+   .then(() => setSavedFind(null))
+  }catch(err){
+        setSaveLoading(false)
+    setSavedFind(null)
+    console.log(err?.message);
+  }
   };
 
   return (
@@ -183,10 +194,6 @@ function PlatformJobs() {
                     a => a?.jobId?._id === post?._id
                   );
 
-                const isSaved =
-                  SavedJobs?.SavedList?.some(
-                    job => job?.jobId === post?._id
-                  );
 
                 return (
 
@@ -268,16 +275,21 @@ function PlatformJobs() {
                               Apply
                             </button>
                           )}
-                          <span
-                            className="bookmark-btn"
-                            onClick={() => handleSave(post)}
-                          >
-                            {isSaved ?
-                              <BookmarkAddedIcon className="bookmark-active" />
-                              :
-                              <BookmarkSharpIcon className="bookmark-inactive" />
-                            }
-                          </span>
+           {saveloading && savedFind === post?._id ?
+            <span><ProgressLoad trigger={1} setSize={"15px"} msg={"Saving.."}/></span>:
+                             <span
+                           className="bookmark-btn"
+                           onClick={() => handleSave(post)}
+                         >
+                           {SavedJobs?.SavedList?.some(
+                             (job) => job?.jobId === post?._id,
+                           ) ? (
+                             <BookmarkAddedIcon className="bookmark-active" />
+                           ) : (
+                             <BookmarkSharpIcon className="bookmark-inactive" />
+                           )}
+                         </span> 
+   }
                         </div>
                       )}
                       </div>

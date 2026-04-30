@@ -1,5 +1,4 @@
 import { loginSuccess } from "../Redux/authSlice";
-import { showAlert } from "../Scripts/Alert";
 import { EmailExistAction,EmailExistRole } from "../Redux/authSlice";
 import api from "../api/axios";
 
@@ -50,19 +49,15 @@ export const GoogleApiCallThunk = (token,Role) =>  {
 
           if (response) {;
              try{
-               const response = await api.post('/auth/loginActivity',
+               await api.post('/auth/loginActivity',
               {},
                {withCredentials : true}
                 )
-             if(response){
-                  showAlert("Success","Login Success","success")
-                 }
              } catch(err){
                console.log("Google-Login-API-Error",err?.response?.data?.msg)
                 }
 
-    dispatch(loginSuccess(response?.data?.user));
-            showAlert("Success", response?.data?.msg, "success");
+            dispatch(loginSuccess(response?.data?.user));
             dispatch(EmailExistAction(null))
             dispatch(EmailExistRole(null))
             return response

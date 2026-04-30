@@ -35,9 +35,13 @@ function AllJobs() {
   const [jobTypeKey, setJobTypekey] = useState("");
   const [jobPlatformKey, setJobPlatformKey] = useState("");
   const [locationKey, setLocationKey] = useState("");
+  const [saveloading,setSaveLoading] = useState(false)
+  const [savedFind,setSavedFind] = useState(null)
 
-
-  const handleSave = (post) => {
+  const handleSave = async(post) => {
+    try{
+    setSaveLoading(true)
+    setSavedFind(post?._id)
     const savedJob = {
       jobId: post?._id,
       recruiterId: post?.recruiterId,
@@ -55,7 +59,14 @@ function AllJobs() {
       updatedAt: post?.updatedAt,
     };
 
-    dispatch(SavedJobsPostThunk(savedJob));
+   await dispatch(SavedJobsPostThunk(savedJob))
+   .then(() => setSaveLoading(false))
+   .then(() => setSavedFind(null))
+  }catch(err){
+    setSaveLoading(false)
+    setSavedFind(null)
+    console.log(err?.message)
+  }
   };
 
   const ApprovedPosts = Posts?.filter((p) => p?.status === "approved");
@@ -288,7 +299,9 @@ Discover <span>Opportunities</span>
                         </Button>
                       )}
 
-                      <span
+        {saveloading && savedFind === post?._id ?
+         <span><ProgressLoad trigger={1} setSize={"15px"} msg={"Saving.."}/></span>:
+                          <span
                         className="bookmark-btn"
                         onClick={() => handleSave(post)}
                       >
@@ -299,10 +312,14 @@ Discover <span>Opportunities</span>
                         ) : (
                           <BookmarkSharpIcon className="bookmark-inactive" />
                         )}
-                      </span>
+                      </span> 
+}
+
+
                     </div>
                   )}
-                  </div> : 
+                  </div>
+                   : 
                     <span
                       className="details-link mt-3"
                       onClick={() => navigate(`/jobDescription/${post._id}`)}

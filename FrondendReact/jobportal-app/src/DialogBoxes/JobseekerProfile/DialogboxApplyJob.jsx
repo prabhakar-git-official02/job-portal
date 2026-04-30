@@ -15,6 +15,8 @@ import Select from "@mui/material/Select";
 import ErrorAlert from "../../Components/ErrorAlert";
 import { useNavigate } from "react-router-dom";
 import ProgressLoad from "../../Components/ProgressLoad";
+import { TextField } from "@mui/material";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 function DialogboxApplyJob({ btnName,JobId}) {
   const dispatch = useDispatch();
@@ -28,6 +30,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
   const [visible, setVisible] = useState(false);
   const [AlertMsg, setAlertMsg] = useState(null);
   const [loading,setLoading] = useState(false)
+  const [applied,setApplied] = useState(false)
 
   useEffect(() => {
     dispatch(authThunk());
@@ -95,68 +98,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
     "Other",
   ];
 
-  const Nums = [];
-
-  for (let i = 1; i < 50; i++) {
-    Nums.push(i);
-  }
-
-  console.log(Nums);
-
-  const preferredLocations = [
-    "Bengaluru",
-    "Hyderabad",
-    "Chennai",
-    "Mumbai",
-    "Pune",
-    "New Delhi",
-    "Noida",
-    "Gurugram",
-    "Kolkata",
-    "Ahmedabad",
-    "Surat",
-    "Vadodara",
-    "Jaipur",
-    "Indore",
-    "Bhopal",
-    "Lucknow",
-    "Kanpur",
-    "Chandigarh",
-    "Ludhiana",
-    "Amritsar",
-    "Coimbatore",
-    "Madurai",
-    "Tiruchirappalli",
-    "Salem",
-    "Kochi",
-    "Thiruvananthapuram",
-    "Kozhikode",
-    "Visakhapatnam",
-    "Vijayawada",
-    "Guntur",
-    "Warangal",
-    "Nashik",
-    "Nagpur",
-    "Aurangabad",
-    "Rajkot",
-    "Jodhpur",
-    "Udaipur",
-    "Raipur",
-    "Bhubaneswar",
-    "Cuttack",
-    "Ranchi",
-    "Jamshedpur",
-    "Patna",
-    "Guwahati",
-    "Shillong",
-    "Dehradun",
-    "Haridwar",
-    "Srinagar",
-    "Jammu",
-    "Agra",
-  ];
-
-  const handleJobApply = () => {
+  const handleJobApply = async() => {
     try{
       setLoading(true)
 
@@ -165,11 +107,12 @@ function DialogboxApplyJob({ btnName,JobId}) {
     }
     if (
       qualification.trim() === "" ||
-      experience === 0 || experience === "" ||
+      experience<0 || !experience ||
       preferredLocation.trim() === "" ||
-      expectedSalary === 0 || expectedSalary === "" 
+      expectedSalary<0 || !expectedSalary 
     ) {
       setLoading(false)
+      setApplied(false)
       setAlertMsg({
         msg: "Invalid Apply",
         id: Date.now(),
@@ -177,16 +120,17 @@ function DialogboxApplyJob({ btnName,JobId}) {
       return;
     }
 
-    dispatch(applyJobPostThunk(JobId,applicantData))
+   await dispatch(applyJobPostThunk(JobId,applicantData))
     .then(() => setLoading(false))
+    .then(() => setApplied(true))
     .then(() => setQualification(""))
     .then(() => setExperience(""))
     .then(() => setPreferredLocation(""))
     .then(() => setExpectedSalary(""))
     .then(()=> setAlertMsg(null))
-    .then(() => {navigate('/allJobs')})
   }catch(err){
     setLoading(false)
+    setApplied(false)
     console.log("JobseekerProfile/DialogboxApplyJob/handleJobApply-Err",err?.message)
   }
   };
@@ -217,6 +161,7 @@ header="Find Dreams"
   onHide={() => {
     setVisible(false);
     setLoading(false)
+    setApplied(false)
     setQualification("");
     setExperience("");
     setExpectedSalary("");
@@ -239,14 +184,14 @@ header="Find Dreams"
           <Box sx={{ width: `100%` }}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label" required>
-                Select your Qualification
+                Select your qualification
               </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={qualification}
                 required
-                label="Select your Qualification"
+                label="Select your qualification"
                 onChange={(e) => setQualification(e.target.value)}
               >
                 {qualifications?.map((q) => (
@@ -257,74 +202,41 @@ header="Find Dreams"
           </Box>
           <br />
 
-          <Box sx={{ width: `100%` }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label" required>
-                Select your Experience
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+              <TextField
+                type="number"
+                fullWidth
+                required
+                label="Enter your experience"
                 value={experience}
-                required
-                label="Select your Experience"
                 onChange={(e) => setExperience(e.target.value)}
-              >
-                <MenuItem value={`Less than 1 year`}>{`Less than 1 year`}</MenuItem>
-                {Nums?.map((n) => (
-                  <MenuItem value={`${n} years`}>{`${n} years`}</MenuItem>
-                ))}
-                <MenuItem value={`50 years+`}>{`50 years+`}</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+              />
           <br />
-          <Box sx={{ width: `100%` }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label" required>
-                Select your Preferred Location
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={preferredLocation}
-                required
-                label="Select your Preferred Location"
-                onChange={(e) => setPreferredLocation(e.target.value)}
-              >
-                {preferredLocations?.map((Pl) => (
-                  <MenuItem value={Pl}>{Pl}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
           <br/>
-          <Box sx={{ width: `100%` }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label" required>
-                Expected Salary
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={expectedSalary}
+              <TextField
+                type="text"
+                fullWidth
                 required
-                label="Select your Experience"
+                label="Enter your preferred location"
+                value={preferredLocation}
+                onChange={(e) => setPreferredLocation(e.target.value)}
+              />
+          <br/>
+          <br/>
+              <TextField
+                type="number"
+                fullWidth
+                required
+                label="Enter your expected salary (In LPA)"
+                value={expectedSalary}
                 onChange={(e) => setExpectedSalary(e.target.value)}
-              >
-                {Nums?.map((n) => (
-                  <MenuItem value={`${n} LPA`}>{`${n} LPA`}</MenuItem>
-                ))}
-                <MenuItem value={`50 LPA+`}>50 LPA+</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+              />
           <br />
         </div>
+         {applied && !loading? <p className="text-success mt-3 d-flex"><span>Job Applied Successfully</span> <span className="mx-1"><ThumbUpAltIcon/></span></p>:null}
 
                 {loading ? 
                 <div className="mt-4">
-                  <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                  <ProgressLoad trigger={1} msg={`Applying..`} setSize={`20px`}/>
                 </div> : null
                 }
 

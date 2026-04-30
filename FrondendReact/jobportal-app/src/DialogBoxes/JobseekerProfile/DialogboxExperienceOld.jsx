@@ -18,6 +18,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import ProgressLoad from "../../Components/ProgressLoad";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 function DialogboxExperienceOld({ index,ExId,JsId }) {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
   const [workExperience,setWorkExperience] = useState(ExperienceIndex?.workExperience)
   const [CTC,setCTC] = useState(ExperienceIndex?.CTC)
   const [loading,setLoading] = useState(false)
+   const [updated,setUpdated] = useState(false)
 
   const UpdateData = { 
         company:company ? company : ExperienceIndex?.company,
@@ -87,6 +89,7 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
       CTC.trim() === ""
     ) {
       setLoading(false)
+      setUpdated(false)
        setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
@@ -95,8 +98,9 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
     }
 
     
-    dispatch(jobseekerProfileExpFieldUpdateThunk(JsId,ExId,UpdateData))
+   await dispatch(jobseekerProfileExpFieldUpdateThunk(JsId,ExId,UpdateData))
     .then(() => setLoading(false))
+    .then(() => setUpdated(true))
     .then(() => setAlertMsg(null))
     .then(() => setCompany(UpdateData?.company))
     .then(() => setField(UpdateData?.field))
@@ -104,9 +108,9 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
     .then(() => setYearEnd(UpdateData?.yearEnd))
     .then(() => setWorkExperience(UpdateData?.workExperience))
     .then(() => setCTC(UpdateData?.CTC))
-    .then(() => setVisible(false))
   }catch(err){
     setLoading(false)
+    setUpdated(false)
     console.log("JobseekerProfile/DialogboxExperienceOld/handlesubmit-Err",err?.message)
   }
   };
@@ -141,6 +145,7 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
           if (!visible) return;
           setVisible(false);
           setLoading(false)
+          setUpdated(false)
     setCompany(ExperienceIndex?.company);
     setField(ExperienceIndex?.field);
     setYearStart(ExperienceIndex?.yearStart);
@@ -242,9 +247,10 @@ onChange={(e) => setWorkExperience(e.target.value)}
 
         <br />
         <br />
+        {updated && !loading?<p className="text-success mt-3 d-flex"><span>Experience Updated Successfully</span> <span className="mx-1"><ThumbUpAltIcon/></span></p>:null}
                         {loading ? 
                         <div className="mt-4">
-                          <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                          <ProgressLoad trigger={1} msg={`Updating..`} setSize={`20px`}/>
                         </div> : null
                         }
         <ErrorAlert

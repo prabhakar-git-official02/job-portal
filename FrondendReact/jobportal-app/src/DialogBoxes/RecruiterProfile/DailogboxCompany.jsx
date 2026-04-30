@@ -17,6 +17,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import ProgressLoad from "../../Components/ProgressLoad";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 function DialogboxAbout() {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ function DialogboxAbout() {
   const [companySize, setCompanySize] = useState(RecruiterProfile?.companySize);
   const [designation, setDesignation] = useState(RecruiterProfile?.designation);
   const [loading,setLoading] = useState(false)
+   const [updated,setUpdated] = useState(false)
 
   const UpdateDatas = {
     companyName: company || RecruiterProfile?.companyName,
@@ -76,16 +78,16 @@ function DialogboxAbout() {
       !designation
     ) {
       setLoading(false)
+      setUpdated(false)
        setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
       });
       return
     }
-    dispatch(recruiterProfileUpdateThunk(UpdateDatas)).then(
-      dispatch(recruiterProfileThunk()),
-    )
+   await dispatch(recruiterProfileUpdateThunk(UpdateDatas))
     .then(() => setLoading(false))
+    .then(() => setUpdated(true))
     setCompany(UpdateDatas?.companyName);
     setCompanyWebsite(UpdateDatas?.companyWebsite);
     setCompanyAddress(UpdateDatas?.companyAddress);
@@ -93,9 +95,9 @@ function DialogboxAbout() {
     setCompanySize(UpdateDatas?.companySize);
     setDesignation(UpdateDatas?.designation);
     setAlertMsg(null);
-    setVisible(false);
   }catch(err){
     setLoading(false)
+    setUpdated(false)
     console.log("RecruiterProfile/DialogboxCompany-handlesubmit-Err",err?.message)
   }
   };
@@ -230,6 +232,7 @@ function DialogboxAbout() {
           if (!visible) return;
           setVisible(false);
           setLoading(false)
+          setUpdated(false)
           setCompany(RecruiterProfile?.companyName);
           setCompanyWebsite(RecruiterProfile?.companyWebsite);
           setCompanyAddress(RecruiterProfile?.companyAddress);
@@ -361,10 +364,11 @@ function DialogboxAbout() {
             </Select>
           </FormControl>
         </Box>
+            {updated && !loading? <p className="text-success mt-3 d-flex"><span>Company Details Updated Successfully</span> <span className="mx-1"><ThumbUpAltIcon/></span></p>:null}
 
                                 {loading ? 
                                 <div className="mt-4">
-                                  <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                                  <ProgressLoad trigger={1} msg={`Updating..`} setSize={`20px`}/>
                                 </div> : null
                                 }
 

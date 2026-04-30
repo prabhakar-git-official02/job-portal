@@ -6,7 +6,7 @@ import RoleDialog from "./RoleDialog";
 import {  useState } from "react";
 import { EmailExistAction,EmailExistRole } from "../Redux/authSlice";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect } from "react";
 function GoogleAuthLogin(){
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -18,18 +18,16 @@ function GoogleAuthLogin(){
 
     console.log(EmailExistRes)
 
-    const handleGoogleLogin = () => {
-        try{
-        if(EmailExistRes === true && EmailRole){
-            dispatch(GoogleApiCallThunk(Token,EmailRole))
+        useEffect(() => {
+        if(EmailExistRes === true && EmailRole && Token){
+            dispatch(GoogleApiCallThunk(Token, EmailRole))
             .then(() => dispatch(EmailExistAction(null)))
             .then(() => dispatch(EmailExistRole(null)))
-            .then(() => {navigate('/')})
+            .then(() => navigate('/')) // better route
         }
-    } catch(err){
-        console.log("handleGoogleLogin-Error",err?.message)
-    }
-    }
+    }, [EmailExistRes, EmailRole, Token,dispatch,navigate])
+
+
 
     return(
         <>
@@ -41,12 +39,9 @@ function GoogleAuthLogin(){
         }}
         onError={() => console.log("Login Failed")}
         /> 
-        {EmailExistRes === false ? 
+        {EmailExistRes === false &&
         <RoleDialog visibleRes={EmailExistRes} tokenRes={Token}/>
-        :
-        EmailExistRes === true? handleGoogleLogin()
-        :
-         null}
+        }
                </>
     )
 }

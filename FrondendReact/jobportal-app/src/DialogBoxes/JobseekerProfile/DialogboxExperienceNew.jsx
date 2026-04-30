@@ -17,6 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { jobseekerProfileThunk } from "../../Thunks/jobseekerProfileThunk";
 import ProgressLoad from "../../Components/ProgressLoad";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 function DialogboxExperienceNew({ btnName, btnType }) {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ function DialogboxExperienceNew({ btnName, btnType }) {
   const [workExperience, setWorkExperience] = useState();
   const [CTC, setCTC] = useState();
   const [loading,setLoadig] = useState(false)
+   const [updated,setUpdated] = useState(false)
 
   const UpdateDatas = {
     company: company,
@@ -80,14 +82,16 @@ function DialogboxExperienceNew({ btnName, btnType }) {
       CTC.trim() === ""
     ) {
       setLoadig(false)
+      setUpdated(false)
       setAlertMsg({
         msg: "Invalid Update",
         id: Date.now(),
       });
       return
     }
-    dispatch(jobseekerProfileExpAddThunk(UpdateDatas, JobseekerProfile));
+   await dispatch(jobseekerProfileExpAddThunk(UpdateDatas, JobseekerProfile));
     setLoadig(false)
+    setUpdated(true)
     setAlertMsg(null);
     setCompany("");
     setField("");
@@ -95,9 +99,9 @@ function DialogboxExperienceNew({ btnName, btnType }) {
     setYearEnd(null);
     setWorkExperience("");
     setCTC("");
-    setVisible(false);
   }catch(err){
     setLoadig(false)
+    setUpdated(false)
     console.log("JobseekerProfile/DialogboxExperienceNew/handlesubmit-Err",err?.message)
   }
   };
@@ -134,6 +138,7 @@ function DialogboxExperienceNew({ btnName, btnType }) {
           if (!visible) return;
           setVisible(false);
           setLoadig(false)
+          setUpdated(false)
           setCompany("");
           setField("");
           setWorkExperience("");
@@ -233,9 +238,10 @@ onChange={(e) => setWorkExperience(e.target.value)}
 
         <br />
         <br />
+         {updated && !loading?<p className="text-success mt-3 d-flex"><span>Experience Added Successfully</span> <span className="mx-1"><ThumbUpAltIcon/></span></p>:null}
                         {loading ? 
                         <div className="mt-4">
-                          <ProgressLoad trigger={1} msg={`Loading..`} setSize={`20px`}/>
+                          <ProgressLoad trigger={1} msg={`Adding Experience..`} setSize={`20px`}/>
                         </div> : null
                         }
         <ErrorAlert

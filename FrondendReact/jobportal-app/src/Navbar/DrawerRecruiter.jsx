@@ -57,7 +57,7 @@ function DrawerRecruiter({ visible, hide }) {
         className="smooth"
         style={{ transition: `0.3s ease` }}
       >
-        <div className="d-flex justify-content-center mt-5">
+        <div className="d-flex justify-content-center mt-5" onClick={() => !RecruiterProfile ? navigate('/recruiterProfileForm') : navigate('/recruiterProfile')} style={{cursor : "pointer"}}>
           <img
             src={`${RecruiterProfile?.profileImage?.url ? RecruiterProfile?.profileImage?.url : "default-profile.jpg" }`}
             alt="profile-logo"

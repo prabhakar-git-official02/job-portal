@@ -56,7 +56,7 @@ export default function DrawerJobseeker({ visible, hide }) {
         className="smooth"
         style={{transition : `0.3s ease`}}
       >
-        <div className="d-flex justify-content-center mt-5">
+        <div className="d-flex justify-content-center mt-5" onClick={() => !JobseekerProfile ? navigate('/jobseekerProfileForm') : navigate('/jobseekerProfile')} style={{cursor : "pointer"}}>
           <img
           src={`${JobseekerProfile?.profileImage?.url ? JobseekerProfile?.profileImage?.url : "default-profile.jpg" }`}
           alt="profile-logo"

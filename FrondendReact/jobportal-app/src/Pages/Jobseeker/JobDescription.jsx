@@ -11,9 +11,13 @@ import { SavedJobsPostThunk } from "../../Thunks/savedJobsThunk";
 import DialogboxApplyJob from "../../DialogBoxes/JobseekerProfile/DialogboxApplyJob";
 import { applicantThunk } from "../../Thunks/applicantThunk";
 import { authThunk } from "../../Thunks/authThunk";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import { useState } from "react";
+import ProgressLoad from "../../Components/ProgressLoad";
 
 function JobDescription() {
   const { id } = useParams();
+   const [saveloading,setSaveLoading] = useState(false)
 
   const dispatch = useDispatch();
 
@@ -41,7 +45,7 @@ function JobDescription() {
 
   const Applied = useSelector((state) => state.applicantMemory.applicant);
 
-   const Post = Posts.find((post) =>  post?._id=== id);
+   const Post = Posts?.find((post) =>  post?._id=== id);
 
     console.log("Post", Post);
   console.log("Applied", Applied);
@@ -50,7 +54,7 @@ function JobDescription() {
 
   console.log(SavedJobs);
 
-  const handleSave = (
+  const handleSave = async(
     JobId,
     RecruiterId,
     PostId,
@@ -64,7 +68,10 @@ function JobDescription() {
     JobDescription,
     ProfileImage,
     UpdatedAt,
+    JobPlatform
   ) => {
+    try{
+    setSaveLoading(true)
     const savedJob = {
       jobId: JobId,
       recruiterId: RecruiterId,
@@ -79,11 +86,17 @@ function JobDescription() {
       skills: Skills,
       jobDescription: JobDescription,
       updatedAt: UpdatedAt,
+      jobPlatform : JobPlatform,
     };
 
     if (savedJob) {
-      dispatch(SavedJobsPostThunk(savedJob));
+     await dispatch(SavedJobsPostThunk(savedJob))
+     .then(() => setSaveLoading(false))
     }
+  }catch(err){
+    setSaveLoading(false)
+    console.log(err?.message);
+  }
   };
 
 const MatchedJob = Applied?.populateData?.find((job) => job?.jobId?._id === Post?._id)
@@ -176,16 +189,15 @@ console.log("matched",MatchedJob)
           {Applied?.populateData?.some(
             (a) => Post?._id.includes(a?.jobId?._id)
           ) ? (
-            <div>
-            <span className="applied-text">
-              Already Applied
-            </span>
-           
-            </div>
+<div className="applied-wrapper">
+  <span className="applied-text">Applied</span>
+  <ThumbUpAltIcon className="applied-icon text-success" fontSize="large"/>
+</div>
           ) : (
             <DialogboxApplyJob btnName="Apply Now" JobId={Post?._id} />
           )}
 
+          {saveloading ? <span><ProgressLoad trigger={1} setSize={"15px"} msg={"Saving.."}/></span>:
           <span
             className="bookmark-btn"
             onClick={() =>
@@ -203,6 +215,7 @@ console.log("matched",MatchedJob)
                 Post?.jobDescription,
                 Post?.profileImage,
                 Post?.updatedAt,
+                Post?.jobPlatform
               )
             }
           >
@@ -216,6 +229,7 @@ console.log("matched",MatchedJob)
             )}
 
           </span>
+}
         </div>
 
         }
@@ -323,6 +337,20 @@ background: linear-gradient(90deg,#00c6ff,#0072ff);
 
   margin-bottom: 6px;
 
+}
+
+.applied-wrapper{
+  display: flex;
+  align-items: center;   
+  gap: 6px;           
+}
+
+.applied-text{
+  line-height: 1;
+}
+
+.applied-icon{
+font-size : 23px;
 }
 
 

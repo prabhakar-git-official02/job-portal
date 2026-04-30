@@ -13,6 +13,7 @@ import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
 import { applicantThunk } from "../../Thunks/applicantThunk";
 import SearchInput from "../../Components/SearchInput";
 import DropDown from "../../Components/DropDown";
+import ProgressLoad from "../../Components/ProgressLoad";
 
 function SavedJobs() {
   const dispatch = useDispatch();
@@ -22,6 +23,8 @@ function SavedJobs() {
     const [jobTypeKey, setJobTypekey] = useState("");
   const [jobPlatformKey, setJobPlatformKey] = useState("");
   const [locationKey, setLocationKey] = useState("");
+    const [desaveloading,setDeSaveLoading] = useState(false)
+  const [desavedFind,setDeSavedFind] = useState(null)
 
   useEffect(() => {
     dispatch(authThunk());
@@ -36,8 +39,18 @@ function SavedJobs() {
 
   console.log(SavedJobs)
 
-  const handleDeleteSave = (JobId) => {
-    dispatch(SavedJobsRemoveThunk(JobId));
+  const handleDeleteSave = async(JobId) => {
+    try{
+    setDeSaveLoading(true)
+    setDeSavedFind(JobId)
+   await dispatch(SavedJobsRemoveThunk(JobId))
+   .then(() => setDeSaveLoading(false))
+   .then(() => setDeSavedFind(null))
+    }catch(err){
+      setDeSaveLoading(false)
+      setDeSavedFind(null)
+      console.log(err?.message)
+    }
   };
 
     const FilteredJobTypes = [
@@ -262,12 +275,15 @@ function SavedJobs() {
                         </button>
                       )}
 
+                      {desaveloading && desavedFind === post?.jobId ? 
+                       <span><ProgressLoad trigger={1} setSize={"15px"} msg={"Unsaving.."}/></span>:
                       <span
                         className="bookmark-btn"
                         onClick={() => handleDeleteSave(post?.jobId)}
                       >
                         <BookmarkRemoveIcon className="bookmark-remove" />
                       </span>
+                      }
                     </div>
 
                     {/* Footer */}

@@ -191,7 +191,7 @@ const [storeSkill, setStoreSkill] = useState([]);
 
       dispatch(recruiterPostUpdateThunk(Post?._id, UpdateDatas))
         .then(() => {
-          showAlert("Success", "Profile Updated", "success");
+          showAlert("Success", "Job Post Updated", "success");
         })
         .then(() => {
           setLoad(false);
@@ -626,7 +626,7 @@ const [storeSkill, setStoreSkill] = useState([]);
         />
         {load ? (
           <div className="mt-4">
-            <ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`} />
+            <ProgressLoad trigger={1} setSize={`20px`} msg={`Updating..`} />
           </div>
         ) : null}
 
