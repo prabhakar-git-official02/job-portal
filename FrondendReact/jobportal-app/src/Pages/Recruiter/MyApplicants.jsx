@@ -11,6 +11,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Button from "@mui/material/Button";
 import DropDown from "../../Components/DropDown";
+import ProgressLoad from "../../Components/ProgressLoad";
 
 const ApplicantCard = memo(({ job }) => (
   <div className="applicant-card mt-3">
@@ -113,6 +114,10 @@ function MyApplicants() {
   const [expandedJobId, setExpandedJobId] = useState(null);
 
   const [search, setSearch] = useState("");
+  const [resultLoad,setResultLoad] = useState(false)
+  const [statusFind,setStatusFind] = useState(null)
+  const [applicantFind,setApplicantFind] = useState(null)
+  const [jobFind,setJobFind] = useState(null)
 
     const [locationKey, setLocationKey] = useState("");
     const [qualificationsKey,setQualificationKey] = useState("")
@@ -135,10 +140,27 @@ function MyApplicants() {
 
 
   console.log(applicants)
-  const handleUpdateJobStatus = (ApplicantId, JobId, PostEmail, Poststatus) => {
-    dispatch(
+
+  const handleUpdateJobStatus = async(ApplicantId, JobId, PostEmail, Poststatus) => {
+    try{
+    setResultLoad(true)
+    setStatusFind(Poststatus)
+    setApplicantFind(ApplicantId)
+    setJobFind(JobId)
+  await  dispatch(
       AppliedJobStatusUpdateThunk(ApplicantId, JobId, PostEmail, Poststatus),
-    );
+    )
+    .then(() => setResultLoad(false))
+    .then(() => setApplicantFind(null))
+    .then(() => setJobFind(null))
+    .then(() => setStatusFind(null))
+  }catch(err){
+    setResultLoad(false)
+    setApplicantFind(null)
+    setApplicantFind(null)
+    setStatusFind(null)
+    console.log(err?.message);
+  }
   };
 
   const FilterApplicantStatus = [
@@ -366,6 +388,8 @@ function MyApplicants() {
                {/* Actions */}
 
                     <div className="d-flex gap-2 mt-3">
+                      {resultLoad && statusFind === "shortlisted" && applicantFind ===  job?.jobseekerId && jobFind === job?.jobId?._id ? 
+                      <p><ProgressLoad trigger={1} setSize={"20px"} msgClass={"text-success fs-5"} msg={"Shortlisting.."}/></p> :
                       <ButtonUI
                         buttonName="Shortlist"
                         buttonVariant="contained"
@@ -379,7 +403,10 @@ function MyApplicants() {
                           )
                         }
                       />
+}
 
+                      {resultLoad && statusFind === "rejected" && applicantFind ===  job?.jobseekerId && jobFind === job?.jobId?._id ? 
+                      <p><ProgressLoad trigger={1} setSize={"20px"} msg={"Rejecting.."} msgClass={"text-danger text-center fs-5"}/></p> :
                       <ButtonUI
                         buttonName="Reject"
                         buttonVariant="contained"
@@ -393,6 +420,7 @@ function MyApplicants() {
                           )
                         }
                       />
+}
                     </div>
                   </div>
                 </div>

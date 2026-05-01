@@ -437,20 +437,14 @@ if(!profileImage && !resume){
                 onChange={(e) => setExpectedSalary(e.target.value)}
               />
 
-              <FormControl sx={{ m: 1 }} fullWidth>
-                <InputLabel>Preferred Location</InputLabel>
-                <Select
-                  value={preferredLocation}
-                  label="Preferred Location"
-                  onChange={(e) => setPreferredLocation(e.target.value)}
-                >
-                  {preferredLocations.map((p) => (
-                    <MenuItem key={p} value={p}>
-                      {p}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <TextField
+                type="text"
+                fullWidth
+                 sx={{ m: 1 }}
+                label="preferred location"
+                value={preferredLocation}
+                onChange={(e) => setPreferredLocation(e.target.value)}
+              />
 
               <LocationInput
                 country={country}

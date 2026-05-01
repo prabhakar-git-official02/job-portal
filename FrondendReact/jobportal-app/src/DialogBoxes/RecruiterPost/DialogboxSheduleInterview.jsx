@@ -178,7 +178,7 @@ function DialogboxSheduleInterview({ApplicantId,ApplicantEmail,JobDetails,JobId}
                         />
                       </Box>
                       <br/>
-                      {load ? <ProgressLoad trigger={1} setSize={`20px`} msg={`Loading`}/> : null}
+                      {load ? <ProgressLoad trigger={1} setSize={`20px`} msg={`Sheduling...`}/> : null}
                       <ErrorAlert
                       alertMsg={AlertMsg}
                       buttonName={`Shedule Interview`}

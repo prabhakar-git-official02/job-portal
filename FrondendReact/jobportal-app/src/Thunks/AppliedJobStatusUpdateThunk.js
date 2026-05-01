@@ -17,7 +17,7 @@ export const AppliedJobStatusUpdateThunk = (applicantId,jobid,Email,status) => {
     );
 
     if (response) {
-      showAlert("Success", response?.data?.msg, "success");
+      showAlert("Success",`Post ${status}`, "success");
       dispatch(applicantGetAllThunk())
     }
 }catch(err){
