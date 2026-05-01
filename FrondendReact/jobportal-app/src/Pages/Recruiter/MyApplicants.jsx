@@ -4,14 +4,13 @@ import { authThunk } from "../../Thunks/authThunk";
 import { applicantGetAllThunk } from "../../Thunks/applicantThunk";
 import { AppliedJobStatusUpdateThunk } from "../../Thunks/AppliedJobStatusUpdateThunk";
 import MainNav from "../../Navbar/MainNav";
-import ButtonUI from "../../Components/ButttonUI";
 import SearchInput from "../../Components/SearchInput";
 import { timeAgo } from "../../Components/timeago";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Button from "@mui/material/Button";
 import DropDown from "../../Components/DropDown";
-import ProgressLoad from "../../Components/ProgressLoad";
+
 
 const ApplicantCard = memo(({ job }) => (
   <div className="applicant-card mt-3">
