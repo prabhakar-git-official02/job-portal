@@ -43,8 +43,8 @@ function Candidates() {
     <div className="dashboard-container">
 
       {/* Sidebar */}
-      <div className="dashboard-sidebar">
-        <h4 className="sidebar-title mt-5">Candidates</h4>
+      <div className="dashboard-sidebar ">
+        
 
         {["shortlisted", "rejected", "pending"].map(status => (
           <div
@@ -162,16 +162,77 @@ function Candidates() {
 
 .dashboard-container {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* ===== Sidebar ===== */
+/* Sidebar fixed */
 .dashboard-sidebar {
   width: 250px;
   background: #1f2f46;
   color: #fff;
   padding: 25px 20px;
-  transition: all 0.3s ease;
+  position: fixed;
+  top: 0;
+  margin-top : 80px;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+@media(max-width : 768px){
+.dashboard-sidebar{
+margin-top : 0px;
+}
+}
+
+@media (max-width: 768px) {
+
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 10px;
+    background: #1f2f46;
+  }
+
+  .sidebar-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px 5px;
+    font-size: 13px;
+    margin: 0 5px;
+    border-radius: 6px;
+  }
+
+  .dashboard-content {
+    margin-left: 0;
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+}
+
+/* Content adjust panna */
+.dashboard-content {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  padding: 30px;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 .sidebar-title {
@@ -200,11 +261,7 @@ function Candidates() {
 }
 
 /* ===== Main Content ===== */
-.dashboard-content {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
-}
+
 
 /* ===== Search ===== */
 .search-wrapper {
@@ -212,7 +269,19 @@ function Candidates() {
   justify-content: flex-end;
   margin-bottom: 20px;
 }
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
 
+  .dashboard-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+  
 /* ===== Candidate Card ===== */
 .candidate-card {
   background: #ffffff;

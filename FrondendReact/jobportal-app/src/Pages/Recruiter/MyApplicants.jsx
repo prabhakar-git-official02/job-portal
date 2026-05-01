@@ -387,41 +387,63 @@ function MyApplicants() {
                   <ApplicantCard key={job._id} job={job}/>
                {/* Actions */}
 
-                    <div className="d-flex gap-2 mt-3">
-                      {resultLoad && statusFind === "shortlisted" && applicantFind ===  job?.jobseekerId && jobFind === job?.jobId?._id ? 
-                      <p><ProgressLoad trigger={1} setSize={"20px"} msgClass={"text-success fs-5"} msg={"Shortlisting.."}/></p> :
-                      <ButtonUI
-                        buttonName="Shortlist"
-                        buttonVariant="contained"
-                        colorbg="#0ea5a4"
-                        handlefn={() =>
-                          handleUpdateJobStatus(
-                            job?.jobseekerId,
-                            job?.jobId?._id,
-                            job?.userDatas?.email,
-                            "shortlisted",
-                          )
-                        }
-                      />
-}
-
-                      {resultLoad && statusFind === "rejected" && applicantFind ===  job?.jobseekerId && jobFind === job?.jobId?._id ? 
-                      <p><ProgressLoad trigger={1} setSize={"20px"} msg={"Rejecting.."} msgClass={"text-danger text-center fs-5"}/></p> :
-                      <ButtonUI
-                        buttonName="Reject"
-                        buttonVariant="contained"
-                        colorbg="#ef4444"
-                        handlefn={() =>
-                          handleUpdateJobStatus(
+               {job?.status === "shortlisted" ? 
+               <div>
+                                 <Button variant="contained" color="error" onClick={() =>                           
+                                handleUpdateJobStatus(
                             job?.jobseekerId,
                             job?.jobId?._id,
                             job?.userDatas?.email,
                             "rejected",
-                          )
-                        }
-                      />
-}
-                    </div>
+                          ) } >{
+                  resultLoad && statusFind === "rejected" && applicantFind ===  job?.jobseekerId && jobFind === job?.jobId?._id ? 
+                 "Rejecting...":"Reject"
+                  }</Button> 
+               </div> :
+               job?.status === "rejected" ? 
+               <div>
+                                 <Button
+                  variant="contained"
+                   color="success" 
+                 onClick={() =>                          
+                   handleUpdateJobStatus(
+                            job?.jobseekerId,
+                            job?.jobId?._id,
+                            job?.userDatas?.email,
+                            "shortlisted",
+                          ) } >{
+                  resultLoad && statusFind === "shortlisted" && applicantFind ===  job?.jobseekerId && jobFind === job?.jobId?._id ? 
+                 "Shortlisting...":"Shortlist"
+                  }</Button>
+               </div> : 
+                              <div  className="d-flex gap-2 mt-3">
+                 <Button
+                  variant="contained"
+                   color="success" 
+                 onClick={() =>                          
+                   handleUpdateJobStatus(
+                            job?.jobseekerId,
+                            job?.jobId?._id,
+                            job?.userDatas?.email,
+                            "shortlisted",
+                          ) } >{
+                  resultLoad && statusFind === "shortlisted" && applicantFind ===  job?.jobseekerId && jobFind === job?.jobId?._id ? 
+                 "Shortlisting...":"Shortlist"
+                  }</Button>
+
+
+                 <Button variant="contained" color="error" onClick={() =>                           
+                                handleUpdateJobStatus(
+                            job?.jobseekerId,
+                            job?.jobId?._id,
+                            job?.userDatas?.email,
+                            "rejected",
+                          ) } >{
+                  resultLoad && statusFind === "rejected" && applicantFind ===  job?.jobseekerId && jobFind === job?.jobId?._id ? 
+                 "Rejecting...":"Reject"
+                  }</Button>
+               </div>
+               }
                   </div>
                 </div>
               ))}
