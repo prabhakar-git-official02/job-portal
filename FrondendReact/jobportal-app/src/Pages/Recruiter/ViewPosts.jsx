@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import SearchInput from "../../Components/SearchInput";
 import DropDown from "../../Components/DropDown";
 
+
 function ViewPosts() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -200,8 +201,6 @@ function ViewPosts() {
               <div key={post._id} className="col-12 col-sm-6 col-lg-4 col-xl-3">
                 <div
                   className="card card-saas border-0 shadow-sm h-100 p-3 p-md-4"
-                  onClick={() => navigate(`/postDetails/${post._id}`)}
-                  style={{ cursor: "pointer" }}
                 >
                   {/* Top */}
 
@@ -249,6 +248,9 @@ function ViewPosts() {
                     <p
                     className="mt-3"
                     ><strong>Post Status: </strong><span className={`fw-bold  ${post?.status === "approved" ? "text-success" : post?.status === "rejected" ? "text-danger" : "text-warning"}`}>{post?.status}</span></p>
+                  </div>
+                  <div>
+                  <span className="details-link" style={{cursor : "pointer"}} onClick={() => navigate(`/postDetails/${post._id}`)}>View Details</span>
                   </div>
                   {/* Footer */}
 
@@ -338,7 +340,11 @@ border-radius:12px;
 
 }
 
-
+.details-link{
+color:#6366f1;
+cursor:pointer;
+font-weight:600;
+}
 
 /* Job info */
 

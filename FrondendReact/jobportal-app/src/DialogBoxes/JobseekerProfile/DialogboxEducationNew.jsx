@@ -176,7 +176,7 @@ function DialogboxEducationNew() {
           <TextField
             type="text"
             value={institute}
-            label={"Add your Institute"}
+            label={"Enter your Institute"}
             multiline
             onChange={(e) => setInstitute(e.target.value)}
             id="outlined-basic"
@@ -188,7 +188,7 @@ function DialogboxEducationNew() {
         <Box sx={{ width: `100%` }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
-              Add your Qualification
+              Enter your Qualification
             </InputLabel>
             <Select
               labelId="demo-simple-select-label"

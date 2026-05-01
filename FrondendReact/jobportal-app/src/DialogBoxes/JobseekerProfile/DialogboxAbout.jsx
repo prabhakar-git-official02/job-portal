@@ -82,6 +82,7 @@ function DialogboxAbout() {
         className="mx-2"
         label="Show"
         icon={`pi pi-external-link`}
+        style={{cursor : "pointer"}}
         onClick={
           () => {
             setVisible(true);

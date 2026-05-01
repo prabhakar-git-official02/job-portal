@@ -81,10 +81,6 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
       company.trim() === "" ||
       !field ||
       field.trim() === "" ||
-      !yearStart ||
-      !yearEnd ||
-      !workExperience ||
-      workExperience.trim() === "" ||
       !CTC ||
       CTC.trim() === ""
     ) {
@@ -97,6 +93,18 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
       return
     }
 
+        if(
+      !yearStart ||
+      !yearEnd
+    ){
+      setLoading(false)
+      setUpdated(false)
+      setAlertMsg({
+        msg : "Years Required",
+        id : Date.now()
+      })
+      return
+    }
     
    await dispatch(jobseekerProfileExpFieldUpdateThunk(JsId,ExId,UpdateData))
     .then(() => setLoading(false))
@@ -209,20 +217,22 @@ function DialogboxExperienceOld({ index,ExId,JsId }) {
 
 <textarea 
 className="form-control" 
-placeholder="Add your Work Experience"
+placeholder="Update About your Work Experience"
 value={workExperience}
 onChange={(e) => setWorkExperience(e.target.value)}
 ></textarea>
 <br />
+          <TextField
+            type="number"
+            fullWidth
+            value={parseFloat(CTC)}
+             required
+            label={"Enter your CTC (In LPA)"}
+            onChange={(e) => setCTC(e.target.value)}
+            id="outlined-basic"
+            variant="outlined"
+          />
 
-        <FormControl fullWidth required>
-          <InputLabel>Add your CTC in (LPA)</InputLabel>
-          <Select value={CTC} label="Add your CTC" onChange={(e)=>setCTC(e.target.value)}>
-            {Nums.map((n)=>(
-              <MenuItem key={n} value={`${n} LPA`}>{`${n} LPA`}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
         <br /><br />
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>

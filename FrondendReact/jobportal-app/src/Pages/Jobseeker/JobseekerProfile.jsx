@@ -215,9 +215,9 @@ domtoimage.toPng(profileRef.current, {
             <div className="section-title">Experience</div>
             {profile?.experience?.map((ex, index) => (
               <div className="inner-card" key={ex?._id}>
-                <h6>{ex?.company}</h6>
+                <h6>{ex?.company || "NA"}</h6>
                 <p>
-                  <strong>Field:</strong> {ex?.field}
+                  <strong>Field:</strong> {ex?.field || "NA"}
                 </p>
                 <p>
                   <strong>Years:</strong>{" "}
@@ -225,10 +225,10 @@ domtoimage.toPng(profileRef.current, {
                   {ex?.yearEnd ? new Date(ex.yearEnd).getFullYear() : "Present"}
                 </p>
                 <p>
-                  <strong>CTC:</strong> {ex?.CTC}
+                  <strong>CTC:</strong> {ex?.CTC + "LPA" || "NA"}
                 </p>
                 <p>
-                  <strong>Work:</strong> {ex?.workExperience}
+                  <strong>About Work Experience:</strong> {ex?.workExperience || "NA"}
                 </p>
                 <div className="d-flex mt-3">
                   <span className="flex-grow-1">

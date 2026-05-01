@@ -41,7 +41,8 @@ export const jobseekerProfileUpdateThunk = (UpdateDatas,alertSts) => {
             return response
         }
     } catch(err){
-        showAlert("Error",err.response?.data?.msg,"error")
+        showAlert("Error","Something went wrong","error")
+        console.log(err?.response?.data?.msg);
     }
     }
 }
@@ -66,7 +67,9 @@ return async(dispatch) => {
             dispatch(jobseekerProfileThunk())
         }
     } catch(err){
-        showAlert("Error",err.response?.data?.msg,"error")
+        console.log(err?.response?.data?.msg);
+        
+        showAlert("Error","Something went wrong","error")
     }
 }
 }
@@ -84,7 +87,9 @@ export const jobseekerProfileExpFieldUpdateThunk = (id,expId,UpdatedData) => {
             return response
         }
     } catch(err){
-        showAlert("Error",err.response?.data?.msg,"error")
+        showAlert("Error","Something went wrong","error")
+        console.log(err?.response?.data?.msg);
+        
     }
     }
 }
@@ -105,7 +110,8 @@ export const jobseekerProfileExpDeleteIndexThunk = (indx) => {
             dispatch(jobseekerProfileThunk())
         }
     } catch(err){
-        showAlert("Error",err.response?.data?.msg,"error")
+        showAlert("Error","Something went wrong","error")
+        console.log(err?.response?.data?.msg);
     }
     }
 }
@@ -130,7 +136,9 @@ return async(dispatch) => {
             dispatch(jobseekerProfileThunk())
         }
     } catch(err){
-        showAlert("Error",err.response?.data?.msg,"error")
+        showAlert("Error","Something went wrong","error")
+        console.log(err?.response?.data?.msg);
+        
     }
 }
 }
@@ -148,7 +156,9 @@ export const jobseekerProfileEduFieldUpdateThunk = (id,eduId,UpdatedData) => {
             dispatch(jobseekerProfileThunk())
         }
     } catch(err){
-        showAlert("Error",err.response?.data?.msg,"error")
+       showAlert("Error","Something went wrong","error")
+       console.log(err?.response?.data?.msg);
+       
     }
     }
 }
@@ -169,7 +179,8 @@ export const jobseekerProfileEduDeleteIndexThunk = (indx) => {
             dispatch(jobseekerProfileThunk())
         }
     } catch(err){
-        showAlert("Error",err.response?.data?.msg,"error")
+              showAlert("Error","Something went wrong","error")
+       console.log(err?.response?.data?.msg);
     }
     }
 }
@@ -186,7 +197,8 @@ export const jobseeker_Profile_skill_Delete_Thunk = (skill) => {
                 dispatch(jobseekerProfileThunk())
             }
         } catch(err){
-            showAlert("Error",err.response?.data?.msg,"error")
+                  showAlert("Error","Something went wrong","error")
+       console.log(err?.response?.data?.msg);
         }
     }
 }
@@ -203,7 +215,8 @@ export const jobseeker_Profile_skill_Add_Thunk = (skill) => {
             dispatch(jobseekerProfileThunk())
         }
     } catch(err){
-        showAlert("Error",err.response?.data?.msg,"error")
+              showAlert("Error","Something went wrong","error")
+       console.log(err?.response?.data?.msg);
     }
     }
 }

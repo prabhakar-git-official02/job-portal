@@ -74,10 +74,6 @@ function DialogboxExperienceNew({ btnName, btnType }) {
       company.trim() === "" ||
       !field ||
       field.trim() === "" ||
-      !yearStart ||
-      !yearEnd ||
-      !workExperience ||
-      workExperience.trim() === "" ||
       !CTC ||
       CTC.trim() === ""
     ) {
@@ -87,6 +83,19 @@ function DialogboxExperienceNew({ btnName, btnType }) {
         msg: "Invalid Update",
         id: Date.now(),
       });
+      return
+    }
+
+    if(
+      !yearStart ||
+      !yearEnd
+    ){
+      setLoadig(false)
+      setUpdated(false)
+      setAlertMsg({
+        msg : "Years Required",
+        id : Date.now()
+      })
       return
     }
    await dispatch(jobseekerProfileExpAddThunk(UpdateDatas, JobseekerProfile));
@@ -171,7 +180,7 @@ function DialogboxExperienceNew({ btnName, btnType }) {
             type="text"
             value={company}
             required
-            label={"Add your Company Name"}
+            label={"Enter your Company Name"}
             onChange={(e) => setCompany(e.target.value)}
             id="outlined-basic"
             variant="outlined"
@@ -182,14 +191,14 @@ function DialogboxExperienceNew({ btnName, btnType }) {
         <Box sx={{ width: `100%` }}>
           <FormControl fullWidth required>
             <InputLabel id="demo-simple-select-label">
-              Add your Field
+              Enter your Field
             </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={field}
               required
-              label={"Add your Field"}
+              label={"Enter your Field"}
               onChange={(e) => setField(e.target.value)}
             >
               {Fields?.map((F) => (
@@ -202,21 +211,23 @@ function DialogboxExperienceNew({ btnName, btnType }) {
 
 <textarea 
 className="form-control" 
-placeholder="Add your Work Experience"
+placeholder="About your Work Experience"
 value={workExperience}
 onChange={(e) => setWorkExperience(e.target.value)}
 ></textarea>
 <br />
-        <FormControl fullWidth required>
-          <InputLabel>Add your CTC in (LPA)</InputLabel>
-          <Select value={CTC} label="Add your CTC" onChange={(e)=>setCTC(e.target.value)}>
-            {Nums.map((n)=>(
-              <MenuItem key={n} value={`${n} LPA`}>{`${n} LPA`}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          <TextField
+            type="number"
+            fullWidth
+            value={CTC}
+             required
+            label={"Enter your CTC (In LPA)"}
+            onChange={(e) => setCTC(e.target.value)}
+            id="outlined-basic"
+            variant="outlined"
+          />
         <br /><br />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider required dateAdapter={AdapterDayjs}>
           <DatePicker
             views={["year"]}
             label="Start Year"
@@ -226,7 +237,7 @@ onChange={(e) => setWorkExperience(e.target.value)}
           />
         </LocalizationProvider>
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider required dateAdapter={AdapterDayjs}>
           <DatePicker
             views={["year"]}
             label="End Year"

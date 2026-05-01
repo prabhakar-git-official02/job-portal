@@ -364,7 +364,7 @@ function DialogboxAbout() {
             </Select>
           </FormControl>
         </Box>
-            {updated && !loading? <p className="text-success mt-3 d-flex"><span>Company Details Updated Successfully</span> <span className="mx-1"><ThumbUpAltIcon/></span></p>:null}
+            {updated && !loading? <p className="text-success mt-3 d-flex"><span>Company Details Updated Successfully<span className="mx-1"><ThumbUpAltIcon/></span></span> </p>:null}
 
                                 {loading ? 
                                 <div className="mt-4">

@@ -34,11 +34,11 @@ export const recruiterProfileUpdateThunk = (UpdateDatas) => {
         )
 
         if(response){
-            showAlert("Success","Profile Updated","success")
             dispatch(recruiterProfileThunk())
         }
     } catch(err){
-        console.log("Error",err.response?.data?.msg,"error")
+               showAlert("Error","Something went wrong","error")
+       console.log(err?.response?.data?.msg);
     }
     }
 }
