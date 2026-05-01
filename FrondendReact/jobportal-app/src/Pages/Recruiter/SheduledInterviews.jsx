@@ -10,6 +10,7 @@ import SearchInput from "../../Components/SearchInput";
 import ErrorAlert from "../../Components/ErrorAlert";
 import { useNavigate } from "react-router-dom";
 import ProgressLoad from "../../Components/ProgressLoad";
+import CloseIcon from '@mui/icons-material/Close';
 
 function SheduledInterviews() {
   const dispatch = useDispatch();
@@ -57,7 +58,7 @@ function SheduledInterviews() {
   const handleCancel = (id, applicantId, jobId) => {
     try {
       setCancelLoading(true);
-      if (!cancelReason.trim()) {
+      if (cancelReason.trim() === "") {
         setCancelLoading(false);
         setAlertmsg({
           msg: "Cancel reason required",
@@ -201,8 +202,9 @@ function SheduledInterviews() {
                                 setCaughtId(interview?._id);
                               }}
                             >
-                              Cancel Interview?
+                              Cancel Interview? 
                             </p>
+                            
 
                             {cancelInterview && caughtId === interview?._id && (
                               <>
@@ -239,6 +241,11 @@ function SheduledInterviews() {
                                     )
                                   }
                                 />
+                                {cancelInterview && caughtId === interview?._id ? 
+                                <div className="mt-4">
+                                   <span style={{cursor : "pointer"}} onClick={() => {setCancelInterview(false);setCaughtId(null)}}>Close<CloseIcon/></span>
+                                   </div>:null}
+                             
                               </>
                             )}
                           </div>
@@ -255,7 +262,7 @@ function SheduledInterviews() {
 
       <style>
         {`
- .no-data-wrapper {
+  .no-data-wrapper {
   text-align: center;
   padding: 60px 20px;
   max-width: 500px;
@@ -282,9 +289,9 @@ function SheduledInterviews() {
   font-size: 14px;
   color: #888;
 }
-  
-/* ===== Layout ===== */
 
+
+/* ===== Dashboard Layout ===== */
 .dashboard-wrapper {
   min-height: 100vh;
   background: #f4f7fb;
@@ -292,17 +299,77 @@ function SheduledInterviews() {
 
 .dashboard-container {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* ===== Sidebar ===== */
-
+/* Sidebar fixed */
 .dashboard-sidebar {
   width: 250px;
-  background: linear-gradient(180deg, #1f2f46, #243b55);
+  background: #1f2f46;
   color: #fff;
   padding: 25px 20px;
-  transition: all 0.3s ease;
+  position: fixed;
+  top: 0;
+  margin-top : 80px;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+@media(max-width : 768px){
+.dashboard-sidebar{
+margin-top : 0px;
+}
+}
+
+@media (max-width: 768px) {
+
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 10px;
+    background: #1f2f46;
+  }
+
+  .sidebar-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px 5px;
+    font-size: 13px;
+    margin: 0 5px;
+    border-radius: 6px;
+  }
+
+  .dashboard-content {
+    margin-left: 0;
+    width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+}
+
+/* Content adjust panna */
+.dashboard-content {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  padding: 30px;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 .sidebar-title {
@@ -322,7 +389,7 @@ function SheduledInterviews() {
 }
 
 .sidebar-item:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-item.active {
@@ -330,78 +397,82 @@ function SheduledInterviews() {
   font-weight: 600;
 }
 
-/* ===== Content ===== */
+/* ===== Main Content ===== */
 
-.dashboard-content {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
-}
 
+/* ===== Search ===== */
 .search-wrapper {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
 }
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
 
-/* ===== Interview Card ===== */
-
+  .dashboard-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+  
+/* ===== Candidate Card ===== */
 .candidate-card {
-  background: linear-gradient(135deg, #2c3e50, #34495e);
-  color: #fff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
   transition: 0.3s ease;
   position: relative;
   height: 100%;
 }
 
 .candidate-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 15px 45px rgba(0,0,0,0.25);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.1);
 }
 
-.candidate-card img {
-  display: block;
-  margin: 0 auto;
-  border: 4px solid rgba(255,255,255,0.3);
+.candidate-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
 }
 
 .candidate-card h5 {
-  text-align: center;
   font-weight: 600;
-  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
 .company-name {
-  text-align: center;
   font-size: 14px;
-  color: #ddd;
+  color: #666;
   margin-bottom: 15px;
 }
 
 .candidate-info p {
   font-size: 14px;
-  margin-bottom: 6px;
-  color: #f1f1f1;
+  margin-bottom: 5px;
+  color: #444;
 }
 
 /* ===== Status Badge ===== */
-
 .status-badge {
   position: absolute;
-  top: 18px;
-  right: 18px;
-  padding: 6px 14px;
+  top: 15px;
+  right: 15px;
+  padding: 6px 12px;
   border-radius: 50px;
   font-size: 12px;
   font-weight: 600;
   text-transform: capitalize;
 }
 
-/* Status colors */
-
+/* Status Colors */
 .status-badge.accepted {
   background: #e6f7ee;
   color: #1a8f4b;
@@ -417,30 +488,7 @@ function SheduledInterviews() {
   color: #f57c00;
 }
 
-/* ===== Cancel Section ===== */
-
-textarea.form-control {
-  border-radius: 10px;
-  border: none;
-  resize: none;
-}
-
-textarea.form-control:focus {
-  box-shadow: 0 0 0 2px #385e82;
-}
-
-/* Cancel link */
-
-.text-danger {
-  transition: 0.3s ease;
-}
-
-.text-danger:hover {
-  opacity: 0.7;
-}
-
 /* ===== Responsive ===== */
-
 @media (max-width: 992px) {
   .dashboard-sidebar {
     width: 200px;
@@ -448,7 +496,6 @@ textarea.form-control:focus {
 }
 
 @media (max-width: 768px) {
-
   .dashboard-container {
     flex-direction: column;
   }
@@ -476,13 +523,11 @@ textarea.form-control:focus {
   .search-wrapper {
     justify-content: center;
   }
-
 }
 
 @media (max-width: 576px) {
-
   .candidate-card {
-    padding: 18px;
+    padding: 15px;
   }
 
   .candidate-info p {
@@ -492,7 +537,6 @@ textarea.form-control:focus {
   .status-badge {
     font-size: 11px;
   }
-
 }
 
 `}
