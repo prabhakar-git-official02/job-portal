@@ -5,6 +5,7 @@ import { authThunk } from "../../Thunks/authThunk";
 import MainNav from "../../Navbar/MainNav";
 import { useNavigate } from "react-router-dom";
 import SearchInput from "../../Components/SearchInput";
+import { useMemo } from "react";
 
 function Candidates() {
   const dispatch = useDispatch();
@@ -18,21 +19,35 @@ function Candidates() {
     dispatch(applicantGetAllThunk());
   }, [dispatch]);
 
+
+
   const user = useSelector((state) => state.auth.user);
   const applicants = useSelector((state) => state.allApplicants.All_Applicants);
 
-  const userJobs = applicants?.flatMap(applicant =>
+  const userJobs = useMemo(() => {
+  return applicants?.flatMap(applicant =>
     applicant?.appliedJobs?.filter(
       job => job?.jobId?.recruiterId?._id === user?._id
     )
   );
+}, [applicants, user]);
 
-  const filteredJobs = userJobs?.filter(job => {
+const filteredJobs = useMemo(() => {
+  return userJobs?.filter(job => {
     if (key === "shortlisted") return job?.status === "shortlisted";
     if (key === "rejected") return job?.status === "rejected";
     if (key === "pending") return job?.status === "applied";
     return false;
   });
+}, [userJobs, key]);
+
+const finalJobs = useMemo(() => {
+  return filteredJobs?.filter(job =>
+    job?.jobId?.jobTitle
+      ?.toLowerCase()
+      .includes(search.toLowerCase())
+  );
+}, [filteredJobs, search]);
 
   return (
 <>
@@ -79,13 +94,7 @@ function Candidates() {
 </div>
         ) : (
 <div className="row g-4 mt-2">
-  {filteredJobs
-    ?.filter(job =>
-      job?.jobId?.jobTitle
-        ?.toLowerCase()
-        .includes(search.toLowerCase())
-    )
-    .map(job => (
+  {finalJobs.map(job => (
       <div   className="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" key={job?._id}>
         <div
           onClick={() => navigate(`/candidate/${job?._id}`)}
