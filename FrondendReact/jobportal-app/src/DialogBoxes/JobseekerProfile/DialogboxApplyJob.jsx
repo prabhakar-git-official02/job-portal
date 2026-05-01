@@ -37,6 +37,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
   }, [dispatch]);
 
   const user = useSelector((state) => state.auth.user);
+  const AuthStatus = useSelector((state) => state.auth.status)
 
   useEffect(() => {
     if (user?.roleData === "user") {
@@ -134,7 +135,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
     console.log("JobseekerProfile/DialogboxApplyJob/handleJobApply-Err",err?.message)
   }
   };
-
+  
   return (
     <>
       <Button
@@ -142,7 +143,7 @@ function DialogboxApplyJob({ btnName,JobId}) {
         style={{ background: `teal` }}
         label="Show"
         icon={`pi pi-external-link`}
-        onClick={() => setVisible(true)}
+        onClick={() => JobseekerProfile ?setVisible(true): !JobseekerProfile && AuthStatus!== 500 ? navigate('/jobseekerProfileForm') : null}
       >
         {btnName}
       </Button>
