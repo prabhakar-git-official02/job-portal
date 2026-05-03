@@ -157,7 +157,8 @@ console.log("matched",MatchedJob)
         <div className="skills-section">
 
           <h5>Skills</h5>
-
+          {Post?.skills?.length === 0 ? 
+          <p>No Skills Added!</p> :
           <div className="skills-container">
             {Post?.skills?.map((skill, index) => (
               <span key={index} className="skill-chip">
@@ -165,7 +166,7 @@ console.log("matched",MatchedJob)
               </span>
             ))}
           </div>
-
+}
         </div>
 
         {/* Description */}

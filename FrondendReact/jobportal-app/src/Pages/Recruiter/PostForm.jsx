@@ -91,7 +91,6 @@ function PostForm() {
       jobPlatform.trim() === "" ||
       experience.trim() === "" ||
       salary.trim() === "" ||
-      storeSkills?.length === 0 ||
       jobDescription.trim() === ""
     ) {
       setLoad(false);
@@ -345,7 +344,6 @@ function PostForm() {
       <div className="skills-section card p-3">
         <TextField
           fullWidth
-          required
           label="Add Skill"
           value={skills}
           onChange={(e)=>setSkills(e.target.value)}

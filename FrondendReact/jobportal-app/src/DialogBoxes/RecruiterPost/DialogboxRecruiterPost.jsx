@@ -24,6 +24,7 @@ import {
 import ProgressLoad from "../../Components/ProgressLoad";
 import { showAlert } from "../../Scripts/Alert";
 
+
 function DialogboxRecruiterPost({ postId }) {
   const dispatch = useDispatch();
 
@@ -130,7 +131,6 @@ const [storeSkill, setStoreSkill] = useState([]);
       if (
         company.trim() === "" ||
         !company ||
-        storeSkill?.length === 0 ||
         location.trim() === "" ||
         !location ||
         jobType.trim() === "" ||
@@ -518,43 +518,27 @@ const [storeSkill, setStoreSkill] = useState([]);
           </Box>
           <br />
 
-          <Box sx={{ width: `100%` }}>
-            <FormControl fullWidth>
-              <InputLabel required id="demo-simple-select-label">
-                Update Job Experience
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={experience}
-                required
-                label="Update your Experience"
-                onChange={(e) => setExperience(e.target.value)}
-              >
-                <MenuItem
-                  value={"Less than 1 year"}
-                >{`Less than 1 year`}</MenuItem>
-                {Nums?.map((n) => (
-                  <MenuItem value={`${n} years`}>{`${n} years`}</MenuItem>
-                ))}
-                <MenuItem value={"50+ years"}>{`${50}+ years`}</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+            <TextField
+              type="number"
+              fullWidth
+              value={parseFloat(experience)}
+              onChange={(e) => setExperience(e.target.value + " years")}
+              id="outlined-basic"
+              label="Update Experience"
+              variant="outlined"
+            />
           <br />
+          <br/>
 
-          <FormControl fullWidth required>
-            <InputLabel>Salary (LPA)</InputLabel>
-            <Select
-              value={salary}
-              label="Salary"
-              onChange={(e) => setSalary(e.target.value)}
-            >
-              {Nums.map((n) => (
-                <MenuItem key={n} value={`${n} LPA`}>{`${n} LPA`}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            <TextField
+              type="number"
+              fullWidth
+              value={parseFloat(salary)}
+              onChange={(e) => setSalary(e.target.value +" LPA")}
+              id="outlined-basic"
+              label="Update Salary"
+              variant="outlined"
+            />
           <br />
           <br />
 
@@ -579,7 +563,8 @@ const [storeSkill, setStoreSkill] = useState([]);
           {/* Skills */}
           <div className="skills-section">
             <h5>Skills</h5>
-
+            {storeSkill?.length === 0 ? 
+            <p>No Skills Added</p> : 
             <div className="skills-container">
               {storeSkill?.map((skill, index) => (
                 <span key={index} className="skill-chip">
@@ -594,7 +579,9 @@ const [storeSkill, setStoreSkill] = useState([]);
                 </span>
               ))}
             </div>
+         }
           </div>
+            
 
           <br />
           <div>
